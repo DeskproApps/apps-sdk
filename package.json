@@ -1,14 +1,16 @@
 {
   "name": "@deskpro/app-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Deskpro Apps SDK",
   "private": false,
   "license": "proprietary",
+  "main": "cjs/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
   "files": [
     "dist",
     "esm",
+    "cjs",
     "README.md"
   ],
   "engines": {
@@ -65,9 +67,10 @@
   },
   "scripts": {
     "start": "yarn start:storybook",
-    "build": "yarn build:esm && yarn build:dist",
+    "build": "yarn build:esm && yarn build:cjs && yarn build:dist",
     "build:dist": "rimraf ./dist && rollup --config rollup.config.js && terser dist/deskpro.js -o dist/deskpro.min.js -m --source-map",
     "build:esm": "rimraf ./esm && tsc",
+    "build:cjs": "rimraf ./cjs && babel ./src --out-dir ./cjs --extensions '.ts' --plugins @babel/plugin-transform-modules-commonjs",
     "watch:dist": "rimraf ./dist && rollup --config rollup.config.js --watch",
     "start:storybook": "start-storybook -p 6008",
     "test": "jest"
