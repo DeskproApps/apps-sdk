@@ -1,0 +1,183 @@
+// Colours
+$white: #FFFFFF !default;
+
+$systemShade100: #011A2E !default;
+$systemShade80: #566672 !default;
+$systemShade40: #9AA3A9 !default;
+$systemShade30: #DCE1E5 !default;
+$systemShade20: #ECEEF0 !default;
+$systemShade10: #F7F7F8 !default;
+
+$brandShade100: #1C3E55 !default;
+$brandShade80: #335166 !default;
+$brandShade60: #8D9FAA !default;
+$brandShade40: #D2D8DD !default;
+$brandShade20: #E8EBEE !default;
+$brandShade10: #F3F5F7 !default;
+
+$grey100: #4C4F50 !default;
+$grey80: #8B9293 !default;
+$grey40: #A9B0B0 !default;
+$grey20: #D3D6D7 !default;
+$grey10: #EFF0F0 !default;
+$grey5: #F7F7F7 !default;
+$grey3: #FBFBFB !default;
+
+$cyan100: #3A8DDE !default;
+$cyan80: #9FCCF3 !default;
+$cyan40: #CFE5F9 !default;
+$cyan20: #E1EEFB !default;
+$cyan10: #F5FAFE !default;
+
+$red100: #E84954 !default;
+$red80: #FD667F !default;
+$red60: #FD8C9F !default;
+$red40: #FEB3BF !default;
+$red20: #FBE1E3 !default;
+$red10: #FFF0F2 !default;
+
+$pink100: #DF5E9C !default;
+$pink80: #EFAFCD !default;
+$pink40: #F7D7E6 !default;
+$pink20: #FAE8F0 !default;
+$pink10: #FDF6F9 !default;
+
+$orange100: #EC6C4E !default;
+$orange80: #F5B5A7 !default;
+$orange40: #FADAD3 !default;
+$orange20: #F9E6E1 !default;
+$orange10: #FDF8F7 !default;
+
+$yellow100: #F8AF3C !default;
+$yellow80: #FBD79D !default;
+$yellow40: #FDEBCE !default;
+$yellow20: #FFF8E1 !default;
+$yellow10: #FFFBF0 !default;
+
+$purple100: #9384BD !default;
+$purple80: #C9C1DE !default;
+$purple40: #EBE4F2 !default;
+$purple20: #F3EFF7 !default;
+$purple10: #FBFAFC !default;
+
+$amethyst100: #7A56DE !default;
+$amethyst80: #9578E5 !default;
+$amethyst40: #CABBF2 !default;
+$amethyst20: #E4DDF8 !default;
+$amethyst10: #F2EEFC !default;
+
+$turquoise100: #5BB6B1 !default;
+$turquoise80: #ADDBD8 !default;
+$turquoise40: #D6EDEB !default;
+$turquoise20: #E6F4F3 !default;
+$turquoise10: #F3F9F9 !default;
+
+$green100: #54B162 !default;
+$green80: #76C181 !default;
+$green40: #BBE0C0 !default;
+$green20: #DDEFE0 !default;
+$green10: #EEF7EF !default;
+
+$jasper100: #EA6548 !default;
+$jasper80: #ED854A !default;
+$jasper40: #F39E4F !default;
+$jasper20: #F8C595 !default;
+$jasper10: #FBE2CA !default;
+
+$ochre100: #F5B44D !default;
+$ochre80: #F8C474 !default;
+$ochre40: #FBD79D !default;
+$ochre20: #FBF0DB !default;
+$ochre10: #FEF7ED !default;
+
+$amber100: #F3993D !default;
+$amber10: #FEF5EC !default;
+
+$beige100: #E7D3A2 !default;
+$beige10: #FDFBF6 !default;
+
+$brown100: #B98846 !default;
+$brown10: #F8F3EC !default;
+
+$burgundy100: #912066 !default;
+$burgundy10: #F4E9F0 !default;
+
+$coral100: #F5B5A7 !default;
+$coral10: #FDF8F7 !default;
+
+$lavender100: #DCB7FD !default;
+$lavender10: #F8F1FF !default;
+
+$lemon100: #F3DF5A !default;
+$lemon10: #FEFCEF !default;
+
+$lime100: #BAD60B !default;
+$lime10: #F8FBE7 !default;
+
+$magenta100: #9C27B0 !default;
+$magenta10: #F5E9F7 !default;
+
+$myrtle100: #2C787C !default;
+$myrtle10: #EAF1F2 !default;
+
+$olive100: #B9BB72 !default;
+$olive10: #F8F8F1 !default;
+
+$sage100: #86A393 !default;
+$sage10: #F3F6F4 !default;
+
+$vermilion100: #CD4718 !default;
+$vermilion10: #FAEDE8 !default;
+
+$violet100: #9C5DF2 !default;
+$violet10: #F5EFFE !default;
+
+$themeColors: (
+  "system": $systemShade100,
+  "brand": $brandShade100,
+  "grey": $grey100,
+  "cyan": $cyan100,
+  "red": $red100,
+  "organge": $orange100,
+  "yellow": $yellow100,
+  "green": $green100,
+  "purple": $purple100,
+) !default;
+
+$themeHighlightColors: (
+  "system": $cyan100,
+  "brand": $cyan100,
+  "grey": $cyan100,
+  "cyan": $brandShade100,
+  "red": $red100,
+  "organge": $orange100,
+  "yellow": $yellow100,
+  "green": $green100,
+  "purple": $purple100,
+) !default;
+
+$spacer: .9rem;
+
+// Page
+$pageFontFamily: "Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !default;
+$pageFontSize: .8rem !default;
+$pageTextColour: $grey100 !default;
+$pageBgColour: $white !default;
+
+// Button
+$buttonFontFamily: "Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !default;
+
+// Typography
+$paragraphMarginBottom: $spacer !default;
+$anchorColour: $cyan100 !default;
+$anchorHighlightColour: $brandShade100 !default;
+$hBottomMargin: $spacer !default;
+$hFontWeight: bold !default;
+$hBaseFontSize: $pageFontSize !default;
+$h1FontSize: $hBaseFontSize * 2.5 !default;
+$h2FontSize: $hBaseFontSize * 2 !default;
+$h3FontSize: $hBaseFontSize * 1.75 !default;
+$h4FontSize: $hBaseFontSize * 1.5 !default;
+$h5FontSize: $hBaseFontSize * 1.25 !default;
+$h6FontSize: $hBaseFontSize !default;
+$dlTitleFontFamily: Rubik,"Noto Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;

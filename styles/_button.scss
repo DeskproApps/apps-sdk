@@ -1,0 +1,32 @@
+.button {
+  display: inline-block;
+  font-family: $buttonFontFamily;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: .8rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+@each $color, $value in $themeColors {
+  .button-#{$color} {
+    color: $white;
+    background-color: $value;
+    border-color: $value;
+  }
+}
+
+@each $color, $value in $themeHighlightColors {
+  .button-#{$color}:hover {
+    color: $white;
+    background-color: $value;
+    border-color: $value;
+  }
+}

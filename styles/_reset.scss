@@ -1,0 +1,108 @@
+@import "~scss-reset/_reset.scss";
+
+body {
+  font-family: $pageFontFamily;
+  font-size: $pageFontSize;
+  background: $pageBgColour;
+  color: $pageTextColour;
+}
+
+a {
+  color: $anchorColour;
+  text-decoration: none;
+  &:hover {
+    color: $anchorHighlightColour;
+  }
+}
+
+hr {
+  margin: .8rem 0;
+  background-color: transparent;
+  border-bottom: 1px solid $grey100;
+  opacity: .25;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: $paragraphMarginBottom;
+}
+
+ol,
+ul {
+  padding-left: 2rem;
+}
+
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin-bottom: 0;
+}
+
+ul li {
+  list-style-type: disc;
+}
+
+dt {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: ($pageFontSize / 1.2);
+  font-family: $dlTitleFontFamily;
+  margin-bottom: 3px;
+}
+
+dd {
+  margin-bottom: .5rem;
+  margin-left: 0;
+}
+
+h1 {
+  font-size: $h1FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+h2 {
+  font-size: $h2FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+h3 {
+  font-size: $h3FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+h4 {
+  font-size: $h4FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+h5 {
+  font-size: $h5FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+h6 {
+  font-size: $h6FontSize;
+  margin-bottom: $hBottomMargin;
+  font-weight: $hFontWeight;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}

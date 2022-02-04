@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "outDir": "esm",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "noEmitHelpers": false,
+  },
+  "include": ["src"],
+  "exclude": [
+    "**/node_modules",
+    "**/.*/",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**/*",
+    "**/*.stories.tsx",
+    "src/preload.ts",
+    "src/index-bundle.ts",
+    "tests"
+  ]
+}
