@@ -1,7 +1,7 @@
-Deskpro Apps Core SDK
-=====================
+Deskpro Apps SDK
+================
 
-Deskpro Core Apps SDK provides a client for communicating with the Deskpro system as well as basic 
+Deskpro Apps SDK provides a client for communicating with the Deskpro system, React UI components as well as basic 
 styles and utilities for use in simple apps and widgets.
 
 Installation
