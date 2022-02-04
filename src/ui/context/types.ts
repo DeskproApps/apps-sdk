@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 export interface DeskproAppProviderProps {
   children: JSX.Element | ReactNode;
   theme?: DeskproTheme;
+  debug?: boolean,
 }
 
 export type DeskproAppContextValue = { client: IDeskproClient|null, theme: DeskproTheme } | null;

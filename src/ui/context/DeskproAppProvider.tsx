@@ -6,7 +6,7 @@ import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../..
 import { DeskproAppContext } from "./context";
 import { ThemeProvider } from "styled-components";
 
-export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme }: DeskproAppProviderProps) => {
+export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
   const [client, setClient] = useState<IDeskproClient|null>(null);
 
   useEffect(() => {
@@ -52,11 +52,13 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
     dpClient.run().then(() => setClient(dpClient));
   }, []);
 
-  console.debug(
-    client
-      ? "Deskpro apps client is ready"
-      : "Deskpro apps client is initialising..."
-  );
+  if (debug) {
+    console.debug(
+        client
+            ? "Deskpro apps client is ready"
+            : "Deskpro apps client is initialising..."
+    );
+  }
 
   const currentTheme = theme ?? lightTheme;
 
