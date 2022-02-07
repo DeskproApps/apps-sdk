@@ -6,6 +6,12 @@ import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../..
 import { DeskproAppContext } from "./context";
 import { ThemeProvider } from "styled-components";
 
+import "flatpickr/dist/themes/light.css";
+import "notyf/notyf.min.css";
+import "tippy.js/dist/tippy.css";
+import "simplebar/dist/simplebar.min.css";
+import "flag-icon-css/css/flag-icons.min.css";
+
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
   const [client, setClient] = useState<IDeskproClient|null>(null);
 
