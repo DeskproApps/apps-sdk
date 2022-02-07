@@ -77,6 +77,10 @@ export class DeskproClient implements IDeskproClient {
   public deleteState: (name: string) => Promise<boolean>;
   public deleteUserState: (name: string) => Promise<boolean>;
 
+  // Settings
+  public setSetting: <T>(name: string, value: T) => Promise<void>;
+  public setSettings: (settings: Record<string, any>) => Promise<void>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -100,6 +104,9 @@ export class DeskproClient implements IDeskproClient {
     this.getUserState = async () => [];
     this.deleteState = async () => false;
     this.deleteUserState = async () => false;
+
+    this.setSetting = async () => {};
+    this.setSettings = async () => {};
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -199,6 +206,15 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._userStateDelete) {
       this.deleteUserState = parent._userStateDelete;
+    }
+
+    // Settings
+    if (parent._settingSet) {
+      this.setSetting = <T>(name: string, value: T) => parent._settingSet(name, JSON.stringify(value));
+    }
+
+    if (parent._settingsSet) {
+      this.setSettings = (settings: Record<string, any>) => parent._settingsSet(JSON.stringify(settings));
     }
   }
 

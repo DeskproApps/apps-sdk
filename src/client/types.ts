@@ -86,6 +86,8 @@ export interface CoreCallSender {
   _userStateGet: (name: string) => Promise<any>;
   _stateDelete: (name: string) => Promise<any>;
   _userStateDelete: (name: string) => Promise<any>;
+  _settingSet: (name: string, value: string) => Promise<any>;
+  _settingsSet: (settings: string) => Promise<any>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -170,6 +172,8 @@ export interface IDeskproClient {
   getUserState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
   deleteState: (name: string) => Promise<boolean>;
   deleteUserState: (name: string) => Promise<boolean>;
+  setSetting: <T>(name: string, value: T) => Promise<void>;
+  setSettings: (settings: Record<string, any>) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
 }
 
