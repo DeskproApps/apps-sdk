@@ -124,6 +124,10 @@ export type AppElement =
       payload?: AppElementPayload;
     }[],
   }
+  | {
+    type: "edit_button";
+    payload?: AppElementPayload;
+  }
 ;
 
 export interface StateOptions {
