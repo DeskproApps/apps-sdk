@@ -2,7 +2,7 @@ import * as React from "react";
 import { select, withKnobs } from "@storybook/addon-knobs";
 import styled, { useTheme } from "styled-components";
 import { P13 } from "../Typography";
-import * as faIcons from "@fortawesome/pro-regular-svg-icons";
+import * as faIcons from "@fortawesome/free-regular-svg-icons";
 
 import { AnyIcon, Icon, isFaIcon } from "./Icon";
 import { ThemeColorKey } from "../../theme";

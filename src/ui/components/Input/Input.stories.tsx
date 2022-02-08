@@ -2,7 +2,7 @@ import * as React from "react";
 import { boolean, text, withKnobs } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import { Input } from "./Input";
-import { faEye, faEyeSlash, faLock } from "@fortawesome/pro-solid-svg-icons";
+import { faEye, faEyeSlash, faLock } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../Button";
 import styled from "styled-components";
 import { H1 } from "../Typography";
