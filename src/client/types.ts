@@ -18,6 +18,7 @@ export type ContextType = "ticket"
   | "download"
   | "guide_topic"
   | "community_topic"
+  | "global"
 ;
 
 export interface Context<Data = any, Settings = any> {
