@@ -1,6 +1,6 @@
 {
   "name": "@deskpro/app-sdk",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Deskpro Apps SDK",
   "private": false,
   "license": "proprietary",
@@ -22,6 +22,7 @@
     "penpal": "6.2.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-intl": "5.23.0",
     "regenerator-runtime": "0.13.9",
     "styled-components": "5.3.3",
     "tslib": "2.3.1"

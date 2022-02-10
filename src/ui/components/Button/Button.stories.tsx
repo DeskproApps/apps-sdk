@@ -2,7 +2,7 @@ import { Button, IconButton } from "./";
 import { Stack } from "../Layout";
 import { H1 } from "../Typography";
 import * as React from "react";
-import { faCheck, faClipboardCheck } from "@fortawesome/pro-solid-svg-icons";
+import { faCheck, faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   title: "Core/Button",
