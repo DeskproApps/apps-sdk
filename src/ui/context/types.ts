@@ -1,5 +1,5 @@
 import { DeskproTheme } from "@deskpro/deskpro-ui";
-import { AppElementPayload, Context, IDeskproClient, TargetAction } from "../../client/types";
+import { Context, IDeskproClient, TargetAction } from "../../client/types";
 import { ReactNode } from "react";
 
 export interface DeskproAppProviderProps {
@@ -31,5 +31,5 @@ export interface DeskproAppEventHooks {
   onShow?: (context: Context) => void;
   onChange?: (context: Context) => void;
   onTargetAction?: (action: TargetAction) => void;
-  onElementEvent?: (id: string, type: string, payload?: AppElementPayload) => void;
+  onElementEvent?: <Payload = any>(id: string, type: string, payload?: Payload) => void;
 }

@@ -43,19 +43,19 @@ export interface TargetAction {
   context: Context;
 }
 
-export interface TargetElementEvent {
+export interface TargetElementEvent<Payload = any> {
   id: string;
   type: string;
-  payload?: AppElementPayload;
+  payload?: Payload;
 }
 
-export type AppElementPayload<T = null> = object | string | number | T;
+export type AppElementPayload<T = any> = T;
 
 export type ChildMethod = (context: Context) => void;
 
 export type TargetActionChildMethod = (action: TargetAction) => void;
 
-export type ElementEventChildMethod = <Payload = any>(id: string, type: string, payload?: AppElementPayload<Payload>) => void;
+export type ElementEventChildMethod = <Payload = any>(id: string, type: string, payload?: Payload) => void;
 
 export type ChildMethods = {
   onReady: ChildMethod;
@@ -106,14 +106,14 @@ export interface DeskproClientOptions {
   resizeAfterEvents?: boolean;
 }
 
-export type AppElement =
+export type AppElement<Payload = any> =
   {
     type: "plus_button";
-    payload?: AppElementPayload;
+    payload?: Payload;
   }
   | {
     type: "home_button";
-    payload?: AppElementPayload;
+    payload?: Payload;
   }
   | {
     type: "refresh_button";
@@ -122,12 +122,12 @@ export type AppElement =
     type: "menu";
     items: {
       title: string;
-      payload?: AppElementPayload;
+      payload?: Payload;
     }[],
   }
   | {
     type: "edit_button";
-    payload?: AppElementPayload;
+    payload?: Payload;
   }
 ;
 

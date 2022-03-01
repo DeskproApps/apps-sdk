@@ -13,7 +13,9 @@ import {
   AppElement,
   ElementEventChildMethod,
   StateOptions,
-  SetStateResponse, UserStateOptions, GetStateResponse, AppElementPayload
+  SetStateResponse,
+  UserStateOptions,
+  GetStateResponse,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
 
@@ -255,7 +257,7 @@ export class DeskproClient implements IDeskproClient {
   }
 
   public onElementEvent<Payload = any>(cb: ElementEventChildMethod): void {
-    this.parentMethods.onElementEvent = <Payload>(id: string, type: string, payload: AppElementPayload<Payload>) => {
+    this.parentMethods.onElementEvent = <Payload>(id: string, type: string, payload: Payload) => {
       cb(id, type, payload);
       if (this.resize && this.options.resizeAfterEvents) {
         this.resize();
