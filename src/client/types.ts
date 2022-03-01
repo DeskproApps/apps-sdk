@@ -55,7 +55,7 @@ export type ChildMethod = (context: Context) => void;
 
 export type TargetActionChildMethod = (action: TargetAction) => void;
 
-export type ElementEventChildMethod = <Payload = undefined>(id: string, type: string, payload?: AppElementPayload<Payload>) => void;
+export type ElementEventChildMethod = <Payload = any>(id: string, type: string, payload?: AppElementPayload<Payload>) => void;
 
 export type ChildMethods = {
   onReady: ChildMethod;

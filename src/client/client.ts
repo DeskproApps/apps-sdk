@@ -254,7 +254,7 @@ export class DeskproClient implements IDeskproClient {
     };
   }
 
-  public onElementEvent<Payload = undefined>(cb: ElementEventChildMethod): void {
+  public onElementEvent<Payload = any>(cb: ElementEventChildMethod): void {
     this.parentMethods.onElementEvent = <Payload>(id: string, type: string, payload: AppElementPayload<Payload>) => {
       cb(id, type, payload);
       if (this.resize && this.options.resizeAfterEvents) {
