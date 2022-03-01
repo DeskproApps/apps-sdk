@@ -49,7 +49,7 @@ export interface TargetElementEvent {
   payload?: AppElementPayload;
 }
 
-export type AppElementPayload = object | string | number;
+export type AppElementPayload<T = object | string | number> = T;
 
 export type ChildMethod = (context: Context) => void;
 
