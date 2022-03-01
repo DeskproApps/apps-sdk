@@ -3,7 +3,7 @@ import { Context, IDeskproClient, TargetAction } from "../../client/types";
 import { ReactNode } from "react";
 
 export interface DeskproAppProviderProps {
-  children: JSX.Element | ReactNode;
+  children: ReactNode;
   theme?: DeskproTheme;
   debug?: boolean,
 }
