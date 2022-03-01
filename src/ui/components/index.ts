@@ -20,3 +20,4 @@ export * from "./Scrollbar";
 export * from "./Tooltip";
 export * from "./DateTimePicker";
 export * from "./Radio";
+export * from "./AttachmentTag";
