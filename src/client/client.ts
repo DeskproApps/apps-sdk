@@ -83,6 +83,9 @@ export class DeskproClient implements IDeskproClient {
   public setSetting: <T>(name: string, value: T) => Promise<void>;
   public setSettings: (settings: Record<string, any>) => Promise<void>;
 
+  // Blocking
+  public setBlocking: (blocking: boolean) => Promise<void>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -109,6 +112,8 @@ export class DeskproClient implements IDeskproClient {
 
     this.setSetting = async () => {};
     this.setSettings = async () => {};
+
+    this.setBlocking = async () => {};
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -217,6 +222,11 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._settingsSet) {
       this.setSettings = (settings: Record<string, any>) => parent._settingsSet(JSON.stringify(settings));
+    }
+
+    // Blocking
+    if (parent._blockingSet) {
+      this.setBlocking = (blocking: boolean) => parent._blockingSet(blocking);
     }
   }
 

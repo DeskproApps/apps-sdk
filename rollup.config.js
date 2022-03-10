@@ -24,12 +24,12 @@ module.exports = {
         ;
       }
     },
+    commonjs(),
     replace({
       DP_TTF_FONT_PATHS: JSON.stringify(fg.sync(["fonts/**/*.ttf"])),
     }),
     polyfills(),
     resolve(),
-    commonjs(),
     babel({
       extensions: [".ts"],
       runtimeHelpers: true,
