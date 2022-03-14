@@ -35,6 +35,8 @@ export interface ProxyAuthPayload {
 
 export type TargetActionType =
   "ticket_addition"
+  | "reply_box_note_item_selection"
+  | "on_reply_box_note"
 ;
 
 export interface TargetAction {
