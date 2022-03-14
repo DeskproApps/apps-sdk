@@ -90,6 +90,8 @@ export interface CoreCallSender {
   _settingSet: (name: string, value: string) => Promise<any>;
   _settingsSet: (settings: string) => Promise<any>;
   _blockingSet: (blocking: boolean) => Promise<any>;
+  _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
+  _deregisterTargetAction: (name: string) => Promise<void>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -181,7 +183,15 @@ export interface IDeskproClient {
   setSetting: <T>(name: string, value: T) => Promise<void>;
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
+  registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
+  deregisterTargetAction: (name: string) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
+}
+
+export interface TargetActionOptions<Payload = any> {
+  title?: string;
+  description?: string;
+  payload?: Payload;
 }
 
 export interface IEntityAssociation {

@@ -15,7 +15,7 @@ import {
   StateOptions,
   SetStateResponse,
   UserStateOptions,
-  GetStateResponse,
+  GetStateResponse, TargetActionType, TargetActionOptions,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
 
@@ -86,6 +86,10 @@ export class DeskproClient implements IDeskproClient {
   // Blocking
   public setBlocking: (blocking: boolean) => Promise<void>;
 
+  // Target Actions
+  public registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
+  public deregisterTargetAction: (name: string) => Promise<void>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -114,6 +118,9 @@ export class DeskproClient implements IDeskproClient {
     this.setSettings = async () => {};
 
     this.setBlocking = async () => {};
+
+    this.registerTargetAction = async () => {};
+    this.deregisterTargetAction = async () => {};
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -227,6 +234,15 @@ export class DeskproClient implements IDeskproClient {
     // Blocking
     if (parent._blockingSet) {
       this.setBlocking = (blocking: boolean) => parent._blockingSet(blocking);
+    }
+
+    // Target Actions
+    if (parent._registerTargetAction) {
+      this.registerTargetAction = (name: string, type: TargetActionType, options?: TargetActionOptions) => parent._registerTargetAction(name, type, options);
+    }
+
+    if (parent._deregisterTargetAction) {
+      this.deregisterTargetAction = (name: string) => parent._deregisterTargetAction(name);
     }
   }
 
