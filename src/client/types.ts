@@ -39,10 +39,11 @@ export type TargetActionType =
   | "on_reply_box_note"
 ;
 
-export interface TargetAction {
+export interface TargetAction<P = any> {
   name: string;
   type: TargetActionType;
   context: Context;
+  payload?: P;
 }
 
 export interface TargetElementEvent<Payload = any> {
@@ -55,7 +56,7 @@ export type AppElementPayload<T = any> = T;
 
 export type ChildMethod = (context: Context) => void;
 
-export type TargetActionChildMethod = (action: TargetAction) => void;
+export type TargetActionChildMethod<Payload = any> = <Payload>(action: TargetAction<Payload>) => void;
 
 export type ElementEventChildMethod = <Payload = any>(id: string, type: string, payload?: Payload) => void;
 
@@ -163,7 +164,7 @@ export interface IDeskproClient {
   onReady: (cb: ChildMethod) => void;
   onShow: (cb: ChildMethod) => void;
   onChange: (cb: ChildMethod) => void;
-  onTargetAction: (cb: TargetActionChildMethod) => void;
+  onTargetAction: <Payload = any>(cb: TargetActionChildMethod<Payload>) => void;
   getProxyAuth: () => Promise<ProxyAuthPayload>;
   resize: (height?: number) => void;
   registerElement: (id: string, element: AppElement) => void;

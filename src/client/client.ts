@@ -273,8 +273,8 @@ export class DeskproClient implements IDeskproClient {
     };
   }
 
-  public onTargetAction(cb: TargetActionChildMethod): void {
-    this.parentMethods.onTargetAction = (action: TargetAction) => {
+  public onTargetAction<Payload = any>(cb: TargetActionChildMethod): void {
+    this.parentMethods.onTargetAction = <Payload>(action: TargetAction<Payload>) => {
       cb(action);
       if (this.resize && this.options.resizeAfterEvents) {
         this.resize();

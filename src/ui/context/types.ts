@@ -30,6 +30,6 @@ export interface DeskproAppEventHooks {
   onReady?: (context: Context) => void;
   onShow?: (context: Context) => void;
   onChange?: (context: Context) => void;
-  onTargetAction?: (action: TargetAction) => void;
+  onTargetAction?: <Payload = any>(action: TargetAction<Payload>) => void;
   onElementEvent?: <Payload = any>(id: string, type: string, payload?: Payload) => void;
 }
