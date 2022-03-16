@@ -39,11 +39,72 @@ export type TargetActionType =
   | "on_reply_box_note"
 ;
 
+export type TargetActionPayload =
+  {
+    type: "ticket_addition";
+  }
+  | {
+    type: "reply_box_note_item_selection";
+    payload: {
+      id: string;
+      selected: boolean;
+    }[];
+  }
+  | {
+    type: "on_reply_box_note";
+    payload: {
+      note: string;
+      attachments: File[];
+    };
+  }
+;
+
+export type TicketAdditionTargetAction = {
+  type: "ticket_addition";
+  name: string;
+  title: string;
+  description: string;
+  appId: string;
+  appInstanceId: string;
+  appHash: string;
+  appIconUrl: string;
+};
+
+export type TicketReplyNoteItemSelectionTargetAction = {
+  type: "reply_box_note_item_selection";
+  name: string;
+  title: string;
+  description: string;
+  appId: string;
+  appInstanceId: string;
+  appHash: string;
+  appIconUrl: string;
+  data: {
+    id: string;
+    title: string;
+    selected: boolean;
+  }[];
+};
+
+export type OnTicketReplyNoteTargetAction = {
+  type: "on_reply_box_note";
+  name: string;
+  title: string;
+  description: string;
+  appId: string;
+  appInstanceId: string;
+  appHash: string;
+  appIconUrl: string;
+};
+
+export type TargetActionData = TicketAdditionTargetAction | TicketReplyNoteItemSelectionTargetAction | OnTicketReplyNoteTargetAction;
+
 export interface TargetAction<P = any> {
   name: string;
   type: TargetActionType;
   context: Context;
   payload?: P;
+  subject: string;
 }
 
 export interface TargetElementEvent<Payload = any> {
