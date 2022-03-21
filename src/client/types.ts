@@ -53,6 +53,7 @@ export type TargetActionPayload =
   | {
     type: "on_reply_box_note";
     payload: {
+      noteId: string;
       note: string;
       attachments: File[];
     };
