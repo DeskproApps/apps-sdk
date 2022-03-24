@@ -37,6 +37,8 @@ export type TargetActionType =
   "ticket_addition"
   | "reply_box_note_item_selection"
   | "on_reply_box_note"
+  | "reply_box_email_item_selection"
+  | "on_reply_box_email"
 ;
 
 export type TargetActionPayload =
@@ -55,6 +57,21 @@ export type TargetActionPayload =
     payload: {
       noteId: string;
       note: string;
+      attachments: File[];
+    };
+  }
+  | {
+    type: "reply_box_email_item_selection";
+    payload: {
+      id: string;
+      selected: boolean;
+    }[];
+  }
+  | {
+    type: "on_reply_box_email";
+    payload: {
+      emailId: string;
+      email: string;
       attachments: File[];
     };
   }
@@ -98,7 +115,39 @@ export type OnTicketReplyNoteTargetAction = {
   appIconUrl: string;
 };
 
-export type TargetActionData = TicketAdditionTargetAction | TicketReplyNoteItemSelectionTargetAction | OnTicketReplyNoteTargetAction;
+export type TicketReplyEmailItemSelectionTargetAction = {
+  type: "reply_box_email_item_selection";
+  name: string;
+  title: string;
+  description: string;
+  appId: string;
+  appInstanceId: string;
+  appHash: string;
+  appIconUrl: string;
+  data: {
+    id: string;
+    title: string;
+    selected: boolean;
+  }[];
+};
+
+export type OnTicketReplyEmailTargetAction = {
+  type: "on_reply_box_email";
+  name: string;
+  title: string;
+  description: string;
+  appId: string;
+  appInstanceId: string;
+  appHash: string;
+  appIconUrl: string;
+};
+
+export type TargetActionData = TicketAdditionTargetAction
+  | TicketReplyNoteItemSelectionTargetAction
+  | OnTicketReplyNoteTargetAction
+  | TicketReplyEmailItemSelectionTargetAction
+  | OnTicketReplyEmailTargetAction
+;
 
 export interface TargetAction<P = any> {
   name: string;
