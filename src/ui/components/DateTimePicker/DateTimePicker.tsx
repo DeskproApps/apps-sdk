@@ -2,9 +2,6 @@ import React from "react";
 import Flatpickr, { DateTimePickerProps } from "react-flatpickr";
 import ShortcutButtonsPlugin from "shortcut-buttons-flatpickr";
 import type { Instance } from "flatpickr/dist/types/instance.d";
-import styled from "styled-components";
-import { Input as SharedInput } from "@deskpro/deskpro-ui";
-
 export { DatePickerInputWithDisplay } from "@deskpro/deskpro-ui";
 
 type OnClickSignature = (index: number, fp: Instance) => void;
@@ -54,31 +51,3 @@ export const DateTimePicker = (props: DatePickerProps) => {
         />
     );
 };
-
-export const DatePickerHiddenInput = styled.input`
-  visibility: hidden;
-  width: 0px;
-  padding: 0px;
-  margin: 0px;
-  border: none;
-  height: 0px;
-`;
-
-export const DatePickerInput = styled(SharedInput)`
-  :read-only {
-    cursor: pointer;
-  }
-`;
-
-export const DatePickerLabelAction = styled.div`
-  flex: 1;
-  text-align: right;
-  padding-right: 8px;
-  span {
-    color: ${({ theme }) => theme.colors.grey40};
-    cursor: pointer;
-    :hover {
-      color: ${({ theme }) => theme.colors.brandPrimary};
-    }
-  }
-`;

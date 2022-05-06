@@ -4,7 +4,7 @@ import { GlobalStyles, lightTheme } from "../theme";
 import { createClient } from "../../client/client";
 import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../../client/types";
 import { DeskproAppContext } from "./context";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "@deskpro/deskpro-ui";
 
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
   const [client, setClient] = useState<IDeskproClient|null>(null);

@@ -50,7 +50,7 @@ export const useDeskproAppTheme = (): DeskproAppTheme => {
   }
 
   return {
-    theme: value?.theme,
+    theme: value.theme,
   };
 };
 
