@@ -1,6 +1,6 @@
 {
   "name": "@deskpro/app-sdk",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Deskpro Apps SDK",
   "private": false,
   "license": "proprietary",
@@ -53,7 +53,7 @@
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11",
     "@types/react-flatpickr": "3.8.4",
-    "@types/styled-components": "5.1.19",
+    "@types/styled-components": "^5.1.23",
     "@typescript/lib-dom": "npm:@types/web",
     "fast-glob": "3.2.7",
     "jest": "27.4.4",
