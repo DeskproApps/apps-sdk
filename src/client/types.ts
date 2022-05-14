@@ -199,6 +199,8 @@ export interface CoreCallSender {
   _userStateSet: (name: string, value: string, options?: StateOptions) => Promise<any>;
   _stateGet: (name: string) => Promise<string>;
   _userStateGet: (name: string) => Promise<any>;
+  _stateHas: (name: string) => Promise<boolean>;
+  _userStateHas: (name: string) => Promise<boolean>;
   _stateDelete: (name: string) => Promise<any>;
   _userStateDelete: (name: string) => Promise<any>;
   _settingSet: (name: string, value: string) => Promise<any>;
@@ -299,6 +301,8 @@ export interface IDeskproClient {
   setUserState: <T>(name: string, value: T, options?: UserStateOptions) => Promise<SetStateResponse>;
   getState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
   getUserState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
+  hasState: <T>(name: string) => Promise<boolean>;
+  hasUserState: <T>(name: string) => Promise<boolean>;
   deleteState: (name: string) => Promise<boolean>;
   deleteUserState: (name: string) => Promise<boolean>;
   setSetting: <T>(name: string, value: T) => Promise<void>;

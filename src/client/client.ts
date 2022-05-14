@@ -122,6 +122,8 @@ export class DeskproClient implements IDeskproClient {
   public getUserState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
   public deleteState: (name: string) => Promise<boolean>;
   public deleteUserState: (name: string) => Promise<boolean>;
+  public hasState: (name: string) => Promise<boolean>;
+  public hasUserState: (name: string) => Promise<boolean>;
 
   // Settings
   public setSetting: <T>(name: string, value: T) => Promise<void>;
@@ -160,6 +162,8 @@ export class DeskproClient implements IDeskproClient {
     this.getUserState = async () => [];
     this.deleteState = async () => false;
     this.deleteUserState = async () => false;
+    this.hasState = async () => false;
+    this.hasUserState = async () => false;
 
     this.setSetting = async () => {};
     this.setSettings = async () => {};
@@ -269,6 +273,14 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._userStateDelete) {
       this.deleteUserState = parent._userStateDelete;
+    }
+
+    if (parent._stateHas) {
+      this.hasState = parent._stateHas;
+    }
+
+    if (parent._userStateHas) {
+      this.hasUserState = parent._userStateHas;
     }
 
     // Settings
