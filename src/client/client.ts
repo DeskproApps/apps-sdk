@@ -65,8 +65,9 @@ class OAuth2 implements IOAuth2 {
 
     const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
       const poller = setInterval(() => {
-        this.client.getUserState(urlResponse.statePath).then((value) => {
-          if (value.length) {
+        this.client.hasUserState(urlResponse.statePath).then((has) => {
+          if (has) {
+            clearInterval(poller);
             resolve({
               statePath: urlResponse.statePath,
               statePathPlaceholder: urlResponse.statePathPlaceholder,

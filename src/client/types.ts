@@ -301,8 +301,8 @@ export interface IDeskproClient {
   setUserState: <T>(name: string, value: T, options?: UserStateOptions) => Promise<SetStateResponse>;
   getState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
   getUserState: <T>(name: string) => Promise<GetStateResponse<T>[]>;
-  hasState: <T>(name: string) => Promise<boolean>;
-  hasUserState: <T>(name: string) => Promise<boolean>;
+  hasState: (name: string) => Promise<boolean>;
+  hasUserState: (name: string) => Promise<boolean>;
   deleteState: (name: string) => Promise<boolean>;
   deleteUserState: (name: string) => Promise<boolean>;
   setSetting: <T>(name: string, value: T) => Promise<void>;
