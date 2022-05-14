@@ -206,6 +206,7 @@ export interface CoreCallSender {
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
+  _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -270,6 +271,12 @@ export interface GetStateResponse<T> {
   data: T|null;
 }
 
+export interface GetOAuth2CallbackUrlResponse {
+  url: string;
+  statePath: string;
+  statePathPlaceholder: string;
+}
+
 export interface IDeskproClient {
   run: () => Promise<void>;
   onReady: (cb: ChildMethod) => void;
@@ -297,9 +304,11 @@ export interface IDeskproClient {
   setSetting: <T>(name: string, value: T) => Promise<void>;
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
+  getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
+  oauth2(): IOAuth2;
 }
 
 export interface TargetActionOptions<Payload = any> {
@@ -313,4 +322,38 @@ export interface IEntityAssociation {
   delete: (key: string) => Promise<void>;
   get: <T>(key: string) => Promise<T|null>;
   list: () => Promise<string[]>;
+}
+
+export interface OAuth2CallbackUrlOptions {
+  /**
+   * Token acquisition polling interval in milliseconds
+   */
+  pollInterval?: number;
+
+  /**
+   * Token acquisition timeout in milliseconds
+   */
+  timeout?: number;
+}
+
+export type OAuth2CallbackUrlPoll = () => Promise<{ statePath: string; statePathPlaceholder: string; }>;
+
+export interface OAuth2CallbackUrl {
+  callbackUrl: string;
+  poll: OAuth2CallbackUrlPoll;
+}
+
+export interface IOAuth2 {
+  /**
+   * Get an OAuth2 callback URL
+   *
+   * @param name Name of the token, e.g. "jira" (this will later be used to create the state var for the token)
+   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
+   * @param options
+   */
+  getCallbackUrl(
+      name: string,
+      tokenAcquisitionPattern: string,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2CallbackUrl>;
 }

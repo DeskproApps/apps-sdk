@@ -15,7 +15,13 @@ import {
   StateOptions,
   SetStateResponse,
   UserStateOptions,
-  GetStateResponse, TargetActionType, TargetActionOptions,
+  GetStateResponse,
+  TargetActionType,
+  TargetActionOptions,
+  IOAuth2,
+  OAuth2CallbackUrlOptions,
+  OAuth2CallbackUrl,
+  GetOAuth2CallbackUrlResponse, OAuth2CallbackUrlPoll,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
 
@@ -41,6 +47,44 @@ class EntityAssociation implements IEntityAssociation {
 
   delete(key: string): Promise<void> {
     return this.client.entityAssociationDelete(this.entityId, this.name, key);
+  }
+}
+
+class OAuth2 implements IOAuth2 {
+  constructor(private client: IDeskproClient) {}
+
+  async getCallbackUrl(
+      name: string,
+      tokenAcquisitionPattern: string,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2CallbackUrl> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute default timeout
+    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
+
+    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout);
+
+    const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.getUserState(urlResponse.statePath).then((value) => {
+          if (value.length) {
+            resolve({
+              statePath: urlResponse.statePath,
+              statePathPlaceholder: urlResponse.statePathPlaceholder,
+            });
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Token acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      callbackUrl: urlResponse.url,
+    };
   }
 }
 
@@ -90,6 +134,9 @@ export class DeskproClient implements IDeskproClient {
   public registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   public deregisterTargetAction: (name: string) => Promise<void>;
 
+  // OAuth2
+  public getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -121,6 +168,8 @@ export class DeskproClient implements IDeskproClient {
 
     this.registerTargetAction = async () => {};
     this.deregisterTargetAction = async () => {};
+
+    this.getOAuth2CallbackUrl = async () => ({ url: "", statePath: "", statePathPlaceholder: "" });
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -244,6 +293,11 @@ export class DeskproClient implements IDeskproClient {
     if (parent._deregisterTargetAction) {
       this.deregisterTargetAction = (name: string) => parent._deregisterTargetAction(name);
     }
+
+    // OAuth2
+    if (parent._getOAuth2CallbackUrl) {
+      this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout);
+    }
   }
 
   public onReady(cb: ChildMethod): void {
@@ -293,6 +347,10 @@ export class DeskproClient implements IDeskproClient {
 
   public getEntityAssociation(name: string, entityId: string): IEntityAssociation {
     return new EntityAssociation(this, name, entityId);
+  }
+
+  public oauth2(): IOAuth2 {
+    return new OAuth2(this);
   }
 
   public getParentMethods(): ChildMethods {
