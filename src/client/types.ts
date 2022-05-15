@@ -357,7 +357,7 @@ export interface IOAuth2 {
    */
   getCallbackUrl(
       name: string,
-      tokenAcquisitionPattern: string,
+      tokenAcquisitionPattern: RegExp,
       options?: OAuth2CallbackUrlOptions
   ): Promise<OAuth2CallbackUrl>;
 }
