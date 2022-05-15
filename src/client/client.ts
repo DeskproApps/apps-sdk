@@ -61,7 +61,7 @@ class OAuth2 implements IOAuth2 {
     const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
     const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
 
-    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.toString(), timeout);
+    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout);
 
     const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
       const poller = setInterval(() => {
