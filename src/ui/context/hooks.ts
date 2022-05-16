@@ -4,9 +4,16 @@ import {
   DeskproAppEventHooks,
   DeskproAppEventType, DeskproAppTheme
 } from "./types";
-import { useContext, useEffect } from "react";
+import {useContext, useEffect, useState} from "react";
 import { DeskproAppContext } from "./context";
-import { Context, TargetAction, TargetElementEvent, IDeskproClient } from "../../client/types";
+import {
+  Context,
+  TargetAction,
+  TargetElementEvent,
+  IDeskproClient,
+  OAuth2CallbackUrlOptions,
+  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll
+} from "../../client/types";
 import { Fetch } from "../../proxy/types";
 import { proxyFetch } from "../../proxy/helpers";
 
@@ -76,4 +83,51 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
       hooks.onElementEvent && hooks.onElementEvent(event.detail.id, event.detail.type, event.detail.payload);
     }) as EventListener);
   }, deps);
+};
+
+export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegExp, options?: OAuth2CallbackUrlOptions): DeferredOAuth2CallbackUrl => {
+  const [callbackUrl, setCallbackUrl] = useState<string|undefined>(undefined);
+  const [poll, setPoll] = useState<OAuth2CallbackUrlPoll|undefined>(undefined);
+  const [hasToken, setHasToken] = useState<DeferredOAuth2CallbackUrl["hasToken"]|undefined>(undefined);
+
+  const { client } = useDeskproAppClient();
+
+  useEffect(() => {
+    if (!client) {
+      return;
+    }
+
+    setHasToken(() => async () => client?.hasUserState(`oauth2/${name}`));
+
+    let onShow: EventListenerOrEventListenerObject|undefined;
+
+    onShow = () => {
+      client.oauth2().getCallbackUrl(name, tokenAcquisitionPattern, options).then((callback) => {
+        setCallbackUrl(callback.callbackUrl);
+        setPoll(() => async () => {
+          if (!options?.noBlockWhenPolling) {
+            await client?.setBlocking(true);
+          }
+
+          const token = await callback.poll();
+
+          if (!options?.noBlockWhenPolling) {
+            await client?.setBlocking(false);
+          }
+
+          return token;
+        });
+      });
+    };
+
+    document.addEventListener(DeskproAppEventType.SHOW, onShow);
+
+    return () => onShow && document.removeEventListener(DeskproAppEventType.SHOW, onShow);
+  }, [client]);
+
+  return {
+    callbackUrl,
+    poll,
+    hasToken,
+  };
 };

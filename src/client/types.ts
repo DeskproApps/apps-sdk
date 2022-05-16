@@ -258,6 +258,12 @@ export interface StateOptions {
    * via the JS client
    */
   backend?: boolean;
+
+  /**
+   * Set an expiry TTL date for this state var. If an expiry date has passed, then hasState*() and getState*() will
+   * not return items for a given key/path
+   */
+  expires?: Date;
 }
 
 export interface UserStateOptions extends StateOptions {
@@ -338,13 +344,44 @@ export interface OAuth2CallbackUrlOptions {
    * Token acquisition timeout in milliseconds
    */
   timeout?: number;
+
+  /**
+   * Don't block the app whilst polling for an access code/token
+   */
+  noBlockWhenPolling?: boolean;
 }
 
 export type OAuth2CallbackUrlPoll = () => Promise<{ statePath: string; statePathPlaceholder: string; }>;
 
 export interface OAuth2CallbackUrl {
+  /**
+   * URL used to pass to the vendor's auth page as the "redirect URL"
+   */
   callbackUrl: string;
+
+  /**
+   * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
+   * the token has been successfully captures by Deskpro
+   */
   poll: OAuth2CallbackUrlPoll;
+}
+
+export interface DeferredOAuth2CallbackUrl {
+  /**
+   * URL used to pass to the vendor's auth page as the "redirect URL"
+   */
+  callbackUrl?: string;
+
+  /**
+   * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
+   * the token has been successfully captures by Deskpro
+   */
+  poll?: OAuth2CallbackUrlPoll;
+
+  /**
+   * Utility to detect an already existing token
+   */
+  hasToken?: () => Promise<boolean|undefined>;
 }
 
 export interface IOAuth2 {
