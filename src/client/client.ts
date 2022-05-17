@@ -61,7 +61,7 @@ class OAuth2 implements IOAuth2 {
     const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
     const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
 
-    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout);
+    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout, options?.expires);
 
     const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
       const poller = setInterval(() => {
@@ -309,7 +309,7 @@ export class DeskproClient implements IDeskproClient {
 
     // OAuth2
     if (parent._getOAuth2CallbackUrl) {
-      this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout);
+      this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout, expires);
     }
   }
 

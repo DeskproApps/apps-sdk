@@ -208,7 +208,7 @@ export interface CoreCallSender {
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
-  _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
+  _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -314,7 +314,7 @@ export interface IDeskproClient {
   setSetting: <T>(name: string, value: T) => Promise<void>;
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
-  getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
+  getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
@@ -349,6 +349,11 @@ export interface OAuth2CallbackUrlOptions {
    * Don't block the app whilst polling for an access code/token
    */
   noBlockWhenPolling?: boolean;
+
+  /**
+   * UTC date/time when this token expires (sets the TTL of the stored token)
+   */
+  expires?: Date;
 }
 
 export type OAuth2CallbackUrlPoll = () => Promise<{ statePath: string; statePathPlaceholder: string; }>;
