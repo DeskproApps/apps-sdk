@@ -366,28 +366,30 @@ export interface OAuth2CallbackUrl {
   poll: OAuth2CallbackUrlPoll;
 }
 
+export type HasOAuth2Token = () => Promise<boolean|undefined>;
+
 export interface DeferredOAuth2CallbackUrl {
   /**
    * When isReady is TRUE then the details of the callback URL will be available in the "callback" object
    */
   isReady: boolean;
 
-  callback: {
+  callback?: {
     /**
      * URL used to pass to the vendor's auth page as the "redirect URL"
      */
-    callbackUrl?: string;
+    callbackUrl: string;
 
     /**
      * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
      * the token has been successfully captures by Deskpro
      */
-    poll?: OAuth2CallbackUrlPoll;
+    poll: OAuth2CallbackUrlPoll;
 
     /**
      * Utility to detect an already existing token
      */
-    hasToken?: () => Promise<boolean|undefined>;
+    hasToken: HasOAuth2Token;
   };
 }
 

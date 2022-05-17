@@ -12,7 +12,7 @@ import {
   TargetElementEvent,
   IDeskproClient,
   OAuth2CallbackUrlOptions,
-  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll
+  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token
 } from "../../client/types";
 import { Fetch } from "../../proxy/types";
 import { proxyFetch } from "../../proxy/helpers";
@@ -88,7 +88,7 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
 export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegExp, options?: OAuth2CallbackUrlOptions): DeferredOAuth2CallbackUrl => {
   const [callbackUrl, setCallbackUrl] = useState<string|undefined>(undefined);
   const [poll, setPoll] = useState<OAuth2CallbackUrlPoll|undefined>(undefined);
-  const [hasToken, setHasToken] = useState<DeferredOAuth2CallbackUrl["callback"]["hasToken"]|undefined>(undefined);
+  const [hasToken, setHasToken] = useState<HasOAuth2Token|undefined>(undefined);
 
   const { client } = useDeskproAppClient();
 
@@ -129,10 +129,10 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
 
   return {
     isReady,
-    callback: {
+    callback: isReady ? {
       callbackUrl,
       poll,
       hasToken,
-    },
+    } : undefined,
   };
 };
