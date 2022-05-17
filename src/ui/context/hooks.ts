@@ -88,7 +88,7 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
 export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegExp, options?: OAuth2CallbackUrlOptions): DeferredOAuth2CallbackUrl => {
   const [callbackUrl, setCallbackUrl] = useState<string|undefined>(undefined);
   const [poll, setPoll] = useState<OAuth2CallbackUrlPoll|undefined>(undefined);
-  const [hasToken, setHasToken] = useState<DeferredOAuth2CallbackUrl["hasToken"]|undefined>(undefined);
+  const [hasToken, setHasToken] = useState<DeferredOAuth2CallbackUrl["callback"]["hasToken"]|undefined>(undefined);
 
   const { client } = useDeskproAppClient();
 
@@ -125,7 +125,7 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
     return () => onShow && document.removeEventListener(DeskproAppEventType.SHOW, onShow);
   }, [client]);
 
-  const isReady = (callbackUrl && poll && hasToken);
+  const isReady = !!(callbackUrl && poll && hasToken);
 
   return {
     isReady,
