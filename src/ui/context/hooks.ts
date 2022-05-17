@@ -125,9 +125,14 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
     return () => onShow && document.removeEventListener(DeskproAppEventType.SHOW, onShow);
   }, [client]);
 
+  const isReady = (callbackUrl && poll && hasToken);
+
   return {
-    callbackUrl,
-    poll,
-    hasToken,
+    isReady,
+    callback: {
+      callbackUrl,
+      poll,
+      hasToken,
+    },
   };
 };
