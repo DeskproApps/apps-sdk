@@ -63,25 +63,43 @@ export const useDeskproAppTheme = (): DeskproAppTheme => {
 
 export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = []) => {
   useEffect(() => {
-    document.addEventListener(DeskproAppEventType.READY, ((event: CustomEvent<Context>) => {
+    const onReady = ((event: CustomEvent<Context>) => {
       hooks.onReady && hooks.onReady(event.detail);
-    }) as EventListener);
+    }) as EventListener;
 
-    document.addEventListener(DeskproAppEventType.SHOW, ((event: CustomEvent<Context>) => {
+    document.addEventListener(DeskproAppEventType.READY, onReady);
+
+    const onShow = ((event: CustomEvent<Context>) => {
       hooks.onShow && hooks.onShow(event.detail);
-    }) as EventListener);
+    }) as EventListener;
 
-    document.addEventListener(DeskproAppEventType.CHANGE, ((event: CustomEvent<Context>) => {
+    document.addEventListener(DeskproAppEventType.SHOW, onShow);
+
+    const onChange = ((event: CustomEvent<Context>) => {
       hooks.onChange && hooks.onChange(event.detail);
-    }) as EventListener);
+    }) as EventListener;
 
-    document.addEventListener(DeskproAppEventType.TARGET_ACTION, ((event: CustomEvent<TargetAction>) => {
+    document.addEventListener(DeskproAppEventType.CHANGE, onChange);
+
+    const onTargetAction = ((event: CustomEvent<TargetAction>) => {
       hooks.onTargetAction && hooks.onTargetAction(event.detail);
-    }) as EventListener);
+    }) as EventListener;
 
-    document.addEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, ((event: CustomEvent<TargetElementEvent>) => {
+    document.addEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
+
+    const onTargetElementEvent = ((event: CustomEvent<TargetElementEvent>) => {
       hooks.onElementEvent && hooks.onElementEvent(event.detail.id, event.detail.type, event.detail.payload);
-    }) as EventListener);
+    }) as EventListener;
+
+    document.addEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
+
+    return () => {
+      document.removeEventListener(DeskproAppEventType.READY, onReady);
+      document.removeEventListener(DeskproAppEventType.SHOW, onShow);
+      document.removeEventListener(DeskproAppEventType.CHANGE, onChange);
+      document.removeEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
+      document.removeEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
+    };
   }, deps);
 };
 
@@ -99,9 +117,7 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
 
     setHasToken(() => async () => client?.hasUserState(`oauth2/${name}`));
 
-    let onShow: EventListenerOrEventListenerObject|undefined;
-
-    onShow = () => {
+    const onShow: EventListenerOrEventListenerObject = () => {
       client.oauth2().getCallbackUrl(name, tokenAcquisitionPattern, options).then((callback) => {
         setCallbackUrl(callback.callbackUrl);
         setPoll(() => async () => {
@@ -122,7 +138,7 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
 
     document.addEventListener(DeskproAppEventType.SHOW, onShow);
 
-    return () => onShow && document.removeEventListener(DeskproAppEventType.SHOW, onShow);
+    return () => document.removeEventListener(DeskproAppEventType.SHOW, onShow);
   }, [client]);
 
   const isReady = !!(callbackUrl && poll && hasToken);
