@@ -1,6 +1,6 @@
 {
   "name": "@deskpro/app-sdk",
-  "version": "0.3.21",
+  "version": "0.3.22",
   "description": "Deskpro Apps SDK",
   "private": false,
   "license": "proprietary",
@@ -55,7 +55,11 @@
     "@types/react-dom": "17.0.11",
     "@types/react-flatpickr": "3.8.4",
     "@types/styled-components": "^5.1.23",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
     "@typescript/lib-dom": "npm:@types/web",
+    "eslint": "^8.15.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "fast-glob": "3.2.7",
     "jest": "27.4.4",
     "node-sass": "7.0.0",
@@ -72,7 +76,7 @@
     "rollup-plugin-typescript": "1.0.1",
     "scss-reset": "1.2.2",
     "terser": "5.10.0",
-    "typescript": "4.5.5"
+    "typescript": "^4.6.4"
   },
   "scripts": {
     "start": "yarn start:storybook",
@@ -82,6 +86,7 @@
     "build:cjs": "rimraf ./cjs && babel ./src --out-dir ./cjs --extensions .ts,.tsx --ignore \"**/*.stories.tsx\" --plugins @babel/plugin-transform-modules-commonjs",
     "watch:dist": "rimraf ./dist && rollup --config rollup.config.js --watch",
     "start:storybook": "start-storybook -p 6008",
-    "test": "jest"
+    "test": "jest",
+    "lint": "yarn eslint --ext ts,tsx ./src"
   }
 }
