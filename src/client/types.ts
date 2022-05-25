@@ -249,6 +249,11 @@ export type AppElement<Payload = any> =
     type: "edit_button";
     payload?: Payload;
   }
+  | {
+    type: "cta_external_link";
+    url: string;
+    hasIcon: boolean;
+  }
 ;
 
 export interface StateOptions {
