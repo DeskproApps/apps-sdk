@@ -1,6 +1,6 @@
 {
   "name": "@deskpro/app-sdk",
-  "version": "0.3.23",
+  "version": "1.0.0",
   "description": "Deskpro Apps SDK",
   "private": false,
   "license": "proprietary",
@@ -17,7 +17,7 @@
     "node": "^16.0.0"
   },
   "dependencies": {
-    "@deskpro/deskpro-ui": "2.3.1",
+    "@deskpro/deskpro-ui": "^2.3.5",
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
     "@fortawesome/free-brands-svg-icons": "^6.1.0",
     "@fortawesome/free-regular-svg-icons": "^6.1.0",
