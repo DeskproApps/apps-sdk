@@ -1287,10 +1287,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@deskpro/deskpro-ui@2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@deskpro/deskpro-ui/-/deskpro-ui-2.3.1.tgz#58125ec436d63072aae0b2231ac53e662e17edb8"
-  integrity sha512-abGYXtetZ9Nn5KZrxdCoNjNArq/9FqYnVwg656cU285dJUtsOtZUhRaRw6U26FZzxrsWA8sF4Qgy9PX3qyKvmQ==
+"@deskpro/deskpro-ui@^2.3.5":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@deskpro/deskpro-ui/-/deskpro-ui-2.3.5.tgz#32442b79052324ada513d9ca90153a473ced38df"
+  integrity sha512-REjp5uDSUGlNkSuB/HWO2fE6k4rGum4Ymc0C3BA6UQw8RF5Ld1KEEcEDZSGMtN4O7Qvj/WZztN5Acwo1H0Nwfg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-solid-svg-icons" "^6.1.0"
