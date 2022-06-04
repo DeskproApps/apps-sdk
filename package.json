@@ -16,6 +16,10 @@
   "engines": {
     "node": "^16.0.0"
   },
+  "peerDependencies": {
+    "react": "^17 || ^18",
+    "react-dom": "^17 || ^18"
+  },
   "dependencies": {
     "@deskpro/deskpro-ui": "^2.3.5",
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
@@ -25,13 +29,11 @@
     "handlebars": "4.7.7",
     "modern-normalize": "^1.1.0",
     "penpal": "6.2.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
     "react-flatpickr": "3.10.7",
-    "react-intl": "5.23.0",
+    "react-intl": "^5.23.0",
     "regenerator-runtime": "0.13.9",
     "shortcut-buttons-flatpickr": "0.4.0",
-    "styled-components": "5.3.3",
+    "styled-components": "^5.3.3",
     "tslib": "2.3.1"
   },
   "devDependencies": {
@@ -63,6 +65,8 @@
     "fast-glob": "3.2.7",
     "jest": "27.4.4",
     "node-sass": "7.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "rollup": "2.61.0",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
