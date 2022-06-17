@@ -2,7 +2,6 @@ import { CSSProperties } from "react";
 import "./CreateLinkIssue.css";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useDeskproAppTheme } from "../../context";
-import "./TwoButtonGroup.css";
 import { Button, Stack } from "@deskpro/deskpro-ui";
 
 export interface TwoButtonGroupProps {
