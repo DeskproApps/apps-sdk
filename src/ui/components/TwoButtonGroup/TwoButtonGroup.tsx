@@ -8,8 +8,8 @@ export interface TwoButtonGroupProps {
     selected: "one"|"two";
     oneLabel: string;
     twoLabel: string;
-    oneOnClick: () => {};
-    twoOnClick: () => {};
+    oneOnClick: () => void;
+    twoOnClick: () => void;
     oneIcon?: IconDefinition;
     twoIcon?: IconDefinition;
 }
