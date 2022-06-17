@@ -1,11 +1,11 @@
-import {CSSProperties, FC} from "react";
+import { CSSProperties } from "react";
 import "./CreateLinkIssue.css";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useDeskproAppTheme } from "../../context";
 import "./TwoButtonGroup.css";
 import { Button, Stack } from "@deskpro/deskpro-ui";
 
-export interface CreateLinkIssueProps {
+export interface TwoButtonGroupProps {
     selected: "one"|"two";
     oneLabel: string;
     twoLabel: string;
@@ -15,7 +15,7 @@ export interface CreateLinkIssueProps {
     twoIcon?: IconDefinition;
 }
 
-export const TwoButtonGroup: FC<CreateLinkIssueProps> = ({ selected, oneOnClick, twoOnClick, oneLabel, twoLabel, oneIcon, twoIcon }: CreateLinkIssueProps) => {
+export const TwoButtonGroup = ({ selected, oneOnClick, twoOnClick, oneLabel, twoLabel, oneIcon, twoIcon }: TwoButtonGroupProps) => {
     const { theme: { colors } } = useDeskproAppTheme();
 
     const group: CSSProperties = {
