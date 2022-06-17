@@ -1,8 +1,8 @@
-import { CSSProperties } from "react";
-import "./CreateLinkIssue.css";
+import React, { CSSProperties } from "react";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useDeskproAppTheme } from "../../context";
-import { Button, Stack } from "@deskpro/deskpro-ui";
+import { Stack } from "../Layout";
+import { Button } from "../Button";
 
 export interface TwoButtonGroupProps {
     selected: "one"|"two";
