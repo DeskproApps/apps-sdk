@@ -22,7 +22,7 @@ export const TwoButtonGroup = ({ selected, oneOnClick, twoOnClick, oneLabel, two
         marginBottom: "10px",
         padding: "6px 6px 7px",
         borderRadius: "6px",
-        backgroundColor: colors.grey10
+        backgroundColor: colors.grey10,
     };
 
     const unselected: CSSProperties = {
