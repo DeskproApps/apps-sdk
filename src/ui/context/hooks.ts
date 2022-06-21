@@ -93,12 +93,19 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
 
     document.addEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
 
+    const onAdminSettingsChange = ((event: CustomEvent<Record<string, any>>) => {
+      hooks.onAdminSettingsChange && hooks.onAdminSettingsChange(event.detail);
+    }) as EventListener;
+
+    document.addEventListener(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, onAdminSettingsChange);
+
     return () => {
       document.removeEventListener(DeskproAppEventType.READY, onReady);
       document.removeEventListener(DeskproAppEventType.SHOW, onShow);
       document.removeEventListener(DeskproAppEventType.CHANGE, onChange);
       document.removeEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
       document.removeEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
+      document.removeEventListener(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, onAdminSettingsChange);
     };
   }, deps);
 };

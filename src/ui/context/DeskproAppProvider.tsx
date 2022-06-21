@@ -49,6 +49,12 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
       );
     });
 
+    dpClient.onAdminSettingsChange((settings) => {
+      document.dispatchEvent(
+          new CustomEvent<Record<string, any>>(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, { detail: settings })
+      );
+    });
+
     dpClient.run().then(() => setClient(dpClient));
   }, []);
 

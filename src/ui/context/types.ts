@@ -24,6 +24,7 @@ export enum DeskproAppEventType {
   CHANGE = "change.app.deskpro",
   TARGET_ACTION = "target_action.app.deskpro",
   TARGET_ELEMENT_EVENT = "target_element_event.app.deskpro",
+  ADMIN_SETTINGS_CHANGE = "change.settings.admin.app.deskpro",
 }
 
 export interface DeskproAppEventHooks {
@@ -32,4 +33,5 @@ export interface DeskproAppEventHooks {
   onChange?: (context: Context) => void;
   onTargetAction?: <Payload = any>(action: TargetAction<Payload>) => void;
   onElementEvent?: <Payload = any>(id: string, type: string, payload?: Payload) => void;
+  onAdminSettingsChange?: (settings: Record<string, any>) => void;
 }
