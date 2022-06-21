@@ -181,6 +181,9 @@ export class DeskproClient implements IDeskproClient {
 
     this.getOAuth2CallbackUrl = async () => ({ url: "", statePath: "", statePathPlaceholder: "" });
 
+    this.setAdminSetting = async () => {};
+    this.setAdminSettingInvalid = async () => {};
+
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
     }
