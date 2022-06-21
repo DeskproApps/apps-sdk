@@ -97,6 +97,7 @@ export class DeskproClient implements IDeskproClient {
     onChange: () => undefined,
     onTargetAction: () => undefined,
     onElementEvent: () => undefined,
+    onAdminSettingsChange: () => undefined,
   };
 
   // Core Methods
@@ -139,6 +140,10 @@ export class DeskproClient implements IDeskproClient {
 
   // OAuth2
   public getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
+
+  // Admin
+  public setAdminSetting: (value: string) => void;
+  public setAdminSettingInvalid: (flag: boolean, settingName?: string) => void;
 
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
@@ -311,6 +316,15 @@ export class DeskproClient implements IDeskproClient {
     if (parent._getOAuth2CallbackUrl) {
       this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout, expires);
     }
+
+    // Admin
+    if (parent._setAdminSetting) {
+      this.setAdminSetting = (value) => parent._setAdminSetting(value);
+    }
+
+    if (parent._setAdminSettingInvalid) {
+      this.setAdminSettingInvalid = (flag, settingName) => parent._setAdminSettingInvalid(flag, settingName);
+    }
   }
 
   public onReady(cb: ChildMethod): void {
@@ -355,6 +369,12 @@ export class DeskproClient implements IDeskproClient {
       if (this.resize && this.options.resizeAfterEvents) {
         this.resize();
       }
+    };
+  }
+
+  public onAdminSettingsChange(cb: (settings: Record<string, any>) => void): void {
+    this.parentMethods.onAdminSettingsChange = (settings: Record<string, any>) => {
+      cb(settings);
     };
   }
 

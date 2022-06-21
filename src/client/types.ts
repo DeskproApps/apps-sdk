@@ -177,6 +177,7 @@ export type ChildMethods = {
   onChange: ChildMethod;
   onTargetAction: TargetActionChildMethod;
   onElementEvent: ElementEventChildMethod;
+  onAdminSettingsChange: (settings: Record<string, any>) => void;
   [name: string]: ChildMethod | TargetActionChildMethod | ElementEventChildMethod;
 };
 
@@ -209,6 +210,8 @@ export interface CoreCallSender {
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
   _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
+  _setAdminSetting: (value: string) => void;
+  _setAdminSettingInvalid: (flag: boolean, settingName?: string) => void;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -296,6 +299,7 @@ export interface IDeskproClient {
   onShow: (cb: ChildMethod) => void;
   onChange: (cb: ChildMethod) => void;
   onTargetAction: <Payload = any>(cb: TargetActionChildMethod<Payload>) => void;
+  onAdminSettingsChange: (cb: (settings: Record<string, any>) => void) => void;
   getProxyAuth: () => Promise<ProxyAuthPayload>;
   resize: (height?: number) => void;
   registerElement: (id: string, element: AppElement) => void;
@@ -322,6 +326,8 @@ export interface IDeskproClient {
   getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
+  setAdminSetting: (value: string) => void;
+  setAdminSettingInvalid: (flag: boolean, settingName?: string) => void;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   oauth2(): IOAuth2;
 }
