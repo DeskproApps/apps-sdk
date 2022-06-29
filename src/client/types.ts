@@ -205,7 +205,7 @@ export interface CoreCallSender {
   _userStateHas: (name: string) => Promise<boolean>;
   _stateDelete: (name: string) => Promise<any>;
   _userStateDelete: (name: string) => Promise<any>;
-  _settingSet: (name: string, value: string) => Promise<any>;
+  _settingSet: (name: string, value: any) => Promise<any>;
   _settingsSet: (settings: string) => Promise<any>;
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
@@ -333,11 +333,9 @@ export interface IDeskproClient {
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
   getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
-
   getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
   getStaticOAuth2CallbackUrlValue: () => Promise<string>;
   getStaticOAuth2Token: (key: string) => Promise<string|null>;
-
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
   setAdminSetting: (value: string) => void;

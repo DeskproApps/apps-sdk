@@ -350,7 +350,7 @@ export class DeskproClient implements IDeskproClient {
 
     // Settings
     if (parent._settingSet) {
-      this.setSetting = <T>(name: string, value: T) => parent._settingSet(name, JSON.stringify(value));
+      this.setSetting = <T>(name: string, value: T) => parent._settingSet(name, value);
     }
 
     if (parent._settingsSet) {
