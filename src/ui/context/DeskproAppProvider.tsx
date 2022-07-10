@@ -8,6 +8,7 @@ import { ThemeProvider } from "@deskpro/deskpro-ui";
 
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
   const [client, setClient] = useState<IDeskproClient|null>(null);
+  const [context, setContext] = useState<Context|null>(null);
 
   useEffect(() => {
     if (client) {
@@ -20,24 +21,28 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
     });
 
     dpClient.onReady((context: Context) => {
+      setContext(context);
       document.dispatchEvent(
         new CustomEvent<Context>(DeskproAppEventType.READY, { detail: context })
       );
     });
 
     dpClient.onShow((context: Context) => {
+      setContext(context);
       document.dispatchEvent(
         new CustomEvent<Context>(DeskproAppEventType.SHOW, { detail: context })
       );
     });
 
     dpClient.onChange((context: Context) => {
+      setContext(context);
       document.dispatchEvent(
         new CustomEvent<Context>(DeskproAppEventType.CHANGE, { detail: context })
       );
     });
 
     dpClient.onTargetAction((action: TargetAction) => {
+      setContext(action.context);
       document.dispatchEvent(
         new CustomEvent<TargetAction>(DeskproAppEventType.TARGET_ACTION, { detail: action })
       );
@@ -71,7 +76,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
   return (
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
-      <DeskproAppContext.Provider value={{ client, theme: currentTheme }}>
+      <DeskproAppContext.Provider value={{ client, context, theme: currentTheme }}>
         {children}
       </DeskproAppContext.Provider>
     </ThemeProvider>

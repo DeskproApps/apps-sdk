@@ -2,7 +2,7 @@ import {
   DeskproAppClient,
   DeskproAppContextValue,
   DeskproAppEventHooks,
-  DeskproAppEventType, DeskproAppTheme
+  DeskproAppEventType, DeskproAppTheme, LatestDeskproAppContext
 } from "./types";
 import {useContext, useEffect, useState} from "react";
 import { DeskproAppContext } from "./context";
@@ -22,6 +22,14 @@ export const useDeskproAppClient = (): DeskproAppClient => {
 
   return {
     client: value?.client ?? null,
+  };
+};
+
+export const useDeskproLatestAppContext = (): LatestDeskproAppContext => {
+  const value = useContext<DeskproAppContextValue>(DeskproAppContext);
+
+  return {
+    context: value?.context ?? null,
   };
 };
 

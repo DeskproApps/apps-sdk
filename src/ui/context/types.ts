@@ -8,10 +8,18 @@ export interface DeskproAppProviderProps {
   debug?: boolean,
 }
 
-export type DeskproAppContextValue = { client: IDeskproClient|null, theme: DeskproTheme } | null;
+export type DeskproAppContextValue = {
+  client: IDeskproClient|null,
+  context: Context|null,
+  theme: DeskproTheme
+} | null;
 
 export interface DeskproAppClient {
   client: IDeskproClient|null;
+}
+
+export interface LatestDeskproAppContext {
+  context: Context|null;
 }
 
 export interface DeskproAppTheme {
