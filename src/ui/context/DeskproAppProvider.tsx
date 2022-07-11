@@ -9,6 +9,7 @@ import { ThemeProvider } from "@deskpro/deskpro-ui";
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
   const [client, setClient] = useState<IDeskproClient|null>(null);
   const [context, setContext] = useState<Context|null>(null);
+  const [registeredElements, setRegisteredElements] = useState<string[]>([]);
 
   useEffect(() => {
     if (client) {
@@ -55,6 +56,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
     });
 
     dpClient.onAdminSettingsChange((settings) => {
+      setContext({ type: "admin_settings", settings }); // Pass more admin context here if we ever have one
       document.dispatchEvent(
           new CustomEvent<Record<string, any>>(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, { detail: settings })
       );
@@ -76,7 +78,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
   return (
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
-      <DeskproAppContext.Provider value={{ client, context, theme: currentTheme }}>
+      <DeskproAppContext.Provider value={{ client, context, registeredElements, setRegisteredElements, theme: currentTheme }}>
         {children}
       </DeskproAppContext.Provider>
     </ThemeProvider>

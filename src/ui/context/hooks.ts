@@ -1,8 +1,10 @@
 import {
+  DeRegisterElement,
+  ClearElements,
   DeskproAppClient,
   DeskproAppContextValue,
   DeskproAppEventHooks,
-  DeskproAppEventType, DeskproAppTheme, LatestDeskproAppContext
+  DeskproAppEventType, DeskproAppTheme, LatestDeskproAppContext, RegisterElement
 } from "./types";
 import {useContext, useEffect, useState} from "react";
 import { DeskproAppContext } from "./context";
@@ -12,7 +14,7 @@ import {
   TargetElementEvent,
   IDeskproClient,
   OAuth2CallbackUrlOptions,
-  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token
+  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token, AppElement
 } from "../../client/types";
 import { Fetch } from "../../proxy/types";
 import { proxyFetch } from "../../proxy/helpers";
@@ -31,6 +33,42 @@ export const useDeskproLatestAppContext = (): LatestDeskproAppContext => {
   return {
     context: value?.context ?? null,
   };
+};
+
+export const useDeskproElements = (
+    cb: (utils: { registerElement: RegisterElement; deRegisterElement: DeRegisterElement; clearElements: ClearElements; }) => void,
+    deps: any[] = []
+): void => {
+  const value = useContext<DeskproAppContextValue>(DeskproAppContext);
+
+  const registerElement: RegisterElement = (id: string, element: AppElement) => {
+    if (value?.client && value.setRegisteredElements) {
+      value.client.registerElement(id, element);
+      value.setRegisteredElements((ids) => [...ids, id]);
+    }
+  };
+
+  const deRegisterElement: DeRegisterElement = (id: string) => {
+    if (value?.client && value.setRegisteredElements) {
+      value.client.deregisterElement(id);
+      value.setRegisteredElements((ids) => ids.filter((elId) => elId !== id));
+    }
+  };
+
+  const clearElements: ClearElements = () => {
+    if (value?.client && value.setRegisteredElements) {
+      value.registeredElements.forEach((id) => value.client?.deregisterElement(id));
+      value.setRegisteredElements([]);
+    }
+  };
+
+  useInitialisedDeskproAppClient(() => {
+    cb({
+      registerElement,
+      deRegisterElement,
+      clearElements,
+    });
+  }, deps);
 };
 
 export const useInitialisedDeskproAppClient = (fn: (client: IDeskproClient) => void, deps: any[] = []): void => {

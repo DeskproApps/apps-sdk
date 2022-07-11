@@ -1,5 +1,5 @@
 import { DeskproTheme } from "@deskpro/deskpro-ui";
-import { Context, IDeskproClient, TargetAction } from "../../client/types";
+import { AppElement, Context, IDeskproClient, TargetAction } from "../../client/types";
 import { ReactNode } from "react";
 
 export interface DeskproAppProviderProps {
@@ -11,7 +11,9 @@ export interface DeskproAppProviderProps {
 export type DeskproAppContextValue = {
   client: IDeskproClient|null,
   context: Context|null,
-  theme: DeskproTheme
+  theme: DeskproTheme,
+  registeredElements: string[];
+  setRegisteredElements: (value: (((prevState: string[]) => string[]) | string[])) => void;
 } | null;
 
 export interface DeskproAppClient {
@@ -43,3 +45,9 @@ export interface DeskproAppEventHooks {
   onElementEvent?: <Payload = any>(id: string, type: string, payload?: Payload) => void;
   onAdminSettingsChange?: (settings: Record<string, any>) => void;
 }
+
+export type RegisterElement = (id: string, element: AppElement) => void;
+
+export type DeRegisterElement = (id: string) => void;
+
+export type ClearElements = () => void;
