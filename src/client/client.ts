@@ -147,6 +147,8 @@ export class DeskproClient implements IDeskproClient {
   public getProxyAuth: () => Promise<ProxyAuthPayload>;
   public getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   public resize: (height?: number) => void;
+  public setHeight: (height: number) => void;
+  public setWidth: (width: number) => void;
   public registerElement: (id: string, element: AppElement) => void;
   public deregisterElement: (id: string) => void;
 
@@ -199,6 +201,8 @@ export class DeskproClient implements IDeskproClient {
     this.getProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
     this.getAdminGenericProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
     this.resize = () => {};
+    this.setWidth = () => {};
+    this.setHeight = () => {};
     this.registerElement = () => {};
     this.deregisterElement = () => {};
     this.setBadgeCount = () => {};
@@ -271,6 +275,14 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._deregisterElement) {
       this.deregisterElement = (id: string) => parent._deregisterElement(id);
+    }
+
+    if (parent._setWidth) {
+      this.setWidth = parent._setWidth;
+    }
+
+    if (parent._setHeight) {
+      this.setHeight = parent._setHeight;
     }
 
     // Common
