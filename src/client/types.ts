@@ -455,6 +455,21 @@ export interface IOAuth2 {
   ): Promise<OAuth2CallbackUrl>;
 
   /**
+   * Get an OAuth2 static callback URL for agent operations
+   *
+   * @param key Generated "random" key used to link the auth request to the returned access token
+   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
+   * @param keyAcquisitionPattern RegEx pattern to acquire the key from the callback URL
+   * @param options
+   */
+  getGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl>;
+
+  /**
    * Get an OAuth2 static callback URL for admin operations
    *
    * @param key Generated "random" key used to link the auth request to the returned access token

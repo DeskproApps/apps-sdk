@@ -92,6 +92,45 @@ class OAuth2 implements IOAuth2 {
     };
   }
 
+  async getGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
+
+    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
+        key,
+        tokenAcquisitionPattern.source,
+        keyAcquisitionPattern.source,
+        timeout,
+        options?.expires
+    );
+
+    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.getStaticOAuth2Token(key).then((token) => {
+          if (token) {
+            clearInterval(poller);
+            resolve({ token });
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Token acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      callbackUrl: urlResponse.url,
+    };
+  }
+
   async getAdminGenericCallbackUrl(
       key: string,
       tokenAcquisitionPattern: RegExp,
