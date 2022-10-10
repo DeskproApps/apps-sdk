@@ -1287,10 +1287,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@deskpro/deskpro-ui@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@deskpro/deskpro-ui/-/deskpro-ui-2.5.1.tgz#e76e7d63df334ad0fed9b371bc5ffe5207c118a1"
-  integrity sha512-F+NjhjO/7FNP4S/cXPOa+ZkFUvIYKNYMj8vTHt4V0+sEMFQHu7/e73zR/XvEJCwn2Np2nC40E84HNABccjJT4g==
+"@deskpro/deskpro-ui@^4.1":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@deskpro/deskpro-ui/-/deskpro-ui-4.1.0.tgz#a58cf4b4b38611bd32317915bfa28421ac2072eb"
+  integrity sha512-Ziaw3/AQI/p4VfWUngSU/bYTvf27kUlc7o9B+ULyZGxBqqJl5ZsmElEcdHMWx92aSunlGS72/i7GoMKyMh8y+w==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-solid-svg-icons" "^6.1.0"
@@ -1307,7 +1307,7 @@
     simplebar "^5.3.6"
     simplebar-react "^2.3.6"
     tippy.js "^6.3.1"
-    ts-pattern "^4.0.2"
+    ts-pattern "^4.0.5"
     tslib "~2.4.0"
     type-fest "^2.12.0"
     use-debounce "^7.0.1"
@@ -12467,10 +12467,10 @@ ts-dedent@^2.0.0:
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
 
-ts-pattern@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.0.3.tgz#4b5a08ff61fcd5a9bbfe3c1e686c35420ef87bda"
-  integrity sha512-OxQStbr1MKcYYz3YaXsFSBkMo3zjFODVkV8kaLfOak+sWSfx4B+jkOm/VoaWLhnMP+icnIcJ7ENYEnmpAv3jLg==
+ts-pattern@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.0.5.tgz#8e87db265b890ddb0dfc10deda36568296ebd5c3"
+  integrity sha512-Bq44KCEt7JVaNLa148mBCJkcQf4l7jtLEBDuDdeuLynWDA+1a60P4D0rMkqSM9mOKLQbIWUddE9h3XKyKwBeqA==
 
 ts-pnp@^1.1.6:
   version "1.2.0"
