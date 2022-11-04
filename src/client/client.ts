@@ -187,7 +187,7 @@ export class DeskproClient implements IDeskproClient {
   public getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   public resize: (height?: number) => void;
   public setHeight: (height: number) => void;
-  public setWidth: (width: number) => void;
+  public setWidth: (width: string) => void;
   public registerElement: (id: string, element: AppElement) => void;
   public deregisterElement: (id: string) => void;
 

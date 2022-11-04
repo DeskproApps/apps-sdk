@@ -189,7 +189,7 @@ export interface TicketSidebarDeskproCallSender {
 
 export interface CoreCallSender {
   _setHeight: (height: number) => void;
-  _setWidth: (width: number) => void;
+  _setWidth: (width: string) => void;
   _registerElement: (id: string, element: AppElement) => Promise<void>;
   _deregisterElement: (id: string) => Promise<void>;
   _getProxyAuth: () => Promise<ProxyAuthPayload>;
@@ -313,7 +313,7 @@ export interface IDeskproClient {
   getProxyAuth: () => Promise<ProxyAuthPayload>;
   getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   resize: (height?: number) => void;
-  setWidth: (width: number) => void;
+  setWidth: (width: string) => void;
   setHeight: (height: number) => void;
   registerElement: (id: string, element: AppElement) => void;
   deregisterElement: (id: string) => void;
