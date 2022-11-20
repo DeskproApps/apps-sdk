@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
+import styled from "styled-components";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { useDeskproAppTheme } from "../../context";
 import { Stack } from "../Layout";
 import { Button } from "../Button";
 
@@ -14,40 +14,49 @@ export interface TwoButtonGroupProps {
     twoIcon?: IconDefinition;
 }
 
-export const TwoButtonGroup = ({ selected, oneOnClick, twoOnClick, oneLabel, twoLabel, oneIcon, twoIcon }: TwoButtonGroupProps) => {
-    const { theme: { colors } } = useDeskproAppTheme();
+const Group = styled(Stack)`
+    margin-bottom: 10px;
+    padding: 6px 6px 7px;
+    border-radius: 6px;
+    background-color: ${({ theme }) => theme.colors.grey10};
+`;
 
-    const group: CSSProperties = {
-        marginBottom: "10px",
-        padding: "6px 6px 7px",
-        borderRadius: "6px",
-        backgroundColor: colors.grey10,
-    };
+const GroupButton = styled(Button)`
+    flex-grow: 1;
+    justify-content: center;
 
-    const unselected: CSSProperties = {
-        backgroundColor: "transparent",
-        borderColor: "transparent",
-        boxShadow: "none",
-    };
+    ${({ selected }) => selected ? "" : `
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    `}
+`;
 
-    return (
-        <Stack justify="space-between" align="center" style={group}>
-            <Button
-                text={oneLabel}
-                intent="secondary"
-                icon={oneIcon}
-                size="large"
-                style={selected === "two" ? unselected : {}}
-                onClick={oneOnClick}
-            />
-            <Button
-                text={twoLabel}
-                intent="secondary"
-                icon={twoIcon}
-                size="large"
-                style={selected === "one" ? unselected : {}}
-                onClick={twoOnClick}
-            />
-        </Stack>
-    );
-};
+export const TwoButtonGroup = ({
+    selected,
+    oneLabel,
+    twoLabel,
+    oneOnClick,
+    twoOnClick,
+    oneIcon,
+    twoIcon,
+}: TwoButtonGroupProps) => (
+    <Group justify="space-between" align="center" gap={6}>
+        <GroupButton
+            text={oneLabel}
+            intent="secondary"
+            icon={oneIcon}
+            size="large"
+            selected={selected === "one"}
+            onClick={oneOnClick}
+        />
+        <GroupButton
+            text={twoLabel}
+            intent="secondary"
+            icon={twoIcon}
+            size="large"
+            selected={selected === "two"}
+            onClick={twoOnClick}
+        />
+    </Group>
+);
