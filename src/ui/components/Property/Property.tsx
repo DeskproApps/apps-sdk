@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { useDeskproAppTheme } from "../../context";
+import styled from "styled-components";
 import { Stack } from "../Layout";
 import { H2 } from "../Typography";
 
@@ -9,12 +9,15 @@ export interface PropertyProps {
   width?: string;
 }
 
-export const Property: FC<PropertyProps> = ({ title, children, width }: PropertyProps) => {
-  const { theme } = useDeskproAppTheme();
+const Title = styled(H2)`
+    color: ${({ theme }) => theme.colors.grey80};
+    margin-bottom: 2px;
+`;
 
+export const Property: FC<PropertyProps> = ({ title, children, width }: PropertyProps) => {
   return (
-    <Stack vertical style={{ width: width ?? "auto" }}>
-      {title && <H2 style={{ color: theme.colors.grey80, marginBottom: "2px" }}>{title}</H2>}
+    <Stack vertical style={{ width: width ?? "100%" }}>
+      {title && <Title>{title}</Title>}
       <div style={{ fontSize: "12px" }}>{children}</div>
     </Stack>
   );

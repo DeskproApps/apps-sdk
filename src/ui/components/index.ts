@@ -22,3 +22,4 @@ export * from "./DateTimePicker";
 export * from "./Radio";
 export * from "./AttachmentTag";
 export * from "./TwoButtonGroup";
+export * from "./Title";
