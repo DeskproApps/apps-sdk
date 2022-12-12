@@ -1,6 +1,6 @@
 import React, { useState, FC } from "react";
 import styled from "styled-components";
-import { faExternalLinkAlt, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { RoundedLabelTag, lightTheme } from "@deskpro/deskpro-ui";
 import { Icon } from "../Icon";
 import { Stack } from "../Layout";

@@ -7,7 +7,7 @@
     "outDir": "esm",
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "importHelpers": true,
