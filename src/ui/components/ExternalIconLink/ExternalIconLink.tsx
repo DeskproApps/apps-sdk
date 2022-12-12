@@ -1,34 +1,72 @@
-import React, { CSSProperties, FC } from "react";
-import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import { useDeskproAppTheme } from "../../context";
+import React, { useState, FC } from "react";
+import styled from "styled-components";
+import { faExternalLinkAlt, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { RoundedLabelTag, lightTheme } from "@deskpro/deskpro-ui";
 import { Icon } from "../Icon";
+import { Stack } from "../Layout";
 import { AnyIcon } from "@deskpro/deskpro-ui";
 
-export interface ExternalIconLinkProps {
-  icon: AnyIcon;
-  href: string;
-  title?: string;
-  style?: CSSProperties;
-}
-
-export const ExternalIconLink: FC<ExternalIconLinkProps> = ({ icon, href, title, style }: ExternalIconLinkProps) => {
-  const { theme } = useDeskproAppTheme();
-
-  const externalLinkStyle: CSSProperties = {
-    display: "inline-flex",
-    padding: "3px 6px",
-    borderRadius: "12px",
-    alignItems: "center",
-    backgroundColor: theme.colors.grey10,
-    ...(style ?? {}),
-  };
-
-  return (
-    <a href={href} title={title} target="_blank" style={externalLinkStyle}>
-      <Icon icon={icon} themeColor="grey100" />
-      <span style={{ marginLeft: "7px" }}>
-        <Icon icon={faExternalLinkAlt} themeColor="brandPrimary" size={10} />
-      </span>
-    </a>
-  );
+type Props = {
+    href: string,
+    icon?: AnyIcon,
 };
+
+const Container = styled(Stack)`
+    align-items: center;
+    padding: 2px;
+`;
+
+const Link = styled.a`
+    display: inline-block;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    color: ${({ theme }) => (theme.colors.brandShade60)}
+`;
+
+const BrandIcon = styled(Icon)`
+    display: inline-block !important;
+    padding: 0 6px 0 0;
+    cursor: pointer;
+  
+    > svg {
+        width: 12px;
+        height: 12px;
+        margin-top: -2px;
+    }
+`;
+
+const ExternalIconLink: FC<Props> = ({ href, icon }) => {
+    const [isHover, setIsHover] = useState(false);
+    const theme = lightTheme;
+
+    return (
+        <Link
+            target="_blank"
+            href={href}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+        >
+            <RoundedLabelTag
+                size="small"
+                withClose={false}
+                backgroundColor={theme.colors.brandShade20}
+                textColor={theme.colors.grey100}
+                borderColor={isHover
+                    ? theme.colors.brandShade60
+                    : theme.colors.brandShade20
+                }
+                closeIcon={faArrowUpRightFromSquare}
+                label={(
+                    <Container>
+                        {icon && <BrandIcon icon={icon} />}
+                        <Stack>
+                            <Icon icon={faArrowUpRightFromSquare} />
+                        </Stack>
+                    </Container>
+                )}
+            />
+        </Link>
+    );
+};
+
+export { ExternalIconLink }
