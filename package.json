@@ -3,7 +3,7 @@
   "version": "1.2.2",
   "description": "Deskpro Apps SDK",
   "private": false,
-  "license": "proprietary",
+  "license": "MIT",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
