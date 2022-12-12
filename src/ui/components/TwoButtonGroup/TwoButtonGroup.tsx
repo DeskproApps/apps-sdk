@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import styled from "styled-components";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { Stack } from "../Layout";
@@ -21,7 +21,7 @@ const Group = styled(Stack)`
     background-color: ${({ theme }) => theme.colors.grey10};
 `;
 
-const GroupButton = styled(Button)`
+const GroupButton = styled(Button)<{ selected: boolean }>`
     flex-grow: 1;
     justify-content: center;
 
