@@ -218,6 +218,7 @@ export interface CoreCallSender {
   _getStaticOAuth2Token: (key: string) => Promise<string|null>;
   _setAdminSetting: (value: string) => void;
   _setAdminSettingInvalid: (message: string, settingName?: string) => void;
+  _sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -344,8 +345,10 @@ export interface IDeskproClient {
   deregisterTargetAction: (name: string) => Promise<void>;
   setAdminSetting: (value: string) => void;
   setAdminSettingInvalid: (message: string, settingName?: string) => void;
+  sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   oauth2(): IOAuth2;
+  deskpro(): IDeskproUI;
 }
 
 export interface TargetActionOptions<Payload = any> {
@@ -359,6 +362,23 @@ export interface IEntityAssociation {
   delete: (key: string) => Promise<void>;
   get: <T>(key: string) => Promise<T|null>;
   list: () => Promise<string[]>;
+}
+
+export type DeskproUIMessageApplyToActiveTicketReplyBox = {
+  type: "append_to_active_ticket_reply_box",
+  content: string;
+};
+
+export type DeskproUIMessage =
+    /**
+     * Send arbitrary content to the "active" ticket reply box RTE
+     */
+    DeskproUIMessageApplyToActiveTicketReplyBox
+;
+
+export interface IDeskproUI {
+  send: (message: DeskproUIMessage) => Promise<void>;
+  appendContentToActiveTicketReplyBox: (content: string) => Promise<void>;
 }
 
 export interface OAuth2CallbackUrlOptions {

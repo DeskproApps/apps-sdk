@@ -26,8 +26,27 @@ import {
   GetStaticOAuth2CallbackUrlResponse,
   OAuth2StaticCallbackUrlPoll,
   OAuth2StaticCallbackUrl,
+  IDeskproUI,
+  DeskproUIMessage,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
+
+class DeskproUI implements IDeskproUI {
+  constructor(
+      private client: IDeskproClient,
+  ) {}
+
+  send(message: DeskproUIMessage): Promise<void> {
+    return this.client.sendDeskproUIMessage(message);
+  }
+
+  appendContentToActiveTicketReplyBox(content: string): Promise<void> {
+    return this.send({
+      type: "append_to_active_ticket_reply_box",
+      content,
+    });
+  }
+}
 
 class EntityAssociation implements IEntityAssociation {
   constructor(
@@ -233,6 +252,9 @@ export class DeskproClient implements IDeskproClient {
   public setAdminSetting: (value: string) => void;
   public setAdminSettingInvalid: (message: string, settingName?: string) => void;
 
+  // Deskpro UI
+  public sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -277,6 +299,8 @@ export class DeskproClient implements IDeskproClient {
 
     this.setAdminSetting = async () => {};
     this.setAdminSettingInvalid = async () => {};
+
+    this.sendDeskproUIMessage = async () => {};
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -447,6 +471,11 @@ export class DeskproClient implements IDeskproClient {
     if (parent._setAdminSettingInvalid) {
       this.setAdminSettingInvalid = (message, settingName) => parent._setAdminSettingInvalid(message, settingName);
     }
+
+    // Deskpro UI
+    if (parent._sendDeskproUIMessage) {
+      this.sendDeskproUIMessage = (message: DeskproUIMessage) => parent._sendDeskproUIMessage(message);
+    }
   }
 
   public onReady(cb: ChildMethod): void {
@@ -506,6 +535,10 @@ export class DeskproClient implements IDeskproClient {
 
   public oauth2(): IOAuth2 {
     return new OAuth2(this);
+  }
+
+  public deskpro(): IDeskproUI {
+    return new DeskproUI(this);
   }
 
   public getParentMethods(): ChildMethods {
