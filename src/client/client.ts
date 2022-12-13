@@ -46,6 +46,15 @@ class DeskproUI implements IDeskproUI {
       content,
     });
   }
+
+  appendLinkToActiveTicketReplyBox(url: string, text: string, title?: string): Promise<void> {
+    return this.send({
+      type: "append_link_to_active_ticket_reply_box",
+      url,
+      text,
+      title,
+    });
+  }
 }
 
 class EntityAssociation implements IEntityAssociation {
