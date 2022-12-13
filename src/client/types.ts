@@ -383,13 +383,14 @@ export type DeskproUIMessageAppendLinkToActiveTicketReplyBox = {
 };
 
 export type DeskproUIMessage =
-    | DeskproUIMessageAppendToActiveTicketReplyBox
+    DeskproUIMessageAppendToActiveTicketReplyBox
     | DeskproUIMessageAppendLinkToActiveTicketReplyBox
 ;
 
 export interface IDeskproUI {
   send: (message: DeskproUIMessage) => Promise<void>;
   appendContentToActiveTicketReplyBox: (content: string) => Promise<void>;
+  appendLinkToActiveTicketReplyBox(url: string, text: string, title?: string): Promise<void>;
 }
 
 export interface OAuth2CallbackUrlOptions {
