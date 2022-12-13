@@ -364,16 +364,27 @@ export interface IEntityAssociation {
   list: () => Promise<string[]>;
 }
 
-export type DeskproUIMessageApplyToActiveTicketReplyBox = {
+/**
+ * Send arbitrary content to the "active" ticket reply box RTE
+ */
+export type DeskproUIMessageAppendToActiveTicketReplyBox = {
   type: "append_to_active_ticket_reply_box",
   content: string;
 };
 
+/**
+ * Append link to the "active" ticket reply box RTE
+ */
+export type DeskproUIMessageAppendLinkToActiveTicketReplyBox = {
+  type: "append_link_to_active_ticket_reply_box",
+  url: string;
+  text: string;
+  title?: string;
+};
+
 export type DeskproUIMessage =
-    /**
-     * Send arbitrary content to the "active" ticket reply box RTE
-     */
-    DeskproUIMessageApplyToActiveTicketReplyBox
+    | DeskproUIMessageAppendToActiveTicketReplyBox
+    | DeskproUIMessageAppendLinkToActiveTicketReplyBox
 ;
 
 export interface IDeskproUI {
