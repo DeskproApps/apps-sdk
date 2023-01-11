@@ -22,6 +22,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.1.0",
     "@fortawesome/free-regular-svg-icons": "^6.1.0",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@types/jest": "^29.2.5",
     "handlebars": "4.7.7",
     "modern-normalize": "^1.1.0",
     "penpal": "6.2.1",
