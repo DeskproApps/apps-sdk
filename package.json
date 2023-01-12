@@ -80,14 +80,14 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "start": "yarn start:storybook",
-    "build": "yarn build:esm && yarn build:cjs && yarn build:dist",
+    "start": "pnpm start:storybook",
+    "build": "pnpm build:esm && pnpm build:cjs && pnpm build:dist",
     "build:dist": "rimraf ./dist && rollup --config rollup.config.js && terser dist/deskpro.js -o dist/deskpro.min.js -m --source-map",
     "build:esm": "rimraf ./esm && tsc",
     "build:cjs": "rimraf ./cjs && babel ./src --out-dir ./cjs --extensions .ts,.tsx --ignore \"**/*.stories.tsx\" --plugins @babel/plugin-transform-modules-commonjs",
     "watch:dist": "rimraf ./dist && rollup --config rollup.config.js --watch",
     "start:storybook": "start-storybook -p 6008",
     "test": "jest",
-    "lint": "yarn eslint --ext ts,tsx ./src"
+    "lint": "pnpm eslint --ext ts,tsx ./src"
   }
 }
