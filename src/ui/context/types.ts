@@ -1,5 +1,5 @@
 import { DeskproTheme } from "@deskpro/deskpro-ui";
-import { Context, IDeskproClient, TargetAction } from "../../client/types";
+import { AppElement, Context, IDeskproClient, TargetAction } from "../../client/types";
 import { ReactNode } from "react";
 
 export interface DeskproAppProviderProps {
@@ -8,10 +8,20 @@ export interface DeskproAppProviderProps {
   debug?: boolean,
 }
 
-export type DeskproAppContextValue = { client: IDeskproClient|null, theme: DeskproTheme } | null;
+export type DeskproAppContextValue = {
+  client: IDeskproClient|null,
+  context: Context|null,
+  theme: DeskproTheme,
+  registeredElements: string[];
+  setRegisteredElements: (value: (((prevState: string[]) => string[]) | string[])) => void;
+} | null;
 
 export interface DeskproAppClient {
   client: IDeskproClient|null;
+}
+
+export interface LatestDeskproAppContext {
+  context: Context|null;
 }
 
 export interface DeskproAppTheme {
@@ -24,6 +34,7 @@ export enum DeskproAppEventType {
   CHANGE = "change.app.deskpro",
   TARGET_ACTION = "target_action.app.deskpro",
   TARGET_ELEMENT_EVENT = "target_element_event.app.deskpro",
+  ADMIN_SETTINGS_CHANGE = "change.settings.admin.app.deskpro",
 }
 
 export interface DeskproAppEventHooks {
@@ -32,4 +43,11 @@ export interface DeskproAppEventHooks {
   onChange?: (context: Context) => void;
   onTargetAction?: <Payload = any>(action: TargetAction<Payload>) => void;
   onElementEvent?: <Payload = any>(id: string, type: string, payload?: Payload) => void;
+  onAdminSettingsChange?: (settings: Record<string, any>) => void;
 }
+
+export type RegisterElement = (id: string, element: AppElement) => void;
+
+export type DeRegisterElement = (id: string) => void;
+
+export type ClearElements = () => void;

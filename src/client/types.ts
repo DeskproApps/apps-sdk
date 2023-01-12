@@ -19,6 +19,7 @@ export type ContextType = "ticket"
   | "guide_topic"
   | "community_topic"
   | "global"
+  | "admin_settings"
 ;
 
 export interface Context<Data = any, Settings = any> {
@@ -177,6 +178,7 @@ export type ChildMethods = {
   onChange: ChildMethod;
   onTargetAction: TargetActionChildMethod;
   onElementEvent: ElementEventChildMethod;
+  onAdminSettingsChange: (settings: Record<string, any>) => void;
   [name: string]: ChildMethod | TargetActionChildMethod | ElementEventChildMethod;
 };
 
@@ -187,9 +189,11 @@ export interface TicketSidebarDeskproCallSender {
 
 export interface CoreCallSender {
   _setHeight: (height: number) => void;
+  _setWidth: (width: number | string) => void;
   _registerElement: (id: string, element: AppElement) => Promise<void>;
   _deregisterElement: (id: string) => Promise<void>;
   _getProxyAuth: () => Promise<ProxyAuthPayload>;
+  _getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   _entityAssociationGet: () => Promise<any>;
   _entityAssociationSet: () => Promise<any>;
   _entityAssociationList: () => Promise<any>;
@@ -203,12 +207,18 @@ export interface CoreCallSender {
   _userStateHas: (name: string) => Promise<boolean>;
   _stateDelete: (name: string) => Promise<any>;
   _userStateDelete: (name: string) => Promise<any>;
-  _settingSet: (name: string, value: string) => Promise<any>;
+  _settingSet: (name: string, value: any) => Promise<any>;
   _settingsSet: (settings: string) => Promise<any>;
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
   _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
+  _getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
+  _getStaticOAuth2CallbackUrlValue: () => Promise<string>;
+  _getStaticOAuth2Token: (key: string) => Promise<string|null>;
+  _setAdminSetting: (value: string) => void;
+  _setAdminSettingInvalid: (message: string, settingName?: string) => void;
+  _sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
 }
 
 export type DeskproCallSender = CoreCallSender & TicketSidebarDeskproCallSender;
@@ -292,14 +302,22 @@ export interface GetOAuth2CallbackUrlResponse {
   statePathPlaceholder: string;
 }
 
+export interface GetStaticOAuth2CallbackUrlResponse {
+  url: string;
+}
+
 export interface IDeskproClient {
   run: () => Promise<void>;
   onReady: (cb: ChildMethod) => void;
   onShow: (cb: ChildMethod) => void;
   onChange: (cb: ChildMethod) => void;
   onTargetAction: <Payload = any>(cb: TargetActionChildMethod<Payload>) => void;
+  onAdminSettingsChange: (cb: (settings: Record<string, any>) => void) => void;
   getProxyAuth: () => Promise<ProxyAuthPayload>;
+  getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   resize: (height?: number) => void;
+  setWidth: (width: number | string) => void;
+  setHeight: (height: number) => void;
   registerElement: (id: string, element: AppElement) => void;
   deregisterElement: (id: string) => void;
   onElementEvent: (cb: ElementEventChildMethod) => void;
@@ -322,10 +340,17 @@ export interface IDeskproClient {
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
   getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
+  getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
+  getStaticOAuth2CallbackUrlValue: () => Promise<string>;
+  getStaticOAuth2Token: (key: string) => Promise<string|null>;
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
+  setAdminSetting: (value: string) => void;
+  setAdminSettingInvalid: (message: string, settingName?: string) => void;
+  sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   oauth2(): IOAuth2;
+  deskpro(): IDeskproUI;
 }
 
 export interface TargetActionOptions<Payload = any> {
@@ -339,6 +364,35 @@ export interface IEntityAssociation {
   delete: (key: string) => Promise<void>;
   get: <T>(key: string) => Promise<T|null>;
   list: () => Promise<string[]>;
+}
+
+/**
+ * Send arbitrary content to the "active" ticket reply box RTE
+ */
+export type DeskproUIMessageAppendToActiveTicketReplyBox = {
+  type: "append_to_active_ticket_reply_box",
+  content: string;
+};
+
+/**
+ * Append link to the "active" ticket reply box RTE
+ */
+export type DeskproUIMessageAppendLinkToActiveTicketReplyBox = {
+  type: "append_link_to_active_ticket_reply_box",
+  url: string;
+  text: string;
+  title?: string;
+};
+
+export type DeskproUIMessage =
+    DeskproUIMessageAppendToActiveTicketReplyBox
+    | DeskproUIMessageAppendLinkToActiveTicketReplyBox
+;
+
+export interface IDeskproUI {
+  send: (message: DeskproUIMessage) => Promise<void>;
+  appendContentToActiveTicketReplyBox: (content: string) => Promise<void>;
+  appendLinkToActiveTicketReplyBox(url: string, text: string, title?: string): Promise<void>;
 }
 
 export interface OAuth2CallbackUrlOptions {
@@ -365,6 +419,8 @@ export interface OAuth2CallbackUrlOptions {
 
 export type OAuth2CallbackUrlPoll = () => Promise<{ statePath: string; statePathPlaceholder: string; }>;
 
+export type OAuth2StaticCallbackUrlPoll = () => Promise<{ token: string; }>;
+
 export interface OAuth2CallbackUrl {
   /**
    * URL used to pass to the vendor's auth page as the "redirect URL"
@@ -373,9 +429,22 @@ export interface OAuth2CallbackUrl {
 
   /**
    * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
-   * the token has been successfully captures by Deskpro
+   * the token has been successfully captured by Deskpro
    */
   poll: OAuth2CallbackUrlPoll;
+}
+
+export interface OAuth2StaticCallbackUrl {
+  /**
+   * URL used to pass to the vendor's auth page as the "redirect URL"
+   */
+  callbackUrl: string;
+
+  /**
+   * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
+   * the token has been successfully captured by Deskpro
+   */
+  poll: OAuth2StaticCallbackUrlPoll;
 }
 
 export type HasOAuth2Token = () => Promise<boolean|undefined>;
@@ -418,4 +487,34 @@ export interface IOAuth2 {
       tokenAcquisitionPattern: RegExp,
       options?: OAuth2CallbackUrlOptions
   ): Promise<OAuth2CallbackUrl>;
+
+  /**
+   * Get an OAuth2 static callback URL for agent operations
+   *
+   * @param key Generated "random" key used to link the auth request to the returned access token
+   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
+   * @param keyAcquisitionPattern RegEx pattern to acquire the key from the callback URL
+   * @param options
+   */
+  getGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl>;
+
+  /**
+   * Get an OAuth2 static callback URL for admin operations
+   *
+   * @param key Generated "random" key used to link the auth request to the returned access token
+   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
+   * @param keyAcquisitionPattern RegEx pattern to acquire the key from the callback URL
+   * @param options
+   */
+  getAdminGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl>;
 }

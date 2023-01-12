@@ -21,9 +21,41 @@ import {
   IOAuth2,
   OAuth2CallbackUrlOptions,
   OAuth2CallbackUrl,
-  GetOAuth2CallbackUrlResponse, OAuth2CallbackUrlPoll,
+  GetOAuth2CallbackUrlResponse,
+  OAuth2CallbackUrlPoll,
+  GetStaticOAuth2CallbackUrlResponse,
+  OAuth2StaticCallbackUrlPoll,
+  OAuth2StaticCallbackUrl,
+  IDeskproUI,
+  DeskproUIMessage,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
+
+class DeskproUI implements IDeskproUI {
+  constructor(
+      private client: IDeskproClient,
+  ) {}
+
+  send(message: DeskproUIMessage): Promise<void> {
+    return this.client.sendDeskproUIMessage(message);
+  }
+
+  appendContentToActiveTicketReplyBox(content: string): Promise<void> {
+    return this.send({
+      type: "append_to_active_ticket_reply_box",
+      content,
+    });
+  }
+
+  appendLinkToActiveTicketReplyBox(url: string, text: string, title?: string): Promise<void> {
+    return this.send({
+      type: "append_link_to_active_ticket_reply_box",
+      url,
+      text,
+      title,
+    });
+  }
+}
 
 class EntityAssociation implements IEntityAssociation {
   constructor(
@@ -87,6 +119,84 @@ class OAuth2 implements IOAuth2 {
       callbackUrl: urlResponse.url,
     };
   }
+
+  async getGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
+
+    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
+        key,
+        tokenAcquisitionPattern.source,
+        keyAcquisitionPattern.source,
+        timeout,
+        options?.expires
+    );
+
+    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.getStaticOAuth2Token(key).then((token) => {
+          if (token) {
+            clearInterval(poller);
+            resolve({ token });
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Token acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      callbackUrl: urlResponse.url,
+    };
+  }
+
+  async getAdminGenericCallbackUrl(
+      key: string,
+      tokenAcquisitionPattern: RegExp,
+      keyAcquisitionPattern: RegExp,
+      options?: OAuth2CallbackUrlOptions
+  ): Promise<OAuth2StaticCallbackUrl> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
+
+    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
+        key,
+        tokenAcquisitionPattern.source,
+        keyAcquisitionPattern.source,
+        timeout,
+        options?.expires
+    );
+
+    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.getStaticOAuth2Token(key).then((token) => {
+          if (token) {
+            clearInterval(poller);
+            resolve({ token });
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Token acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      callbackUrl: urlResponse.url,
+    };
+  }
 }
 
 export class DeskproClient implements IDeskproClient {
@@ -97,11 +207,15 @@ export class DeskproClient implements IDeskproClient {
     onChange: () => undefined,
     onTargetAction: () => undefined,
     onElementEvent: () => undefined,
+    onAdminSettingsChange: () => undefined,
   };
 
   // Core Methods
   public getProxyAuth: () => Promise<ProxyAuthPayload>;
+  public getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   public resize: (height?: number) => void;
+  public setHeight: (height: number) => void;
+  public setWidth: (width: number | string) => void;
   public registerElement: (id: string, element: AppElement) => void;
   public deregisterElement: (id: string) => void;
 
@@ -139,13 +253,26 @@ export class DeskproClient implements IDeskproClient {
 
   // OAuth2
   public getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
+  public getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
+  public getStaticOAuth2CallbackUrlValue: () => Promise<string>;
+  public getStaticOAuth2Token: (key: string) => Promise<string|null>;
+
+  // Admin
+  public setAdminSetting: (value: string) => void;
+  public setAdminSettingInvalid: (message: string, settingName?: string) => void;
+
+  // Deskpro UI
+  public sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
 
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
   ) {
     this.getProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
+    this.getAdminGenericProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
     this.resize = () => {};
+    this.setWidth = () => {};
+    this.setHeight = () => {};
     this.registerElement = () => {};
     this.deregisterElement = () => {};
     this.setBadgeCount = () => {};
@@ -175,6 +302,14 @@ export class DeskproClient implements IDeskproClient {
     this.deregisterTargetAction = async () => {};
 
     this.getOAuth2CallbackUrl = async () => ({ url: "", statePath: "", statePathPlaceholder: "" });
+    this.getStaticOAuth2CallbackUrl = async () => ({ url: "" });
+    this.getStaticOAuth2CallbackUrlValue = async () => "";
+    this.getStaticOAuth2Token = async () => null;
+
+    this.setAdminSetting = async () => {};
+    this.setAdminSettingInvalid = async () => {};
+
+    this.sendDeskproUIMessage = async () => {};
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -189,12 +324,17 @@ export class DeskproClient implements IDeskproClient {
         _onChange: this.parentMethods.onChange,
         _onTargetAction: this.parentMethods.onTargetAction,
         _onElementEvent: this.parentMethods.onElementEvent,
+        _onAdminSettingsChange: this.parentMethods.onAdminSettingsChange,
       },
     }).promise;
 
     // Core
     if (parent._getProxyAuth) {
       this.getProxyAuth = parent._getProxyAuth;
+    }
+
+    if (parent._getAdminGenericProxyAuth) {
+      this.getAdminGenericProxyAuth = parent._getAdminGenericProxyAuth;
     }
 
     if (document && parent._setHeight) {
@@ -207,6 +347,14 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._deregisterElement) {
       this.deregisterElement = (id: string) => parent._deregisterElement(id);
+    }
+
+    if (parent._setWidth) {
+      this.setWidth = parent._setWidth;
+    }
+
+    if (parent._setHeight) {
+      this.setHeight = parent._setHeight;
     }
 
     // Common
@@ -286,7 +434,7 @@ export class DeskproClient implements IDeskproClient {
 
     // Settings
     if (parent._settingSet) {
-      this.setSetting = <T>(name: string, value: T) => parent._settingSet(name, JSON.stringify(value));
+      this.setSetting = <T>(name: string, value: T) => parent._settingSet(name, value);
     }
 
     if (parent._settingsSet) {
@@ -310,6 +458,32 @@ export class DeskproClient implements IDeskproClient {
     // OAuth2
     if (parent._getOAuth2CallbackUrl) {
       this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout, expires);
+    }
+
+    if (parent._getStaticOAuth2CallbackUrl) {
+      this.getStaticOAuth2CallbackUrl = (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getStaticOAuth2CallbackUrl(key, tokenAcquisitionPattern, keyAcquisitionPattern, timeout, expires);
+    }
+
+    if (parent._getStaticOAuth2CallbackUrlValue) {
+      this.getStaticOAuth2CallbackUrlValue = () => parent._getStaticOAuth2CallbackUrlValue();
+    }
+
+    if (parent._getStaticOAuth2Token) {
+      this.getStaticOAuth2Token = (key: string) => parent._getStaticOAuth2Token(key);
+    }
+
+    // Admin
+    if (parent._setAdminSetting) {
+      this.setAdminSetting = (value) => parent._setAdminSetting(value);
+    }
+
+    if (parent._setAdminSettingInvalid) {
+      this.setAdminSettingInvalid = (message, settingName) => parent._setAdminSettingInvalid(message, settingName);
+    }
+
+    // Deskpro UI
+    if (parent._sendDeskproUIMessage) {
+      this.sendDeskproUIMessage = (message: DeskproUIMessage) => parent._sendDeskproUIMessage(message);
     }
   }
 
@@ -358,12 +532,22 @@ export class DeskproClient implements IDeskproClient {
     };
   }
 
+  public onAdminSettingsChange(cb: (settings: Record<string, any>) => void): void {
+    this.parentMethods.onAdminSettingsChange = (settings: Record<string, any>) => {
+      cb(settings);
+    };
+  }
+
   public getEntityAssociation(name: string, entityId: string): IEntityAssociation {
     return new EntityAssociation(this, name, entityId);
   }
 
   public oauth2(): IOAuth2 {
     return new OAuth2(this);
+  }
+
+  public deskpro(): IDeskproUI {
+    return new DeskproUI(this);
   }
 
   public getParentMethods(): ChildMethods {

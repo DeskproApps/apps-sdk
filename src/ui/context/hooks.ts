@@ -1,8 +1,10 @@
 import {
+  DeRegisterElement,
+  ClearElements,
   DeskproAppClient,
   DeskproAppContextValue,
   DeskproAppEventHooks,
-  DeskproAppEventType, DeskproAppTheme
+  DeskproAppEventType, DeskproAppTheme, LatestDeskproAppContext, RegisterElement
 } from "./types";
 import {useContext, useEffect, useState} from "react";
 import { DeskproAppContext } from "./context";
@@ -12,7 +14,7 @@ import {
   TargetElementEvent,
   IDeskproClient,
   OAuth2CallbackUrlOptions,
-  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token
+  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token, AppElement
 } from "../../client/types";
 import { Fetch } from "../../proxy/types";
 import { proxyFetch } from "../../proxy/helpers";
@@ -23,6 +25,50 @@ export const useDeskproAppClient = (): DeskproAppClient => {
   return {
     client: value?.client ?? null,
   };
+};
+
+export const useDeskproLatestAppContext = (): LatestDeskproAppContext => {
+  const value = useContext<DeskproAppContextValue>(DeskproAppContext);
+
+  return {
+    context: value?.context ?? null,
+  };
+};
+
+export const useDeskproElements = (
+    cb: (utils: { registerElement: RegisterElement; deRegisterElement: DeRegisterElement; clearElements: ClearElements; }) => void,
+    deps: any[] = []
+): void => {
+  const value = useContext<DeskproAppContextValue>(DeskproAppContext);
+
+  const registerElement: RegisterElement = (id: string, element: AppElement) => {
+    if (value?.client && value.setRegisteredElements) {
+      value.client.registerElement(id, element);
+      value.setRegisteredElements((ids) => [...ids, id]);
+    }
+  };
+
+  const deRegisterElement: DeRegisterElement = (id: string) => {
+    if (value?.client && value.setRegisteredElements) {
+      value.client.deregisterElement(id);
+      value.setRegisteredElements((ids) => ids.filter((elId) => elId !== id));
+    }
+  };
+
+  const clearElements: ClearElements = () => {
+    if (value?.client && value.setRegisteredElements) {
+      value.registeredElements.forEach((id) => value.client?.deregisterElement(id));
+      value.setRegisteredElements([]);
+    }
+  };
+
+  useInitialisedDeskproAppClient(() => {
+    cb({
+      registerElement,
+      deRegisterElement,
+      clearElements,
+    });
+  }, deps);
 };
 
 export const useInitialisedDeskproAppClient = (fn: (client: IDeskproClient) => void, deps: any[] = []): void => {
@@ -93,12 +139,19 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
 
     document.addEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
 
+    const onAdminSettingsChange = ((event: CustomEvent<Record<string, any>>) => {
+      hooks.onAdminSettingsChange && hooks.onAdminSettingsChange(event.detail);
+    }) as EventListener;
+
+    document.addEventListener(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, onAdminSettingsChange);
+
     return () => {
       document.removeEventListener(DeskproAppEventType.READY, onReady);
       document.removeEventListener(DeskproAppEventType.SHOW, onShow);
       document.removeEventListener(DeskproAppEventType.CHANGE, onChange);
       document.removeEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
       document.removeEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
+      document.removeEventListener(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, onAdminSettingsChange);
     };
   }, deps);
 };
