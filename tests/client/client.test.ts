@@ -1,56 +1,56 @@
 import { DeskproClient } from "../../src/client/client";
 
-test('onShow() callback added', () => {
-  const client = new DeskproClient(jest.fn());
+test("onShow() callback added", () => {
+  const client = new DeskproClient(jest.fn(), { settings: {} });
+
   const cb = jest.fn();
 
   client.onShow(cb);
-  client.getParentMethods().onShow({ settings: {} });
+
+  client.getParentMethods().onShow({ settings: {}, type:"user" });
 
   expect(cb.mock.calls.length).toBe(1);
 });
 
-test('onReady() callback added', () => {
-  const client = new DeskproClient(jest.fn());
+test("onReady() callback added", () => {
+  const client = new DeskproClient(jest.fn(), { settings: {} });
   const cb = jest.fn();
 
   client.onReady(cb);
-  client.getParentMethods().onReady({ settings: {} });
+  client.getParentMethods().onReady({ settings: {}, type:"user" });
 
   expect(cb.mock.calls.length).toBe(1);
 });
 
-test('onChange() callback added', () => {
-  const client = new DeskproClient(jest.fn());
+test("onChange() callback added", () => {
+  const client = new DeskproClient(jest.fn(), { settings: {} });
   const cb = jest.fn();
 
   client.onChange(cb);
-  client.getParentMethods().onChange({ settings: {} });
+  client.getParentMethods().onChange({ settings: {}, type:"user" });
 
   expect(cb.mock.calls.length).toBe(1);
 });
 
-test('run() mount core methods', async () => {
+
+
+test("run() mount core methods", async () => {
   const proxyAuthMock = jest.fn();
   const setHeightMock = jest.fn();
   const setBadgeCountMock = jest.fn();
   const getTitleMock = jest.fn();
 
-  const parent = jest
-    .fn()
-    .mockReturnValue({
-      promise: new Promise((resolve) => {
-        resolve({
-          _getProxyAuth: proxyAuthMock,
-          _setHeight: setHeightMock,
-          setBadgeCount: setBadgeCountMock,
-          setTitle: getTitleMock,
-        });
-      }),
-    })
-  ;
-
-  const client = new DeskproClient(parent);
+  const parent = jest.fn().mockReturnValue({
+    promise: new Promise((resolve) => {
+      resolve({
+        _getProxyAuth: proxyAuthMock,
+        _setHeight: setHeightMock,
+        setBadgeCount: setBadgeCountMock,
+        setTitle: getTitleMock,
+      });
+    }),
+  });
+  const client = new DeskproClient(parent, { settings: {} });
   await client.run();
 
   expect(client.getProxyAuth).toBeTruthy();

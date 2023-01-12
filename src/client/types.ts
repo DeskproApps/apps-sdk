@@ -27,7 +27,7 @@ export interface Context<Data = any, Settings = any> {
   settings: Settings;
   data?: Data;
 }
-
+ 
 export interface ProxyAuthPayload {
   proxyUrl: string;
   token: string;
@@ -228,6 +228,8 @@ export interface DeskproClientOptions {
    * Run client after page load when DOM is available
    */
   runAfterPageLoad?: boolean;
+
+  settings?: Record<string, unknown>;
 
   /**
    * Call client.resize() after any app event is received and
