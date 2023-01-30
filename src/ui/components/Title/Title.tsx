@@ -1,4 +1,4 @@
-import { FC, ComponentType, ReactNode } from "react";
+import React, { FC, ComponentType, ReactNode } from "react";
 import styled   from "styled-components";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { AnyIcon } from "@deskpro/deskpro-ui";
