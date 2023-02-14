@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { RoundedLabelTag, lightTheme } from "@deskpro/deskpro-ui";
@@ -35,25 +35,23 @@ const BrandIcon = styled(Icon)`
   }
 `;
 
+const CustomRoundedLabelTag = styled(RoundedLabelTag)`
+  border-color: ${({ theme }) => theme.colors.brandShade20};
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.brandShade60};
+  }
+`;
+
 const ExternalIconLink: FC<Props> = ({ href, icon }) => {
-  const [isHover, setIsHover] = useState(false);
   const theme = lightTheme;
 
   return (
-    <Link
-      target="_blank"
-      href={href}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-    >
-      <RoundedLabelTag
+    <Link target="_blank" href={href}>
+      <CustomRoundedLabelTag
         size="small"
         withClose={false}
         backgroundColor={theme.colors.brandShade20}
         textColor={theme.colors.grey100}
-        borderColor={
-          isHover ? theme.colors.brandShade60 : theme.colors.brandShade20
-        }
         closeIcon={faArrowUpRightFromSquare}
         label={
           <Container gap={5}>
