@@ -15,6 +15,7 @@ export * from "./Formik";
 export * from "./TextArea";
 export * from "./Label";
 export * from "./Select";
+export * from "./PropertyRow";
 export * from "./Infinite";
 export * from "./Scrollbar";
 export * from "./Tooltip";
