@@ -1,23 +1,36 @@
 import {
-  DeRegisterElement,
+  QueryKey,
+  useMutation,
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import { useContext, useEffect, useState } from "react";
+import {
+  AppElement,
+  Context,
+  DeferredOAuth2CallbackUrl,
+  HasOAuth2Token,
+  IDeskproClient,
+  OAuth2CallbackUrlOptions,
+  OAuth2CallbackUrlPoll,
+  TargetAction,
+  TargetElementEvent,
+} from "../../client/types";
+import { proxyFetch } from "../../proxy/helpers";
+import { Fetch } from "../../proxy/types";
+import { DeskproAppContext } from "./context";
+import {
   ClearElements,
+  DeRegisterElement,
   DeskproAppClient,
   DeskproAppContextValue,
   DeskproAppEventHooks,
-  DeskproAppEventType, DeskproAppTheme, LatestDeskproAppContext, RegisterElement
+  DeskproAppEventType,
+  DeskproAppTheme,
+  LatestDeskproAppContext,
+  RegisterElement,
 } from "./types";
-import {useContext, useEffect, useState} from "react";
-import { DeskproAppContext } from "./context";
-import {
-  Context,
-  TargetAction,
-  TargetElementEvent,
-  IDeskproClient,
-  OAuth2CallbackUrlOptions,
-  DeferredOAuth2CallbackUrl, OAuth2CallbackUrlPoll, HasOAuth2Token, AppElement
-} from "../../client/types";
-import { Fetch } from "../../proxy/types";
-import { proxyFetch } from "../../proxy/helpers";
 
 export const useDeskproAppClient = (): DeskproAppClient => {
   const value = useContext<DeskproAppContextValue>(DeskproAppContext);
@@ -36,8 +49,12 @@ export const useDeskproLatestAppContext = (): LatestDeskproAppContext => {
 };
 
 export const useDeskproElements = (
-    cb: (utils: { registerElement: RegisterElement; deRegisterElement: DeRegisterElement; clearElements: ClearElements; }) => void,
-    deps: any[] = []
+  cb: (utils: {
+    registerElement: RegisterElement;
+    deRegisterElement: DeRegisterElement;
+    clearElements: ClearElements;
+  }) => void,
+  deps: any[] = []
 ): void => {
   const value = useContext<DeskproAppContextValue>(DeskproAppContext);
 
@@ -71,7 +88,10 @@ export const useDeskproElements = (
   }, deps);
 };
 
-export const useInitialisedDeskproAppClient = (fn: (client: IDeskproClient) => void, deps: any[] = []): void => {
+export const useInitialisedDeskproAppClient = (
+  fn: (client: IDeskproClient) => void,
+  deps: any[] = []
+): void => {
   const { client } = useDeskproAppClient();
 
   useEffect(() => {
@@ -83,7 +103,49 @@ export const useInitialisedDeskproAppClient = (fn: (client: IDeskproClient) => v
   }, [client, ...deps]);
 };
 
-export const useDeskproAppFetch = (fn: (fetch: Fetch) => void, onCatch: () => void, deps: any[] = []) => {
+export const useQueryWithClient = <
+  TQueryFnData = unknown,
+  TError = unknown,
+  TData extends TQueryFnData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey
+>(
+  queryKey: string[],
+  queryFn: (client: IDeskproClient) => Promise<TQueryFnData>,
+  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, "queryKey" | "queryFn">
+): UseQueryResult<TQueryFnData> => {
+  const { client } = useDeskproAppClient();
+
+  const key = Array.isArray(queryKey) ? queryKey : [queryKey];
+
+  return useQuery(
+    [client, ...key] as unknown as TQueryKey,
+    () => (client && queryFn(client)) as Promise<TQueryFnData>,
+    {
+      ...(options ?? {}),
+      enabled: options?.enabled === undefined ? !!client : true && options?.enabled,
+    }
+  );
+};
+
+export const useMutationWithClient = <TFuncParams = unknown, TData = unknown>(
+  queryFn: (client: IDeskproClient, data: TFuncParams) => Promise<TData>
+) => {
+  const { client } = useDeskproAppClient();
+
+  return useMutation<TData, unknown, unknown, unknown>((data) => {
+    if (!client) {
+      throw new Error("Client is not initialised");
+    }
+
+    return queryFn(client, data as TFuncParams);
+  });
+};
+
+export const useDeskproAppFetch = (
+  fn: (fetch: Fetch) => void,
+  onCatch: () => void,
+  deps: any[] = []
+) => {
   const { client } = useDeskproAppClient();
 
   useEffect(() => {
@@ -134,7 +196,8 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
     document.addEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
 
     const onTargetElementEvent = ((event: CustomEvent<TargetElementEvent>) => {
-      hooks.onElementEvent && hooks.onElementEvent(event.detail.id, event.detail.type, event.detail.payload);
+      hooks.onElementEvent &&
+        hooks.onElementEvent(event.detail.id, event.detail.type, event.detail.payload);
     }) as EventListener;
 
     document.addEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
@@ -151,15 +214,22 @@ export const useDeskproAppEvents = (hooks: DeskproAppEventHooks, deps: any[] = [
       document.removeEventListener(DeskproAppEventType.CHANGE, onChange);
       document.removeEventListener(DeskproAppEventType.TARGET_ACTION, onTargetAction);
       document.removeEventListener(DeskproAppEventType.TARGET_ELEMENT_EVENT, onTargetElementEvent);
-      document.removeEventListener(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, onAdminSettingsChange);
+      document.removeEventListener(
+        DeskproAppEventType.ADMIN_SETTINGS_CHANGE,
+        onAdminSettingsChange
+      );
     };
   }, deps);
 };
 
-export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegExp, options?: OAuth2CallbackUrlOptions): DeferredOAuth2CallbackUrl => {
-  const [callbackUrl, setCallbackUrl] = useState<string|undefined>(undefined);
-  const [poll, setPoll] = useState<OAuth2CallbackUrlPoll|undefined>(undefined);
-  const [hasToken, setHasToken] = useState<HasOAuth2Token|undefined>(undefined);
+export const useDeskproOAuth2Auth = (
+  name: string,
+  tokenAcquisitionPattern: RegExp,
+  options?: OAuth2CallbackUrlOptions
+): DeferredOAuth2CallbackUrl => {
+  const [callbackUrl, setCallbackUrl] = useState<string | undefined>(undefined);
+  const [poll, setPoll] = useState<OAuth2CallbackUrlPoll | undefined>(undefined);
+  const [hasToken, setHasToken] = useState<HasOAuth2Token | undefined>(undefined);
 
   const { client } = useDeskproAppClient();
 
@@ -171,22 +241,25 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
     setHasToken(() => async () => client?.hasUserState(`oauth2/${name}`));
 
     const onShow: EventListenerOrEventListenerObject = () => {
-      client.oauth2().getCallbackUrl(name, tokenAcquisitionPattern, options).then((callback) => {
-        setCallbackUrl(callback.callbackUrl);
-        setPoll(() => async () => {
-          if (!options?.noBlockWhenPolling) {
-            await client?.setBlocking(true);
-          }
+      client
+        .oauth2()
+        .getCallbackUrl(name, tokenAcquisitionPattern, options)
+        .then((callback) => {
+          setCallbackUrl(callback.callbackUrl);
+          setPoll(() => async () => {
+            if (!options?.noBlockWhenPolling) {
+              await client?.setBlocking(true);
+            }
 
-          const token = await callback.poll();
+            const token = await callback.poll();
 
-          if (!options?.noBlockWhenPolling) {
-            await client?.setBlocking(false);
-          }
+            if (!options?.noBlockWhenPolling) {
+              await client?.setBlocking(false);
+            }
 
-          return token;
+            return token;
+          });
         });
-      });
     };
 
     document.addEventListener(DeskproAppEventType.SHOW, onShow);
@@ -198,10 +271,12 @@ export const useDeskproOAuth2Auth = (name: string, tokenAcquisitionPattern: RegE
 
   return {
     isReady,
-    callback: isReady ? {
-      callbackUrl,
-      poll,
-      hasToken,
-    } : undefined,
+    callback: isReady
+      ? {
+          callbackUrl,
+          poll,
+          hasToken,
+        }
+      : undefined,
   };
 };
