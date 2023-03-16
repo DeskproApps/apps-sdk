@@ -12,6 +12,7 @@ specifiers:
   '@fortawesome/fontawesome-svg-core': ^6.1.0
   '@fortawesome/free-brands-svg-icons': ^6.1.0
   '@fortawesome/free-regular-svg-icons': ^6.1.0
+  '@fortawesome/free-solid-svg-icons': ^6.1.1
   '@fortawesome/react-fontawesome': ^0.1.18
   '@rollup/plugin-typescript': 8.3.0
   '@storybook/addon-a11y': ^6.4.19
@@ -33,6 +34,7 @@ specifiers:
   eslint: ^8.15.0
   eslint-plugin-react-hooks: ^4.5.0
   fast-glob: 3.2.7
+  flatpickr: ^4.6.13
   handlebars: 4.7.7
   jest: 27.4.4
   modern-normalize: ^1.1.0
@@ -66,8 +68,10 @@ dependencies:
   '@fortawesome/fontawesome-svg-core': 6.1.1
   '@fortawesome/free-brands-svg-icons': 6.1.1
   '@fortawesome/free-regular-svg-icons': 6.1.1
+  '@fortawesome/free-solid-svg-icons': 6.1.1
   '@fortawesome/react-fontawesome': 0.1.18_6909f5698ccb6b468185370814560628
   '@types/jest': 29.2.5
+  flatpickr: 4.6.13
   handlebars: 4.7.7
   modern-normalize: 1.1.0
   penpal: 6.2.1
