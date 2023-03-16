@@ -49,14 +49,23 @@ jobs:
       - name: Build package
         run: pnpm run build
 
-      - name: Bump version
-        uses: anothrNick/github-tag-action@1.55.0
-        with:
-          push: true
-          push_branch: "main"
-          push_tag: true
-          current_version: ${{ env.npm_package_version }}
-          version: "minor"
+      - name: Bump Version
+        run: |
+          # Check if the previous commit was made by the workflow itself
+          if [ "$(git log -1 --pretty=format:%ae)" = "noreply@github.com" ]; then
+            echo "Skipping workflow run because previous commit was not made by workflow."
+            exit 0
+          fi
+
+          # Bump the version
+          npm version patch
+
+          # Create a commit with the new version
+          git config --global user.email "itweeno@gmail.com"
+          git config --global user.name "Itweeno"
+          git commit -m "Bump version" package.json
+
+          git push origin master
 
       - name: Publish to NPM
         env:
