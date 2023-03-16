@@ -47,7 +47,7 @@ jobs:
         run: pnpm run build
 
       - name: Bump version
-        uses: anothrNick/github-tag-action@v1.55.0
+        uses: anothrNick/github-tag-action@1.55.0
         with:
           push: true
           push_branch: "main"
