@@ -65,6 +65,8 @@ jobs:
           git config user.name "Itweeno"
           git commit -m "Bump version" package.json
 
+          git config --list
+
           git push origin master
 
       - name: Publish to NPM
