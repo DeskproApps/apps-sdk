@@ -61,10 +61,7 @@ jobs:
 
           npm version patch
 
-          git commit -m "Bump version" package.json
-
           git push origin master
-
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
