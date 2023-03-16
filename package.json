@@ -1,5 +1,5 @@
 {
-  "name": "@deskpro/app-sdk",
+  "name": "@itweeno/app-sdk",
   "version": "1.2.7",
   "description": "Deskpro Apps SDK",
   "private": false,
@@ -94,5 +94,17 @@
     "start:storybook": "start-storybook -p 6008",
     "test": "jest",
     "lint": "pnpm eslint --ext ts,tsx ./src"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iTweeno/app-sdk-test.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/iTweeno/app-sdk-test/issues"
+  },
+  "homepage": "https://github.com/iTweeno/app-sdk-test#readme"
 }
