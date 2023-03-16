@@ -61,8 +61,8 @@ jobs:
           npm version patch
 
           # Create a commit with the new version
-          git config --global user.email "itweeno@gmail.com"
-          git config --global user.name "Itweeno"
+          git config user.email "itweeno@gmail.com"
+          git config user.name "Itweeno"
           git commit -m "Bump version" package.json
 
           git push origin master
