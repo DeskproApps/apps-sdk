@@ -51,14 +51,14 @@ jobs:
 
       - name: Bump Version
         run: |
-          # Check if the previous commit was made by the workflow itself
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "iTweeno@users.noreply.github.com"
+
           if [ "$(git log -1 --pretty=format:%ae)" = "noreply@github.com" ]; then
             echo "Skipping workflow run because previous commit was not made by workflow."
             exit 0
           fi
 
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "iTweeno@users.noreply.github.com"
           git commit -m "Bump version" package.json
 
           npm version patch
