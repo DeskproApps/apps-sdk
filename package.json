@@ -1,7 +1,7 @@
 {
   "name": "@itweeno/app-sdk",
   "version": "1.2.10",
-  "description": "Deskpro Apps SDK",
+  "description": "Deskpro Apps SDKK",
   "private": false,
   "license": "MIT",
   "main": "cjs/index.js",
