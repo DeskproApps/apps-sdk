@@ -57,15 +57,11 @@ jobs:
             exit 0
           fi
 
-          # Bump the version
-          npm version patch
-
-          # Create a commit with the new version
-          git config user.email "itweeno@gmail.com"
-          git config user.name "Itweeno"
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "iTweeno@users.noreply.github.com"
           git commit -m "Bump version" package.json
 
-          git config --list
+          npm version patch
 
           git push origin master
 
