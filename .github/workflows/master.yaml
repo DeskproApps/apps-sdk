@@ -76,6 +76,10 @@ jobs:
             npm version patch
           fi
 
+          git add docs/*
+
+          git commit -m "Updated Storybook"
+
           git push origin master
 
       - name: Authenticate NPM

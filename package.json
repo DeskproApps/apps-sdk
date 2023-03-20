@@ -98,7 +98,9 @@
     "build:storybook": "build-storybook --quiet -o build-storybook",
     "start:storybook": "start-storybook -p 6008",
     "test": "jest",
-    "lint": "pnpm eslint --ext ts,tsx ./src"
+    "lint": "pnpm eslint --ext ts,tsx ./src",
+    "docs:storybook": "build-storybook --quiet -o docs/storybook",
+    "docs": "pnpm run docs:storybook"
   },
   "directories": {
     "test": "tests"
