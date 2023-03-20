@@ -59,7 +59,16 @@ jobs:
             exit 0
           fi
 
-          npm version patch
+
+          if [[ $commit_msg == *major-version* ]]; then
+            update_type="major"
+          elif [[ $commit_msg == *minor-version* ]]; then
+            update_type="minor"
+          else
+            update_type="patch"
+          fi
+
+          npm version "$update_type"
 
           git commit -m "Bump version" package.json
 
