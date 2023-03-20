@@ -66,11 +66,11 @@ jobs:
           fi
 
           if [[ "${{ steps.labels.outputs.milestone }}" == "major-version" ]]; then
-            pnpm version major
+            npm version major
           elif [[ "${{ steps.labels.outputs.milestone }}" == "minor-version" ]]; then
-            pnpm version minor
+            npm version minor
           else
-            pnpm version patch
+            npm version patch
           fi
 
           npm version "$update_type"
