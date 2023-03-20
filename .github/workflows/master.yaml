@@ -76,7 +76,9 @@ jobs:
             npm version patch
           fi
 
-          npm run build:storybook
+          pnpm run build
+
+          pnpm run build:storybook
 
           git add docs/*
 
