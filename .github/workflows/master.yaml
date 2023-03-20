@@ -73,8 +73,6 @@ jobs:
             npm version patch
           fi
 
-          npm version "$update_type"
-
           git push origin master
 
       - name: Authenticate NPM
