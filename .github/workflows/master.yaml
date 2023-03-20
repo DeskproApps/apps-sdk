@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
 
@@ -59,11 +59,24 @@ jobs:
             exit 0
           fi
 
-          npm version patch
+          labels=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
 
-          git commit -m "Bump version" package.json
+          if [[ "$labels" == *"major-version"* ]]; then
+            update_type="major"
+          elif [[ "$labels" == *"minor-version"* ]]; then
+            update_type="minor"
+          else
+            update_type="patch"
+          fi
+
+          npm version "$update_type"
 
           git push origin master
+
+      - name: Authenticate NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
 
       - name: Publish to NPM
         env:
