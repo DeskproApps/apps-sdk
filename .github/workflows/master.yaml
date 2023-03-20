@@ -1,12 +1,14 @@
 name: CI/CD
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - master
 
 jobs:
   release:
+    if: github.event.pull_request.merged == true
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -49,6 +51,10 @@ jobs:
       - name: Build package
         run: pnpm run build
 
+      - name: Get labels from pull request
+        id: labels
+        run: echo "::set-output name=milestone::$(jq --raw-output '.pull_request.labels[].name' $GITHUB_EVENT_PATH | grep -E 'major-version|minor-version' | head -1)"
+
       - name: Bump Version
         run: |
           git config --global user.name "git log -1 --pretty=format:%an"
@@ -59,14 +65,12 @@ jobs:
             exit 0
           fi
 
-          labels=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
-
-          if [[ "$labels" == *"major-version"* ]]; then
-            update_type="major"
-          elif [[ "$labels" == *"minor-version"* ]]; then
-            update_type="minor"
+          if [[ "${{ steps.labels.outputs.milestone }}" == "major-version" ]]; then
+            pnpm version major
+          elif [[ "${{ steps.labels.outputs.milestone }}" == "minor-version" ]]; then
+            pnpm version minor
           else
-            update_type="patch"
+            pnpm version patch
           fi
 
           npm version "$update_type"
