@@ -76,6 +76,8 @@ jobs:
             npm version patch
           fi
 
+          npm run build:storybook
+
           git add docs/*
 
           git commit -m "Updated Storybook"
