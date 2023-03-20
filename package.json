@@ -1,7 +1,7 @@
 {
   "name": "@itweeno/app-sdk",
-  "version": "1.2.7",
-  "description": "Deskpro Apps SDK",
+  "version": "1.2.15",
+  "description": "Deskpro Apps SDKKK",
   "private": false,
   "license": "MIT",
   "main": "cjs/index.js",
@@ -29,6 +29,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@types/jest": "^29.2.5",
+    "fast-check": "^3.7.1",
     "flatpickr": "^4.6.13",
     "handlebars": "4.7.7",
     "modern-normalize": "^1.1.0",
@@ -37,6 +38,7 @@
     "react-intl": "^5.23.0",
     "regenerator-runtime": "0.13.9",
     "shortcut-buttons-flatpickr": "0.4.0",
+    "ts-pattern": "^4.2.1",
     "tslib": "2.3.1"
   },
   "devDependencies": {
@@ -93,6 +95,7 @@
     "build:esm": "rimraf ./esm && tsc",
     "build:cjs": "rimraf ./cjs && babel ./src --out-dir ./cjs --extensions .ts,.tsx --ignore \"**/*.stories.tsx\" --plugins @babel/plugin-transform-modules-commonjs",
     "watch:dist": "rimraf ./dist && rollup --config rollup.config.js --watch",
+    "build:storybook": "build-storybook --quiet -o build-storybook",
     "start:storybook": "start-storybook -p 6008",
     "test": "jest",
     "lint": "pnpm eslint --ext ts,tsx ./src"
