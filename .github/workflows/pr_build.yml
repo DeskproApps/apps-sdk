@@ -72,17 +72,10 @@ jobs:
           storybookBuildDir: build-storybook
           exitOnceUploaded: true
 
-      - name: Extract Storybook URL
-        id: extract_url
-        run: |
-          echo ${{toJson(steps.chromauideployment.outputs)}} 
-          url_regex='View your Storybook at (https://.*\.chromatic\.com)'
-          if [[ ${{ steps.chromauideployment.outputs.response  }} =~ $url_regex ]]; then
-            echo "::set-output name=url::${BASH_REMATCH[1]}"
-          fi
-
       - name: Leave comment with URL
         uses: peter-evans/create-or-update-comment@v2
         with:
           body: |
-          Storybook build URL: ${{steps.extract_url.outputs.url}}
+          Storybook build URL: ${{steps.chromauideployment.outputs.storybookUrl}}
+
+          Chromatic URL: ${{steps.chromauideployment.outputs.buildUrl}}
