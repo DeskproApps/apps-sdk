@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import { TemplateContext } from "./types";
 import { IDeskproClient } from "../client/types";
 
-let dpCustomAppsHandlebarsTemplates: Record<string, string> = {};
+const dpCustomAppsHandlebarsTemplates: Record<string, string> = {};
 
 export const renderTemplate = (client: IDeskproClient, templateId: string, context: TemplateContext) => {
   const target = document.getElementById(templateId);

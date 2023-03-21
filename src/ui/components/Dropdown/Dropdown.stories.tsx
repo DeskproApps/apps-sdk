@@ -32,7 +32,6 @@ import {
   faSortUp,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import * as fc from "fast-check";
 import * as React from "react";
 import { useMemo, useState } from "react";
 import styled, { useTheme } from "styled-components";
@@ -1191,7 +1190,7 @@ export const TheEverything = () => {
     label: "withIconAndOnIconClick (click arrow)",
     value: "withIconAndOnIconClick",
     icon: toggleValue ? faSortUp : faSortDown,
-    onClickIcon: (_value: unknown) => {
+    onClickIcon: () => {
       setToggleValue(!toggleValue);
     },
   });

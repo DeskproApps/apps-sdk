@@ -26,7 +26,6 @@ export const Tag = () => (
         e.preventDefault();
         e.stopPropagation();
       }}
-      onClick={() => {}}
     />
   </div>
 );

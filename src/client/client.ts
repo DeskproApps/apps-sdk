@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { connectToParent, Connection } from "penpal";
 import {
   IDeskproClient,
@@ -514,7 +515,7 @@ export class DeskproClient implements IDeskproClient {
     };
   }
 
-  public onTargetAction<Payload = any>(cb: TargetActionChildMethod): void {
+  public onTargetAction(cb: TargetActionChildMethod): void {
     this.parentMethods.onTargetAction = <Payload>(action: TargetAction<Payload>) => {
       cb(action);
       if (this.resize && this.options.resizeAfterEvents) {
@@ -523,7 +524,7 @@ export class DeskproClient implements IDeskproClient {
     };
   }
 
-  public onElementEvent<Payload = any>(cb: ElementEventChildMethod): void {
+  public onElementEvent(cb: ElementEventChildMethod): void {
     this.parentMethods.onElementEvent = <Payload>(id: string, type: string, payload: Payload) => {
       cb(id, type, payload);
       if (this.resize && this.options.resizeAfterEvents) {
