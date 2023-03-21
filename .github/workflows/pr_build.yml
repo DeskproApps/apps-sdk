@@ -71,12 +71,14 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           storybookBuildDir: build-storybook
           exitOnceUploaded: true
+        env:
+          capture_output: true
 
       - name: Extract Storybook URL
         id: extract_url
         run: |
           url_regex='View your Storybook at (https://.*\.chromatic\.com)'
-          if [[ ${{ steps.chromauideployment.outputs.stdout }} =~ $url_regex ]]; then
+          if [[ ${{ steps.chromauideployment.outputs.stdout  }} =~ $url_regex ]]; then
             echo "::set-output name=url::${BASH_REMATCH[1]}"
           fi
 
