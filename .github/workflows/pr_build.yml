@@ -1,0 +1,73 @@
+name: PR Build
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deskpro_ui:
+    name: Test / Build
+    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch --no-tags --depth=1 origin main
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Clone deskpro/deskpro-ui
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: 6.32.3
+          run_install: true
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type check
+        run: pnpm exec tsc -b
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Build Storybook
+        run: pnpm run build:storybook
+
+      - name: Deploy Storybook
+        id: chromauideployment
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_TOKEN }}
+          storybookBuildDir: build-storybook
+          exitOnceUploaded: true
+
+      - name: Extract Storybook URL
+        id: extract_url
+        run: |
+          url_regex='View your Storybook at (https://.*\.chromatic\.com)'
+          if [[ ${{ steps.publish.outputs.stdout }} =~ $url_regex ]]; then
+            echo "::set-output name=url::${BASH_REMATCH[1]}"
+          fi
+
+      - name: Leave comment with URL
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          body: |
+          Storybook build URL: ${{steps.extract_url.outputs.url}}
