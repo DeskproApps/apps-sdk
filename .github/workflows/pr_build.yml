@@ -76,8 +76,7 @@ jobs:
         uses: actions-ecosystem/action-create-comment@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          comment: |
+          body: |
             Storybook build URL ${{steps.chromauideployment.outputs.storybookUrl}}
 
             Chromatic URL ${{steps.chromauideployment.outputs.buildUrl}}
-          unique: true
