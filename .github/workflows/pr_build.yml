@@ -77,6 +77,9 @@ jobs:
       - name: Extract Storybook URL
         id: extract_url
         run: |
+          echo ${{ steps.chromauideployment.outputs  }}
+          echo ${{ steps.chromauideployment.outputs.stdout  }}
+          ${{ steps.chromauideployment.outputs.stderr  }}
           url_regex='View your Storybook at (https://.*\.chromatic\.com)'
           if [[ ${{ steps.chromauideployment.outputs.stdout  }} =~ $url_regex ]]; then
             echo "::set-output name=url::${BASH_REMATCH[1]}"
