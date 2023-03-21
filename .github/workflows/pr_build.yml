@@ -76,6 +76,6 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2
         with:
           body: |
-          Storybook build URL: ${{steps.chromauideployment.outputs.storybookUrl}}
+            Storybook build URL ${{steps.chromauideployment.outputs.storybookUrl}}
 
-          Chromatic URL: ${{steps.chromauideployment.outputs.buildUrl}}
+            Chromatic URL ${{steps.chromauideployment.outputs.buildUrl}}
