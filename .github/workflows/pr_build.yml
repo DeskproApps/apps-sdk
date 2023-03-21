@@ -73,9 +73,10 @@ jobs:
           exitOnceUploaded: true
 
       - name: Leave comment with URL
-        uses: peter-evans/create-or-update-comment@v2
+        uses: KeisukeYamashita/create-comment@v1
         with:
-          body: |
+          comment: |
             Storybook build URL ${{steps.chromauideployment.outputs.storybookUrl}}
 
             Chromatic URL ${{steps.chromauideployment.outputs.buildUrl}}
+          unique: true
