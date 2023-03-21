@@ -8,22 +8,30 @@ import "simplebar/dist/simplebar.min.css";
 import { GlobalStyles, lightTheme, ThemeProvider } from "@deskpro/deskpro-ui";
 import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
+import { addParameters } from "@storybook/react";
+import theme from "./theme";
+
+addParameters({
+  options: {
+    theme,
+  },
+});
 
 export const parameters = {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { argTypesRegex: "^on[A-Z].*" },
 };
 
 export const decorators = [
-    (Story) => <Story />,
-    (Story) => (
-        <>
-            <GlobalStyles />
-            <Story />
-        </>
-    ),
-    (Story) => (
-        <ThemeProvider theme={lightTheme}>
-            <Story />
-        </ThemeProvider>
-    ),
+  (Story) => <Story />,
+  (Story) => (
+    <>
+      <GlobalStyles />
+      <Story />
+    </>
+  ),
+  (Story) => (
+    <ThemeProvider theme={lightTheme}>
+      <Story />
+    </ThemeProvider>
+  ),
 ];
