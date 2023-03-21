@@ -73,8 +73,9 @@ jobs:
           exitOnceUploaded: true
 
       - name: Leave comment with URL
-        uses: KeisukeYamashita/create-comment@v1
+        uses: actions-ecosystem/action-create-comment@v1
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           comment: |
             Storybook build URL ${{steps.chromauideployment.outputs.storybookUrl}}
 
