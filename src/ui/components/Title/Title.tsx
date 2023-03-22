@@ -10,7 +10,7 @@ import { ExternalIconLink } from "../ExternalIconLink";
 type Props = {
     title: string | ReactNode,
     onClick?: () => void,
-    as?: ComponentType<any>|string|any,
+    as?: ComponentType<unknown>|string,
     marginBottom?: number,
 
     link?: string,

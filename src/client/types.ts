@@ -168,6 +168,7 @@ export type AppElementPayload<T = any> = T;
 
 export type ChildMethod = (context: Context) => void;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- onTargetAction complains if removed
 export type TargetActionChildMethod<Payload = any> = <Payload>(action: TargetAction<Payload>) => void;
 
 export type ElementEventChildMethod = <Payload = any>(id: string, type: string, payload?: Payload) => void;
@@ -283,8 +284,7 @@ export interface StateOptions {
   expires?: Date;
 }
 
-export interface UserStateOptions extends StateOptions {
-}
+export type UserStateOptions = StateOptions
 
 export interface SetStateResponse {
   isSuccess: boolean;

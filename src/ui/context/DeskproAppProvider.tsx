@@ -63,6 +63,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
     });
 
     dpClient.run().then(() => setClient(dpClient));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (debug) {
