@@ -1,28 +1,24 @@
 import React, { FC, CSSProperties } from "react";
-import { useDeskproAppTheme } from "../../context";
+import styled from "styled-components";
 
 export interface VerticalDividerProps {
   width?: number;
   style?: CSSProperties;
 }
 
-export const VerticalDivider: FC<VerticalDividerProps> = ({ width, style }: VerticalDividerProps) => {
-  const { theme } = useDeskproAppTheme();
+const StyledDivider = styled.div`
+  background-color: ${({ theme }) => theme.colors.grey20};
+`;
 
-  return (
-    <div style={{ margin: "0 8px", backgroundColor: theme.colors.grey20, width: `${width ?? 2}px`, ...(style ?? {}) }} />
-  );
-};
+export const VerticalDivider: FC<VerticalDividerProps> = ({ width, style }: VerticalDividerProps) => (
+  <StyledDivider style={{ margin: "0 8px", width: `${width ?? 2}px`, ...(style ?? {}) }} />
+);
 
 export interface HorizontalDividerProps {
   width?: number;
   style?: CSSProperties;
 }
 
-export const HorizontalDivider: FC<HorizontalDividerProps> = ({ width, style }: HorizontalDividerProps) => {
-  const { theme } = useDeskproAppTheme();
-
-  return (
-    <div style={{ margin: "4px 0 0 0", backgroundColor: theme.colors.grey10, height: `${width ?? 1}px`, ...(style ?? {}) }} />
-  );
-};
+export const HorizontalDivider: FC<HorizontalDividerProps> = ({ width, style }: HorizontalDividerProps) => (
+  <StyledDivider style={{ margin: "4px 0 0 0", height: `${width ?? 1}px`, ...(style ?? {}) }} />
+);
