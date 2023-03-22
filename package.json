@@ -104,5 +104,5 @@
     "lint": "pnpm eslint --ext ts,tsx ./src",
     "docs:storybook": "build-storybook --quiet -o docs/storybook",
     "docs": "pnpm run docs:storybook"
-  },
+  }
 }
