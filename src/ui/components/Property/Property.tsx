@@ -7,6 +7,8 @@ export interface PropertyProps {
   children: JSX.Element | ReactNode;
   title?: string;
   width?: string;
+  style?: React.CSSProperties;
+  childrenStyle?: React.CSSProperties;
 }
 
 const Title = styled(H2)`
@@ -14,11 +16,11 @@ const Title = styled(H2)`
     margin-bottom: 2px;
 `;
 
-export const Property: FC<PropertyProps> = ({ title, children, width }: PropertyProps) => {
+export const Property: FC<PropertyProps> = ({ title, children, style, childrenStyle }: PropertyProps) => {
   return (
-    <Stack vertical style={{ width: width ?? "100%" }}>
+    <Stack vertical style={ style }>
       {title && <Title>{title}</Title>}
-      <div style={{ fontSize: "12px" }}>{children}</div>
+      <div style={{ fontSize: "12px",...childrenStyle }}>{children}</div>
     </Stack>
   );
 };
