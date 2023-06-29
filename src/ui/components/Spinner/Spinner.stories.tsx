@@ -1,24 +1,14 @@
 import * as React from "react";
-import { LoadingSpinner, Spinner } from "./Spinner";
-import { Stack } from "../Layout";
+import { LoadingSpinner } from "./Spinner";
+import { Stack } from "@deskpro/deskpro-ui";
 
 export default {
   title: "Core/Spinner",
-  component: Spinner,
+  component: LoadingSpinner,
 };
 
-export const Spinners = () => {
-  return (
-    <>
-      <Stack>
-        <Spinner />
-        <Spinner size="large" />
-        <Spinner size="medium" />
-        <Spinner size="small" />
-      </Stack>
-      <Stack>
-        <LoadingSpinner />
-      </Stack>
-    </>
-  );
-};
+export const Spinners = () => (
+    <Stack justify="center">
+      <LoadingSpinner />
+    </Stack>
+);

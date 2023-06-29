@@ -1,26 +1,37 @@
-import React, { FC, ReactNode } from "react";
+import React, { isValidElement } from "react";
 import styled from "styled-components";
-import { Stack } from "../Layout";
-import { H2 } from "../Typography";
+import { P5, TSpan } from "@deskpro/deskpro-ui";
+import type { FC, ReactNode } from "react";
 
 export interface PropertyProps {
-  children: JSX.Element | ReactNode;
-  title?: string;
-  width?: string;
-  style?: React.CSSProperties;
-  childrenStyle?: React.CSSProperties;
+  label?: string|number|JSX.Element|ReactNode,
+  text?: string|number|JSX.Element|ReactNode,
+  marginBottom?: number,
 }
 
-const Title = styled(H2)`
-    color: ${({ theme }) => theme.colors.grey80};
-    margin-bottom: 2px;
+const Label = styled(TSpan)`
+  color: ${({ theme }) => theme.colors.grey80};
 `;
 
-export const Property: FC<PropertyProps> = ({ title, children, style, childrenStyle }: PropertyProps) => {
+const Container = styled.div<PropertyProps>`
+  margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
+`;
+
+const Property: FC<PropertyProps> = ({ text, label, marginBottom = 10 }: PropertyProps) => {
+  let textBlock: ReactNode = (<P5>-</P5>);
+
+  if ((typeof text === "string" && Boolean(text)) || typeof text === "number") {
+    textBlock = (<P5>{text}</P5>);
+  } else if (isValidElement(text)) {
+    textBlock = text;
+  }
+
   return (
-    <Stack vertical style={ style }>
-      {title && <Title>{title}</Title>}
-      <div style={{ fontSize: "12px",...childrenStyle }}>{children}</div>
-    </Stack>
+    <Container marginBottom={marginBottom}>
+      {label && <Label type="p8">{label}</Label>}
+      {textBlock && textBlock}
+    </Container>
   );
 };
+
+export { Property };

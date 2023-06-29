@@ -1,5 +1,7 @@
 import React from "react";
+import { ComponentStory } from '@storybook/react';
 import { faPhp, faReact, faApple, faAndroid } from "@fortawesome/free-brands-svg-icons";
+import { AnyIcon } from "@deskpro/deskpro-ui";
 import { ExternalIconLink } from "./ExternalIconLink";
 
 const HubSpotLogo = () => (
@@ -37,7 +39,7 @@ export default {
     },
 };
 
-const Template = (props) => (
+const Template: ComponentStory<typeof ExternalIconLink> = (props) => (
     <ExternalIconLink {...props} />
 );
 
@@ -45,5 +47,5 @@ export const Default = Template.bind({});
 
 Default.args = {
     href: "https://some.url",
-    icon: "svgGitLab"
+    icon: "svgGitLab" as AnyIcon
 };

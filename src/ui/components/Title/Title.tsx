@@ -1,10 +1,7 @@
 import React, { FC, ComponentType, ReactNode } from "react";
 import styled   from "styled-components";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { AnyIcon } from "@deskpro/deskpro-ui";
-import { H1 } from "../Typography";
-import { Button } from "../Button";
-import { Stack } from "../Layout";
+import { AnyIcon, H1, Button, Stack } from "@deskpro/deskpro-ui";
 import { ExternalIconLink } from "../ExternalIconLink";
 
 type Props = {
