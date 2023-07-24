@@ -1,4 +1,5 @@
 import React from "react";
+import { ComponentStory } from "@storybook/react";
 import { faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TwoButtonGroup } from "./TwoButtonGroup";
 
@@ -19,7 +20,7 @@ export default {
     },
 };
 
-const Template = ({ oneIcon, twoIcon, ...props }) => (
+export const Default: ComponentStory<typeof TwoButtonGroup> = ({ oneIcon, twoIcon, ...props }) => (
     <TwoButtonGroup
         {...props}
         {...(oneIcon ? { oneIcon: faSearch } : {})}
@@ -27,12 +28,10 @@ const Template = ({ oneIcon, twoIcon, ...props }) => (
     />
 );
 
-export const Default = Template.bind({});
-
 Default.args = {
     selected: "one",
     oneLabel: "Find",
     twoLabel: "Create",
-    oneIcon: true,
-    twoIcon: true,
+    oneIcon: true as never,
+    twoIcon: true as never,
 };

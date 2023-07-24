@@ -1,1 +1,1 @@
-export * from "./Infinite";
+export * from "./ObservedDiv";

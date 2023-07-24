@@ -1,10 +1,7 @@
 import React, { FC, ComponentType, ReactNode } from "react";
 import styled   from "styled-components";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { AnyIcon } from "@deskpro/deskpro-ui";
-import { H1 } from "../Typography";
-import { Button } from "../Button";
-import { Stack } from "../Layout";
+import { AnyIcon, H1, Button, Stack } from "@deskpro/deskpro-ui";
 import { ExternalIconLink } from "../ExternalIconLink";
 
 type Props = {
@@ -24,13 +21,13 @@ const Heading = styled(H1)`
 const Title: FC<Props> = ({
     title,
     onClick,
-    as = H1,
+    as,
     marginBottom = 14,
     link,
     icon,
 }) => (
     <Stack align="center" justify="space-between" gap={6} style={{ marginBottom }}>
-        <Heading as={as}>
+        <Heading {...(as ? { as } : {})}>
             {title}&nbsp;
             {onClick && (
                 <Button icon={faPlus} minimal noMinimalUnderline onClick={onClick} />

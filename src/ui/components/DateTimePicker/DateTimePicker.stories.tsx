@@ -1,8 +1,6 @@
 import * as React from "react";
-import { Stack } from "../Layout";
-import { H1 } from "../Typography";
-import {DatePicker, DateTimePicker} from "./DateTimePicker";
-import { Input } from "../Input";
+import { Stack, H1, Input } from "@deskpro/deskpro-ui";
+import { DatePicker, DateTimePicker } from "./DateTimePicker";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default {

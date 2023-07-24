@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { Stack } from "../Layout";
-import { Button } from "../Button";
+import { Stack, Button } from "@deskpro/deskpro-ui";
 
 export interface TwoButtonGroupProps {
     selected: "one"|"two";

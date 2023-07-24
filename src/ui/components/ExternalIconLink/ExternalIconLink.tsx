@@ -1,10 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { RoundedLabelTag, lightTheme } from "@deskpro/deskpro-ui";
-import { Icon } from "../Icon";
-import { Stack } from "../Layout";
-import { AnyIcon } from "@deskpro/deskpro-ui";
+import { RoundedLabelTag, lightTheme, Icon, Stack, AnyIcon } from "@deskpro/deskpro-ui";
 
 type Props = {
   href: string;

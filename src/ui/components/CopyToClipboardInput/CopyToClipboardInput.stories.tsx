@@ -1,14 +1,13 @@
-import { withKnobs } from "@storybook/addon-knobs";
-import * as React from "react";
 import { CopyToClipboardInput } from "./CopyToClipboardInput";
+import type { StoryObj } from "@storybook/react";
 
 export default {
   title: "Core/CopyToClipboardInput",
-  decorators: [withKnobs],
+  component: CopyToClipboardInput,
 };
 
-export const CopyToClipboardInputStory = () => {
-  return (
-    <CopyToClipboardInput value="https://www.deskpro.com/"/>
-  );
+export const Default: StoryObj<typeof CopyToClipboardInput> = {
+  args: {
+    value: "https://www.google.com",
+  }
 };
