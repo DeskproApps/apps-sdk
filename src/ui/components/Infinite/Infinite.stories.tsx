@@ -1,5 +1,4 @@
 import { Infinite, Stack } from "@deskpro/deskpro-ui";
-import { boolean, withKnobs } from "@storybook/addon-knobs";
 import * as fc from "fast-check";
 import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -29,7 +28,6 @@ const Container = styled.div`
 
 export default {
   title: "Core/Infinite",
-  decorators: [withKnobs],
 };
 
 export const ObserverDiv = () => {
@@ -38,11 +36,9 @@ export const ObserverDiv = () => {
     setState((prev) => prev + 1);
   }, []);
 
-  const reverse = boolean("reverse", true);
-
   return (
     <RelativeContainer>
-      Scroll the {reverse ? "top" : "bottom"} in and out of view. Observe count:{" "}
+      Scroll the top in and out of view. Observe count:{" "}
       {state}
       <ObservedDiv onIntersect={handleIntersect} />
     </RelativeContainer>

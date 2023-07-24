@@ -1,5 +1,4 @@
 import React from "react";
-import { ComponentStory } from '@storybook/react';
 import { TwoProperties as TwoPropertiesCmp } from "../TwoProperties";
 
 export default {
@@ -13,9 +12,14 @@ export default {
     },
 };
 
-const Template: ComponentStory<typeof TwoPropertiesCmp> = ({ ...props }) => (
+export const TwoProperties = () => (
   <>
-    <TwoPropertiesCmp {...props}/>
+    <TwoPropertiesCmp
+      leftLabel={"Due date"}
+      leftText={"01 Jan 2023"}
+      rightLabel={"Deskpro ticket"}
+      rightText={"3"}
+    />
     <TwoPropertiesCmp
       leftLabel="Due date"
       leftText="01 Jan 2023"
@@ -24,12 +28,3 @@ const Template: ComponentStory<typeof TwoPropertiesCmp> = ({ ...props }) => (
     />
   </>
 );
-
-export const TwoProperties = Template.bind({});
-
-TwoProperties.args = {
-  leftLabel: "Due date",
-  leftText: "01 Jan 2023",
-  rightLabel: "Deskpro ticket",
-  rightText: "3",
-};

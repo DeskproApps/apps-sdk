@@ -20,15 +20,13 @@ export default {
     },
 };
 
-const Template: ComponentStory<typeof TwoButtonGroup> = ({ oneIcon, twoIcon, ...props }) => (
+export const Default: ComponentStory<typeof TwoButtonGroup> = ({ oneIcon, twoIcon, ...props }) => (
     <TwoButtonGroup
         {...props}
         {...(oneIcon ? { oneIcon: faSearch } : {})}
         {...(twoIcon ? { twoIcon: faPlus } : {})}
     />
 );
-
-export const Default = Template.bind({});
 
 Default.args = {
     selected: "one",

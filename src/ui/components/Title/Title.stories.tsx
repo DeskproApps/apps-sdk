@@ -31,14 +31,12 @@ export default {
     },
 };
 
-const Template: ComponentStory<typeof Object> = ({ onClick, withOnClick, ...props }) => {
+export const Default: ComponentStory<typeof Object> = ({ onClick, withOnClick, ...props }) => {
     return <Title
         {...props}
         {...(withOnClick ? { onClick } : {})}
     />
 };
-
-export const Default = Template.bind({});
 
 Default.args = {
     title: "from args",

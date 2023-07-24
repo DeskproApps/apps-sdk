@@ -21,13 +21,13 @@ const Heading = styled(H1)`
 const Title: FC<Props> = ({
     title,
     onClick,
-    as = H1,
+    as,
     marginBottom = 14,
     link,
     icon,
 }) => (
     <Stack align="center" justify="space-between" gap={6} style={{ marginBottom }}>
-        <Heading as={as}>
+        <Heading {...(as ? { as } : {})}>
             {title}&nbsp;
             {onClick && (
                 <Button icon={faPlus} minimal noMinimalUnderline onClick={onClick} />

@@ -1,6 +1,5 @@
-import React from "react";
-import { ComponentStory } from '@storybook/react';
 import { Property as PropertyCmp } from "../Property";
+import type { StoryObj } from "@storybook/react";
 
 export default {
     title: "Core/Property",
@@ -11,14 +10,10 @@ export default {
     },
 };
 
-const Template: ComponentStory<typeof PropertyCmp> = ({ ...props }) => (
-    <PropertyCmp {...props} />
-);
-
-export const Property = Template.bind({});
-
-Property.args = {
-  label: "Deskpro ticket",
-  text: "",
-  marginBottom: 10,
+export const Property: StoryObj<typeof PropertyCmp> = {
+  args: {
+    label: "Deskpro ticket",
+    text: "",
+    marginBottom: 10,
+  }
 };
