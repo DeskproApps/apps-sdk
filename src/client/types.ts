@@ -27,9 +27,10 @@ export interface Context<Data = any, Settings = any> {
   settings: Settings;
   data?: Data;
 }
- 
+
 export interface ProxyAuthPayload {
   proxyUrl: string;
+  proxyV2Url: string;
   token: string;
   appInstanceId: string;
 }
