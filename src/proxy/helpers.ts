@@ -1,4 +1,4 @@
-import { Fetch, ProxyFetch } from "./types";
+import {Fetch, ProxyFetch, ProxyResponse} from "./types";
 import { IDeskproClient } from "../client/types";
 
 export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fetch> => {
@@ -9,19 +9,33 @@ export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fe
     `);
   }
 
-  const { proxyUrl, token } = await client.getProxyAuth();
+  const { proxyV2Url, token } = await client.getProxyAuth();
 
-  return (input: RequestInfo, init?: RequestInit) => fetch(proxyUrl, {
-    ...init,
-    method: "POST",
-    headers: {
-      ...(init?.headers ?? {}),
-      "X-Proxy-Authorization": `Bearer ${token}`,
-      "X-Proxy-Url": typeof input === "string" ? input : input.url,
-      "X-Proxy-Method": typeof input === "string" ? (init?.method ?? "GET") : input.method,
-    },
-  });
+  return async (input: RequestInfo, init?: RequestInit) => {
+    const req = {
+      headers: init?.headers ?? {},
+      content: init?.body,
+    };
 
+    const res = await fetch(proxyV2Url, {
+      body: JSON.stringify(req),
+      method: "POST",
+      headers: {
+        "X-Proxy-Authorization": `Bearer ${token}`,
+        "X-Proxy-Url": typeof input === "string" ? input : input.url,
+        "X-Proxy-Method": typeof input === "string" ? (init?.method ?? "GET") : input.method,
+      },
+    });
+
+    const resContent = JSON.parse(await res.text());
+
+    return {
+      status: res.status,
+      headers: resContent.headers,
+      text: async () => resContent.content,
+      json: async () => JSON.parse(resContent.content),
+    } as ProxyResponse;
+  };
 };
 
 export const adminGenericProxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fetch> => {
@@ -32,17 +46,31 @@ export const adminGenericProxyFetch: ProxyFetch = async (client: IDeskproClient)
     `);
   }
 
-  const { proxyUrl, token } = await client.getAdminGenericProxyAuth();
+  const { proxyV2Url, token } = await client.getAdminGenericProxyAuth();
 
-  return (input: RequestInfo, init?: RequestInit) => fetch(proxyUrl, {
-    ...init,
-    method: "POST",
-    headers: {
-      ...(init?.headers ?? {}),
-      "X-Proxy-Authorization": `Bearer ${token}`,
-      "X-Proxy-Url": typeof input === "string" ? input : input.url,
-      "X-Proxy-Method": typeof input === "string" ? (init?.method ?? "GET") : input.method,
-    },
-  });
+  return async (input: RequestInfo, init?: RequestInit) => {
+    const req = {
+      headers: init?.headers ?? {},
+      content: init?.body,
+    };
 
+    const res = await fetch(proxyV2Url, {
+      body: JSON.stringify(req),
+      method: "POST",
+      headers: {
+        "X-Proxy-Authorization": `Bearer ${token}`,
+        "X-Proxy-Url": typeof input === "string" ? input : input.url,
+        "X-Proxy-Method": typeof input === "string" ? (init?.method ?? "GET") : input.method,
+      },
+    });
+
+    const resContent = JSON.parse(await res.text());
+
+    return {
+      status: res.status,
+      headers: resContent.headers,
+      text: async () => resContent.content,
+      json: async () => JSON.parse(resContent.content),
+    } as ProxyResponse;
+  };
 };
