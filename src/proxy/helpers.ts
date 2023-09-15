@@ -30,7 +30,7 @@ export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fe
     const resContent = JSON.parse(await res.text());
 
     return {
-      status: res.status,
+      status: resContent.status,
       headers: resContent.headers,
       text: async () => resContent.content,
       json: async () => JSON.parse(resContent.content),
@@ -67,7 +67,7 @@ export const adminGenericProxyFetch: ProxyFetch = async (client: IDeskproClient)
     const resContent = JSON.parse(await res.text());
 
     return {
-      status: res.status,
+      status: resContent.status,
       headers: resContent.headers,
       text: async () => resContent.content,
       json: async () => JSON.parse(resContent.content),
