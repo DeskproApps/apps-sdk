@@ -11,19 +11,14 @@ const Divider = styled.div`
 `;
 
 export const PropertyRow = ({ children }: { children: ReactElement[] }) => {
-  const maxHeight = Math.max(
-    ...Array.from(document.querySelectorAll(".property-row")).map(
-      (row) => row.clientHeight
-    )
-  );
-
   return (
     <Stack
       style={{
         position: "relative",
         width: "100%",
-        height: `${maxHeight}px` || "100%",
+        height: "100%",
       }}
+      className="property-row-parent"
     >
       {children.map((child, idx) => (
         <Stack
@@ -33,13 +28,14 @@ export const PropertyRow = ({ children }: { children: ReactElement[] }) => {
             position: idx === 0 ? "relative" : "absolute",
             width: `${idx === 0 ? 100 : 100 / children.length}%`,
             left: `${idx * (100 / children.length)}%`,
+            height: "100%",
           }}
         >
-          {idx !== 0 && (
-            <Divider style={{ height: `${maxHeight}px` || "100%" }} />
-          )}
+          {idx !== 0 && <Divider style={{ height: "100%" }} />}
           <Stack
-            style={{ maxWidth: `${(idx + 1) * (100 / children.length) - 5}%` }}
+            style={{
+              maxWidth: `${(idx + 1) * (100 / children.length) - 5}%`,
+            }}
           >
             {child}
           </Stack>
