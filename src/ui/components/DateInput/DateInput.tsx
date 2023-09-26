@@ -3,10 +3,10 @@ import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import Flatpickr from "react-flatpickr";
 import { Input } from "@deskpro/deskpro-ui";
 import { useDeskproAppTheme } from "../../context";
+import { DateInputStyles } from "./styles";
 import type { FC } from "react";
 import type { AnyIcon } from "@deskpro/deskpro-ui";
 import type { DateTimePickerProps } from "react-flatpickr";
-import "./DateInput.css";
 
 export type Props = DateTimePickerProps & {
   id: string;
@@ -33,44 +33,47 @@ const DateInput: FC<Props> = ({
   const { theme } = useDeskproAppTheme();
 
   return (
-    <Flatpickr
-      options={{
-        position: "auto",
-        dateFormat: "j M Y",
-        ...(!enableTime ? {} : {
-          dateFormat: "j M Y H:i",
-          minuteIncrement: 5,
-          enableTime: true,
-          time_24hr: true,
-        }),
-      }}
-      value={value}
-      defaultValue=""
-      onChange={(dates: Date[]) => {
-        onChange && onChange(dates);
-      }}
-      render={({ defaultValue, ...props }, ref) => (
-        <StyledInput
-          {...props}
-          id={id}
-          ref={ref}
-          variant="inline"
-          inputsize="small"
-          placeholder={placeholder}
-          defaultValue={defaultValue || ''}
-          error={error}
-          style={{ paddingRight: 0 }}
-          rightIcon={{
-            icon: faCalendarDays as AnyIcon,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            style: {
-              color: theme.colors.grey40,
-            }
-          }}
-        />
-      )}
-    />
+    <>
+      <DateInputStyles/>
+      <Flatpickr
+        options={{
+          position: "auto",
+          dateFormat: "j M Y",
+          ...(!enableTime ? {} : {
+            dateFormat: "j M Y H:i",
+            minuteIncrement: 5,
+            enableTime: true,
+            time_24hr: true,
+          }),
+        }}
+        value={value}
+        defaultValue=""
+        onChange={(dates: Date[]) => {
+          onChange && onChange(dates);
+        }}
+        render={({ defaultValue, ...props }, ref) => (
+          <StyledInput
+            {...props}
+            id={id}
+            ref={ref}
+            variant="inline"
+            inputsize="small"
+            placeholder={placeholder}
+            defaultValue={defaultValue || ''}
+            error={error}
+            style={{ paddingRight: 0 }}
+            rightIcon={{
+              icon: faCalendarDays as AnyIcon,
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              style: {
+                color: theme.colors.grey40,
+              }
+            }}
+          />
+        )}
+      />
+    </>
   )
 };
 
