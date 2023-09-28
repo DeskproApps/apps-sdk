@@ -10,46 +10,52 @@ export default {
 
 export const PropertyRow = () => {
   return (
-    <Stack vertical style={{ maxWidth: "265px" }} gap={15}>
+    <Stack vertical gap={15} style={{ maxWidth: "265px" }}>
       <PropertyRowCmp>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
+        <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
       <PropertyRowCmp>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
       <PropertyRowCmp>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
       <PropertyRowCmp>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
-        <Property label="key" text="value"/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="most popular programming" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
       <PropertyRowCmp>
-        <Property label="key" text="value"/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="JavaScript" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="JavaScript it's the world" marginBottom={0}/>
+        <Property label="key" text="value" marginBottom={0}/>
+      </PropertyRowCmp>
+      <PropertyRowCmp>
+        <Property label="key" text="value" marginBottom={0}/>
         <Property
           label="key"
           text={(
             <Pill label="Pill" textColor="#FFFFFF" backgroundColor="#000000"></Pill>
           )}
+          marginBottom={0}
         />
       </PropertyRowCmp>
       <PropertyRowCmp>
         <Property
           label="key"
+          marginBottom={0}
           text="JavaScript is the world's most popular programming language. JavaScript is the programming language of the Web. JavaScript is easy to learn."
         />
         <Property
           label="key"
-          text="JavaScript is the world's most popular programming language. JavaScript is the programming language of the Web. JavaScript is easy to learn."
+          marginBottom={0}
+          text="JavaScript is the world's most popular programming language."
         />
       </PropertyRowCmp>
     </Stack>
