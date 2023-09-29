@@ -265,6 +265,9 @@ export class DeskproClient implements IDeskproClient {
   // Deskpro UI
   public sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
 
+  // Utils
+  public ticketChannelsUtil: () => Promise<any>;
+
   constructor(
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
@@ -280,6 +283,7 @@ export class DeskproClient implements IDeskproClient {
     this.setTitle = () => {};
 
     this.entityAssociationSet = async () => {};
+    this.ticketChannelsUtil = async () => {};
     this.entityAssociationDelete = async () => {};
     this.entityAssociationGet = async () => null;
     this.entityAssociationList = async () => [""];
@@ -374,6 +378,10 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._entityAssociationSet) {
       this.entityAssociationSet = parent._entityAssociationSet;
+    }
+
+    if (parent._ticketChannelsUtil) {
+      this.ticketChannelsUtil = parent._ticketChannelsUtil;
     }
 
     if (parent._entityAssociationList) {

@@ -27,7 +27,7 @@ export interface Context<Data = any, Settings = any> {
   settings: Settings;
   data?: Data;
 }
- 
+
 export interface ProxyAuthPayload {
   proxyUrl: string;
   token: string;
@@ -197,6 +197,7 @@ export interface CoreCallSender {
   _getAdminGenericProxyAuth: () => Promise<ProxyAuthPayload>;
   _entityAssociationGet: () => Promise<any>;
   _entityAssociationSet: () => Promise<any>;
+  _ticketChannelsUtil: () => Promise<any>;
   _entityAssociationList: () => Promise<any>;
   _entityAssociationDelete: () => Promise<any>;
   _entityAssociationCountEntities: () => Promise<any>;
@@ -348,6 +349,7 @@ export interface IDeskproClient {
   setAdminSetting: (value: string) => void;
   setAdminSettingInvalid: (message: string, settingName?: string) => void;
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
+  ticketChannelsUtil: () => Promise<any>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   oauth2(): IOAuth2;
   deskpro(): IDeskproUI;
