@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
+import styled from "styled-components";
 import { faSearch, faTimes, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input, IconButton, Label } from "@deskpro/deskpro-ui";
 import type { FC, ChangeEvent } from "react";
-import type { AnyIcon } from "@deskpro/deskpro-ui";
+import type { AnyIcon, InputProps } from "@deskpro/deskpro-ui";
 
 export type Props = {
   label?: string,
@@ -12,7 +13,15 @@ export type Props = {
   required?: boolean,
   isFetching?: boolean,
   marginBottom?: number,
+  inputProps?: InputProps,
 };
+
+const SearchContainer = styled.div`
+  [data-dp-name=Input] {
+    display: flex;
+    margin-bottom: 10px;
+  }
+`;
 
 const Search: FC<Props> = ({
   label,
@@ -21,6 +30,7 @@ const Search: FC<Props> = ({
   required = false,
   isFetching = false,
   marginBottom = 10,
+  inputProps = {},
 }) => {
   const [search, setSearch] = useState<string>("");
 
@@ -35,35 +45,38 @@ const Search: FC<Props> = ({
   }, [onChange]);
 
   return (
-    <Label
-      required={required}
-      label={label}
-      htmlFor="search"
-      style={{ marginBottom }}
-    >
-      <Input
-        id="search"
-        name="search"
-        value={search}
-        variant="inline"
-        inputsize="small"
-        disabled={disabled}
-        onChange={onChangeSearch}
-        placeholder="Search"
-        leftIcon={isFetching
-          ? <FontAwesomeIcon icon={faSpinner as never} spin/>
-          : faSearch as AnyIcon
-        }
-        rightIcon={(
-          <IconButton
-            minimal
-            data-testid="search-reset"
-            icon={faTimes as never}
-            onClick={onClearSearch}
-          />
-        )}
-      />
-    </Label>
+    <SearchContainer>
+      <Label
+        required={required}
+        label={label}
+        htmlFor="search"
+        style={{ marginBottom }}
+      >
+        <Input
+          id="search"
+          name="search"
+          value={search}
+          variant="inline"
+          inputsize="small"
+          disabled={disabled}
+          onChange={onChangeSearch}
+          placeholder="Search"
+          leftIcon={isFetching
+            ? <FontAwesomeIcon icon={faSpinner as never} spin/>
+            : faSearch as AnyIcon
+          }
+          rightIcon={(
+            <IconButton
+              minimal
+              data-testid="search-reset"
+              icon={faTimes as never}
+              onClick={onClearSearch}
+            />
+          )}
+          {...inputProps}
+        />
+      </Label>
+    </SearchContainer>
   );
 }
 
