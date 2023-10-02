@@ -40,7 +40,7 @@ const TwoProperties: FC<Props> = ({
   leftText,
   rightLabel,
   rightText,
-  marginBottom = 7,
+  marginBottom = 10,
 }) => (
   <Container marginBottom={marginBottom}>
     <Side>
