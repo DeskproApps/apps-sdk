@@ -14,7 +14,7 @@ export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fe
   return async (input: RequestInfo, init?: RequestInit) => {
     const req = {
       headers: init?.headers ?? {},
-      content: init?.body,
+      content: typeof init?.body?.toString === "function" ? init?.body.toString() : init?.body,
     };
 
     const res = await fetch(proxyV2Url, {
@@ -51,7 +51,7 @@ export const adminGenericProxyFetch: ProxyFetch = async (client: IDeskproClient)
   return async (input: RequestInfo, init?: RequestInit) => {
     const req = {
       headers: init?.headers ?? {},
-      content: init?.body,
+      content: typeof init?.body?.toString === "function" ? init?.body.toString() : init?.body,
     };
 
     const res = await fetch(proxyV2Url, {
