@@ -9,4 +9,5 @@ export * from "./Title";
 export * from "./TwoButtonGroup";
 export * from "./DateInput";
 export * from "./Search";
-
+export * from "./Select";
+export * from "./Link";
