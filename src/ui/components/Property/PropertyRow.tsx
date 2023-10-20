@@ -45,11 +45,13 @@ export const PropertyRow: FC<Props> = ({
   children,
   marginBottom = 10,
 }) => {
-  return (!Array.isArray(children))
-    ? (<div style={style}>{children}</div>)
+  const filteredChildren = !Array.isArray(children) ? children : children.filter(Boolean);
+
+  return (!Array.isArray(filteredChildren))
+    ? (<div style={style}>{filteredChildren}</div>)
     : (
-      <Row count={children.length} marginBottom={marginBottom} style={style}>
-        {children.map((child, idx) => (
+      <Row count={filteredChildren.length} marginBottom={marginBottom} style={style}>
+        {filteredChildren.map((child, idx) => (
           <ItemContainer key={idx}>
             <Item>{child}</Item>
           </ItemContainer>
