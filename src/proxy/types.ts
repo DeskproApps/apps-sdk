@@ -7,6 +7,8 @@ export type ProxyResponse = {
   json: () => Promise<any>;
 };
 
-export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<ProxyResponse>;
+export type V2ProxyRequestInit = Omit<RequestInit, "body"> & { body?: string };
+
+export type Fetch = (input: RequestInfo, init?: V2ProxyRequestInit) => Promise<ProxyResponse>;
 
 export type ProxyFetch = (client: IDeskproClient) => Promise<Fetch>;

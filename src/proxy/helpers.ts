@@ -1,4 +1,4 @@
-import {Fetch, ProxyFetch, ProxyResponse} from "./types";
+import { Fetch, ProxyFetch, ProxyResponse, V2ProxyRequestInit } from "./types";
 import { IDeskproClient } from "../client/types";
 
 export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fetch> => {
@@ -11,7 +11,7 @@ export const proxyFetch: ProxyFetch = async (client: IDeskproClient): Promise<Fe
 
   const { proxyV2Url, token } = await client.getProxyAuth();
 
-  return async (input: RequestInfo, init?: RequestInit) => {
+  return async (input: RequestInfo, init?: V2ProxyRequestInit) => {
     const req = {
       headers: init?.headers ?? {},
       content: typeof init?.body?.toString === "function" ? init?.body.toString() : init?.body,
@@ -48,7 +48,7 @@ export const adminGenericProxyFetch: ProxyFetch = async (client: IDeskproClient)
 
   const { proxyV2Url, token } = await client.getAdminGenericProxyAuth();
 
-  return async (input: RequestInfo, init?: RequestInit) => {
+  return async (input: RequestInfo, init?: V2ProxyRequestInit) => {
     const req = {
       headers: init?.headers ?? {},
       content: typeof init?.body?.toString === "function" ? init?.body.toString() : init?.body,
