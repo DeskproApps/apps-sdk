@@ -7,7 +7,11 @@ export type ProxyResponse = {
   json: () => Promise<any>;
 };
 
-export type V2ProxyRequestInit = Omit<RequestInit, "body"> & { body?: string };
+export type V2ProxyRequestInitBody = {
+  body?: string | { toString: () => string };
+};
+
+export type V2ProxyRequestInit = Omit<RequestInit, "body"> & V2ProxyRequestInitBody;
 
 export type Fetch = (input: RequestInfo, init?: V2ProxyRequestInit) => Promise<ProxyResponse>;
 
