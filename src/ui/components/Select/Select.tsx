@@ -1,15 +1,7 @@
-import { useState, useMemo } from "react";
-import {
-  faCheck,
-  faCaretDown,
-  faExternalLinkAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { useState, useMemo, ReactNode } from "react";
+import { faCheck, faCaretDown, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { Stack, DivAsInput, Dropdown } from "@deskpro/deskpro-ui";
-import {
-  isPrimitive,
-  getDisplayValue,
-  getFilteredOptions,
-} from "./utils";
+import { isPrimitive, getDisplayValue, getFilteredOptions } from "./utils";
 import { NO_FOUND } from "./constants";
 import type {
   AnyIcon,
@@ -19,15 +11,19 @@ import type {
   DivAsInputWithDisplayProps,
 } from "@deskpro/deskpro-ui";
 
-type Props<T> = Pick<DropdownProps<T, HTMLElement>, "closeOnSelect"|"containerHeight"|"containerMaxHeight"|"placement"|"disabled"> & {
-  initValue: T | T[],
-  id?: string,
-  error?: DivAsInputWithDisplayProps["error"],
-  options: Array<DropdownValueType<T>>,
-  onChange?: (value: T|T[]) => void,
-  placeholder?: DivAsInputWithDisplayProps["placeholder"],
-  showInternalSearch?: boolean,
-  noFoundText?: string,
+type Props<T> = Pick<
+  DropdownProps<T, HTMLElement>,
+  "closeOnSelect" | "containerHeight" | "containerMaxHeight" | "placement" | "disabled"
+> & {
+  initValue: T | T[];
+  id?: string;
+  error?: DivAsInputWithDisplayProps["error"];
+  options: Array<DropdownValueType<T>>;
+  onChange?: (value: T | T[]) => void;
+  placeholder?: DivAsInputWithDisplayProps["placeholder"];
+  showInternalSearch?: boolean;
+  noFoundText?: string;
+  children?: ReactNode;
 };
 
 const Select = <T,>({
@@ -40,6 +36,7 @@ const Select = <T,>({
   placeholder,
   showInternalSearch,
   noFoundText = NO_FOUND,
+  children,
   ...props
 }: Props<T>) => {
   const [input, setInput] = useState<string>("");
@@ -76,7 +73,6 @@ const Select = <T,>({
           setSelected(newValue);
           onChange && onChange(newValue);
         }
-
       }}
       onInputChange={(value) => {
         if (showInternalSearch) {
@@ -86,8 +82,12 @@ const Select = <T,>({
       options={currentOptions}
       {...props}
     >
-      {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => {
-        return (
+      {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) =>
+        children ? (
+          <div ref={targetRef} {...targetProps}>
+            {children}
+          </div>
+        ) : (
           <DivAsInput
             {...(!id ? {} : { id: id })}
             placeholder={placeholder || "Select Value"}
@@ -96,16 +96,21 @@ const Select = <T,>({
             error={error}
             ref={targetRef}
             {...targetProps}
-            value={!Array.isArray(displayValue)
-              ? displayValue
-              : isPrimitive(displayValue[0])
-              ? displayValue[0]
-              : (<Stack gap={6} wrap="wrap" style={{ marginBottom: 6 }}>{displayValue}</Stack>)
+            value={
+              !Array.isArray(displayValue) ? (
+                displayValue
+              ) : isPrimitive(displayValue[0]) ? (
+                displayValue[0]
+              ) : (
+                <Stack gap={6} wrap="wrap" style={{ marginBottom: 6 }}>
+                  {displayValue}
+                </Stack>
+              )
             }
             style={{ paddingRight: 0, cursor: !disabled ? "pointer" : "not-allowed" }}
           />
         )
-      }}
+      }
     </Dropdown>
   );
 };
