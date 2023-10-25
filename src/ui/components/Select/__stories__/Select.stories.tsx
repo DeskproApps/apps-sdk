@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { action } from "@storybook/addon-actions";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Stack, Avatar, P5 } from "@deskpro/deskpro-ui";
 import { Select } from "../Select";
@@ -52,7 +54,7 @@ const memberOptions = [
 ];
 
 export const SingleSelect = () => (
-  <Select initValue={""} options={options as never} />
+  <Select initValue={""} options={options as never} onChange={action("onChange")} />
 );
 
 export const MultiplySelect = () => (
@@ -60,16 +62,11 @@ export const MultiplySelect = () => (
     initValue={[]}
     closeOnSelect={false}
     options={options as never[]}
+    onChange={action("onChange")}
   />
 );
 
-export const Disabled = () => (
-  <Select
-    disabled
-    initValue={"1"}
-    options={options as never[]}
-  />
-);
+export const Disabled = () => <Select disabled initValue={"1"} options={options as never[]} />;
 
 export const CustomLabels = () => (
   <Select
@@ -80,6 +77,29 @@ export const CustomLabels = () => (
   />
 );
 
-export const WithoutOptions = () => (
-  <Select initValue={""} options={[]} />
-);
+export const WithoutOptions = () => <Select initValue={""} options={[]} />;
+
+export const WithChildren = () => <Select children={<h1>Dropdown</h1>} />;
+
+export const HandleChangedValue = () => {
+  const [form, setForm] = useState({ writers: ["1"] });
+
+  return (
+    <Stack gap={15}>
+      <div style={{ width: "300px" }}>
+        <Select
+          initValue={["1"]}
+          closeOnSelect={false}
+          options={memberOptions as never[]}
+          onChange={(newValue) => {
+            setForm({
+              ...form,
+              writers: newValue as string[],
+            });
+          }}
+        />
+      </div>
+      <pre>{JSON.stringify(form, null, 2)}</pre>
+    </Stack>
+  );
+};
