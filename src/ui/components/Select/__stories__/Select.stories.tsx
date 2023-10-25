@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { action } from '@storybook/addon-actions';
+import { action } from "@storybook/addon-actions";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Stack, Avatar, P5 } from "@deskpro/deskpro-ui";
 import { Select } from "../Select";
@@ -54,11 +54,7 @@ const memberOptions = [
 ];
 
 export const SingleSelect = () => (
-  <Select
-    initValue={""}
-    options={options as never}
-    onChange={action("onChange")}
-  />
+  <Select initValue={""} options={options as never} onChange={action("onChange")} />
 );
 
 export const MultiplySelect = () => (
@@ -70,13 +66,7 @@ export const MultiplySelect = () => (
   />
 );
 
-export const Disabled = () => (
-  <Select
-    disabled
-    initValue={"1"}
-    options={options as never[]}
-  />
-);
+export const Disabled = () => <Select disabled initValue={"1"} options={options as never[]} />;
 
 export const CustomLabels = () => (
   <Select
@@ -87,9 +77,9 @@ export const CustomLabels = () => (
   />
 );
 
-export const WithoutOptions = () => (
-  <Select initValue={""} options={[]} />
-);
+export const WithoutOptions = () => <Select initValue={""} options={[]} />;
+
+export const WithChildren = () => <Select children={<h1>Dropdown</h1>} />;
 
 export const HandleChangedValue = () => {
   const [form, setForm] = useState({ writers: ["1"] });
@@ -112,4 +102,4 @@ export const HandleChangedValue = () => {
       <pre>{JSON.stringify(form, null, 2)}</pre>
     </Stack>
   );
-}
+};
