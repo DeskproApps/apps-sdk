@@ -84,8 +84,6 @@ export const WithChildren = () => (
 export const HandleChangedValue = () => {
   const [form, setForm] = useState({ writers: ["1"] });
 
-  console.log(">>>", form);
-
   return (
     <Stack gap={15}>
       <div style={{ width: "300px" }}>
