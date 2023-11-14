@@ -1,20 +1,14 @@
 import { useState } from "react";
 import { action } from "@storybook/addon-actions";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Stack, Avatar, P5 } from "@deskpro/deskpro-ui";
+import { Button } from "@deskpro/deskpro-ui";
+import { Stack } from "@deskpro/deskpro-ui";
+import { Member } from "../../Member";
 import { Select } from "../Select";
-import type { FC } from "react";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
 
 export default {
   title: "Core/Select",
 };
-
-const Member: FC<{ name: string }> = ({ name }) => (
-  <Stack gap={6}>
-    <Avatar size={18} name={name} backupIcon={faUser} />
-    <P5>{name}</P5>
-  </Stack>
-);
 
 const options = [
   { value: "1", label: "one", key: "1", type: "value" },
@@ -22,7 +16,7 @@ const options = [
   { value: "3", label: "three", key: "3", type: "value" },
 ];
 
-const memberOptions = [
+const memberOptions: Array<DropdownValueType<string>> = [
   {
     key: "1",
     value: "1",
@@ -79,7 +73,13 @@ export const CustomLabels = () => (
 
 export const WithoutOptions = () => <Select initValue={""} options={[]} />;
 
-export const WithChildren = () => <Select children={<h1>Dropdown</h1>} />;
+export const WithChildren = () => (
+  <Select
+    initValue=""
+    options={memberOptions}
+    children={<Button type="button" text="Open" />}
+  />
+);
 
 export const HandleChangedValue = () => {
   const [form, setForm] = useState({ writers: ["1"] });
