@@ -56,7 +56,6 @@ const Search: FC<Props> = ({
           id="search"
           name="search"
           value={search}
-          variant="inline"
           inputsize="small"
           disabled={disabled}
           onChange={onChangeSearch}

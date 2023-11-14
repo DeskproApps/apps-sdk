@@ -1,8 +1,9 @@
-import { useState, useMemo, ReactNode } from "react";
+import { useState, useMemo } from "react";
 import { faCheck, faCaretDown, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { Stack, DivAsInput, Dropdown } from "@deskpro/deskpro-ui";
 import { isPrimitive, getDisplayValue, getFilteredOptions } from "./utils";
 import { NO_FOUND } from "./constants";
+import type { PropsWithChildren } from "react";
 import type {
   AnyIcon,
   DropdownProps,
@@ -23,7 +24,6 @@ type Props<T> = Pick<
   placeholder?: DivAsInputWithDisplayProps["placeholder"];
   showInternalSearch?: boolean;
   noFoundText?: string;
-  children?: ReactNode;
 };
 
 const Select = <T,>({
@@ -38,7 +38,7 @@ const Select = <T,>({
   noFoundText = NO_FOUND,
   children,
   ...props
-}: Props<T>) => {
+}: PropsWithChildren<Props<T>>) => {
   const [input, setInput] = useState<string>("");
   const [selected, setSelected] = useState(initValue);
 
