@@ -51,6 +51,14 @@ export const SingleSelect = () => (
   <Select initValue={""} options={options as never} onChange={action("onChange")} />
 );
 
+export const PassingValue = () => {
+  const [value, setValue] = useState("1");
+
+  return (
+    <Select value={value} options={options as never} onChange={(e) => setValue(e as string)} />
+  );
+};
+
 export const MultiplySelect = () => (
   <Select
     initValue={[]}
@@ -74,11 +82,7 @@ export const CustomLabels = () => (
 export const WithoutOptions = () => <Select initValue={""} options={[]} />;
 
 export const WithChildren = () => (
-  <Select
-    initValue=""
-    options={memberOptions}
-    children={<Button type="button" text="Open" />}
-  />
+  <Select initValue="" options={memberOptions} children={<Button type="button" text="Open" />} />
 );
 
 export const HandleChangedValue = () => {
