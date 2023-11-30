@@ -16,11 +16,12 @@ type Props<T> = Pick<
   DropdownProps<T, HTMLElement>,
   "closeOnSelect" | "containerHeight" | "containerMaxHeight" | "placement" | "disabled"
 > & {
-  initValue: T | T[];
+  value?: T | T[];
+  initValue?: T | T[];
   id?: string;
   error?: DivAsInputWithDisplayProps["error"];
   options: Array<DropdownValueType<T>>;
-  onChange?: (value: T | T[]) => void;
+  onChange?: (value: T | T[] | undefined) => void;
   placeholder?: DivAsInputWithDisplayProps["placeholder"];
   showInternalSearch?: boolean;
   noFoundText?: string;
@@ -29,6 +30,7 @@ type Props<T> = Pick<
 const Select = <T,>({
   id,
   error,
+  value,
   initValue,
   options,
   onChange,
@@ -42,11 +44,27 @@ const Select = <T,>({
   const [input, setInput] = useState<string>("");
   const [selected, setSelected] = useState(initValue);
 
-  const displayValue = useMemo(() => getDisplayValue(selected, options), [selected, options]);
+  const displayValue = useMemo(
+    () => getDisplayValue(value || selected, options),
+    [value, selected, options]
+  );
 
   const currentOptions = useMemo(() => {
-    return getFilteredOptions(options, selected, input, noFoundText);
-  }, [options, selected, input, noFoundText]);
+    return getFilteredOptions(options, value, input, noFoundText);
+  }, [options, value, input, noFoundText]);
+
+  const setValues = (value: T | T[], selectedOption: DropdownValueType<T>) => {
+    if (isPrimitive(value)) {
+      setSelected(selectedOption.value);
+      onChange && onChange(selectedOption.value);
+    } else if (Array.isArray(value)) {
+      const newValue = value.includes(selectedOption.value)
+        ? value.filter((v) => v !== selectedOption.value)
+        : [...value, selectedOption.value];
+      setSelected(newValue);
+      onChange && onChange(newValue);
+    }
+  };
 
   return (
     <Dropdown
@@ -62,16 +80,10 @@ const Select = <T,>({
       onSelectOption={(selectedOption) => {
         setInput("");
 
-        if (isPrimitive(selected)) {
-          setSelected(selectedOption.value);
-          onChange && onChange(selectedOption.value);
-        } else if (Array.isArray(selected)) {
-          const newValue = selected.includes(selectedOption.value)
-            ? selected.filter((v) => v !== selectedOption.value)
-            : [...selected, selectedOption.value];
-
-          setSelected(newValue);
-          onChange && onChange(newValue);
+        if (value) {
+          setValues(value, selectedOption as DropdownValueType<T>);
+        } else {
+          setValues(selected as T | T[], selectedOption as DropdownValueType<T>);
         }
       }}
       onInputChange={(value) => {
