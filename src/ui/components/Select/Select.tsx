@@ -16,12 +16,12 @@ type Props<T> = Pick<
   DropdownProps<T, HTMLElement>,
   "closeOnSelect" | "containerHeight" | "containerMaxHeight" | "placement" | "disabled"
 > & {
-  value: T | T[];
-  initValue: T | T[];
+  value?: T | T[];
+  initValue?: T | T[];
   id?: string;
   error?: DivAsInputWithDisplayProps["error"];
   options: Array<DropdownValueType<T>>;
-  onChange?: (value: T | T[]) => void;
+  onChange?: (value: T | T[] | undefined) => void;
   placeholder?: DivAsInputWithDisplayProps["placeholder"];
   showInternalSearch?: boolean;
   noFoundText?: string;
@@ -53,6 +53,19 @@ const Select = <T,>({
     return getFilteredOptions(options, value, input, noFoundText);
   }, [options, value, input, noFoundText]);
 
+  const setValues = (value: T | T[], selectedOption: DropdownValueType<T>) => {
+    if (isPrimitive(value)) {
+      setSelected(selectedOption.value);
+      onChange && onChange(selectedOption.value);
+    } else if (Array.isArray(value)) {
+      const newValue = value.includes(selectedOption.value)
+        ? value.filter((v) => v !== selectedOption.value)
+        : [...value, selectedOption.value];
+      setSelected(newValue);
+      onChange && onChange(newValue);
+    }
+  };
+
   return (
     <Dropdown
       disabled={disabled}
@@ -67,15 +80,10 @@ const Select = <T,>({
       onSelectOption={(selectedOption) => {
         setInput("");
 
-        if (isPrimitive(value)) {
-          setSelected(selectedOption.value);
-          onChange && onChange(selectedOption.value);
-        } else if (Array.isArray(value)) {
-          const newValue = value.includes(selectedOption.value)
-            ? value.filter((v) => v !== selectedOption.value)
-            : [...value, selectedOption.value];
-          setSelected(newValue);
-          onChange && onChange(newValue);
+        if (value) {
+          setValues(value, selectedOption as DropdownValueType<T>);
+        } else if (selected) {
+          setValues(selected, selectedOption as DropdownValueType<T>);
         }
       }}
       onInputChange={(value) => {
