@@ -82,8 +82,8 @@ const Select = <T,>({
 
         if (value) {
           setValues(value, selectedOption as DropdownValueType<T>);
-        } else if (selected) {
-          setValues(selected, selectedOption as DropdownValueType<T>);
+        } else {
+          setValues(selected as T | T[], selectedOption as DropdownValueType<T>);
         }
       }}
       onInputChange={(value) => {
