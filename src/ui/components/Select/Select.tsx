@@ -16,7 +16,7 @@ type Props<T> = Pick<
   DropdownProps<T, HTMLElement>,
   "closeOnSelect" | "containerHeight" | "containerMaxHeight" | "placement" | "disabled"
 > & {
-  initValue: T | T[];
+  selected: T | T[];
   id?: string;
   error?: DivAsInputWithDisplayProps["error"];
   options: Array<DropdownValueType<T>>;
@@ -29,7 +29,7 @@ type Props<T> = Pick<
 const Select = <T,>({
   id,
   error,
-  initValue,
+  selected,
   options,
   onChange,
   disabled,
@@ -40,7 +40,6 @@ const Select = <T,>({
   ...props
 }: PropsWithChildren<Props<T>>) => {
   const [input, setInput] = useState<string>("");
-  const [selected, setSelected] = useState(initValue);
 
   const displayValue = useMemo(() => getDisplayValue(selected, options), [selected, options]);
 
@@ -63,14 +62,12 @@ const Select = <T,>({
         setInput("");
 
         if (isPrimitive(selected)) {
-          setSelected(selectedOption.value);
           onChange && onChange(selectedOption.value);
         } else if (Array.isArray(selected)) {
           const newValue = selected.includes(selectedOption.value)
             ? selected.filter((v) => v !== selectedOption.value)
             : [...selected, selectedOption.value];
 
-          setSelected(newValue);
           onChange && onChange(newValue);
         }
       }}
