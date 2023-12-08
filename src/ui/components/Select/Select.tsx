@@ -50,8 +50,8 @@ const Select = <T,>({
   );
 
   const currentOptions = useMemo(() => {
-    return getFilteredOptions(options, value, input, noFoundText);
-  }, [options, value, input, noFoundText]);
+    return getFilteredOptions(options, selected, input, noFoundText);
+  }, [options, selected, input, noFoundText]);
 
   const setValues = (value: T | T[], selectedOption: DropdownValueType<T>) => {
     if (isPrimitive(value)) {
