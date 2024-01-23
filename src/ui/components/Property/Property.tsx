@@ -1,11 +1,13 @@
 import React, { isValidElement } from "react";
 import styled from "styled-components";
 import { P5, TSpan } from "@deskpro/deskpro-ui";
+import { WithCopyButton } from "./CopyButton";
 import type { FC, ReactNode } from "react";
 
 export interface PropertyProps {
-  label?: string|number|JSX.Element|ReactNode,
-  text?: string|number|JSX.Element|ReactNode,
+  label?: ReactNode,
+  text?: ReactNode,
+  copyText?: string,
   marginBottom?: number,
 }
 
@@ -17,8 +19,8 @@ const Container = styled.div<PropertyProps>`
   margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
 `;
 
-const Property: FC<PropertyProps> = ({ text, label, marginBottom = 10 }: PropertyProps) => {
-  let textBlock: ReactNode = (<P5>-</P5>);
+const Property: FC<PropertyProps> = ({ text, label, copyText, marginBottom = 10 }: PropertyProps) => {
+  let textBlock;
 
   if ((typeof text === "string" && Boolean(text)) || typeof text === "number") {
     textBlock = (<P5>{text}</P5>);
@@ -26,10 +28,16 @@ const Property: FC<PropertyProps> = ({ text, label, marginBottom = 10 }: Propert
     textBlock = text;
   }
 
+  if (copyText && textBlock) {
+    textBlock = (
+      <WithCopyButton copyText={copyText}>{textBlock}</WithCopyButton>
+    );
+  }
+
   return (
     <Container marginBottom={marginBottom}>
       {label && <Label type="p8">{label}</Label>}
-      {textBlock && textBlock}
+      {textBlock ? textBlock : (<P5>-</P5>)}
     </Container>
   );
 };
