@@ -28,7 +28,5 @@ export const WithCustomIcon = () => (
 );
 
 export const ListOfMembers = () => (
-  <div style={{ width: "300px" }}>
-    <Members members={members} />
-  </div>
+  <Members members={members} />
 );

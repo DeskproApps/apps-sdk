@@ -7,11 +7,12 @@ import "simplebar/dist/simplebar.min.css";
 import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 import { DeskproAppProvider } from "../src";
+import { AppWrapper } from "./structure";
 import type { Preview } from "@storybook/react";
 
 const preview: Preview = {
   parameters: {
-    actions: {argTypesRegex: "^on[A-Z].*"},
+    actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -21,10 +22,15 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
+      <AppWrapper>
+        <Story/>
+      </AppWrapper>
+    ),
+    (Story) => (
       <DeskproAppProvider>
         <Story/>
       </DeskproAppProvider>
-    )
+    ),
   ],
 };
 
