@@ -25,6 +25,7 @@ export const TwoProperties = () => (
       leftText="01 Jan 2023"
       rightLabel="Deskpro ticket"
       rightText="Aut corporis cupiditate dolore dolorem et hic id illo minus, natus, nisi officia, officiis."
+      rightCopyText="https://deskpro.com/apps"
     />
   </>
 );
