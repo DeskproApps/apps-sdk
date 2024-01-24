@@ -1,8 +1,0 @@
-import{j as o,a as g,F as h}from"./jsx-runtime-29545a09.js";import{S as k,a as m}from"./SPA-0f542073.js";import"./index-76fb7be0.js";import"./index-d3ea75b5.js";import{L as s,a as t}from"./Link-d1ca8468.js";import{T as d}from"./Title-edadc966.js";import"./_commonjsHelpers-de833af9.js";import"./index-9d475cdf.js";import"./ExternalIconLink-d5de536c.js";const v={title:"Core/Link"},e=()=>o(k,{vertical:!0,gap:6,children:[o(s,{href:"https://google.com",target:"_blank",children:"google.com"}),o(s,{href:"https://google.com",target:"_blank",color:"red100",children:"google.com"}),o(t,{href:"https://deskpro.com"}),o(t,{href:"https://deskpro.com",icon:m,color:"green100"})]}),r=()=>o(d,{title:g(h,{children:["Sales Invoices (5)"," ",o(t,{icon:m,href:"https://deskpro.com/apps"})]})});var a,c,i;e.parameters={...e.parameters,docs:{...(a=e.parameters)==null?void 0:a.docs,source:{originalSource:`() => <Stack vertical gap={6}>
-    {[<Link href="https://google.com" target="_blank">google.com</Link>, <Link href="https://google.com" target="_blank" color="red100">google.com</Link>, <LinkIcon href="https://deskpro.com" />, <LinkIcon href="https://deskpro.com" icon={faPlus} color="green100" />]}
-  </Stack>`,...(i=(c=e.parameters)==null?void 0:c.docs)==null?void 0:i.source}}};var n,p,l;r.parameters={...r.parameters,docs:{...(n=r.parameters)==null?void 0:n.docs,source:{originalSource:`() => <Title title={<>
-        Sales Invoices (5)
-        {" "}
-        <LinkIcon icon={faPlus} href="https://deskpro.com/apps" />
-      </>} />`,...(l=(p=r.parameters)==null?void 0:p.docs)==null?void 0:l.source}}};const j=["Default","ExampleWithTitle"];export{e as Default,r as ExampleWithTitle,j as __namedExportsOrder,v as default};
-//# sourceMappingURL=Link.stories-8f2241fd.js.map
