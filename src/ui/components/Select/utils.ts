@@ -28,7 +28,7 @@ const isPrimitive = (value: any): value is string|number => {
   return isString(value) || isNumber(value);
 }
 
-const getDisplayValue = <T,>(value: T|T[], options: Array<DropdownValueType<T>>) => {
+const getDisplayValue = <T,>(value: T|T[], options?: Array<DropdownValueType<T>>) => {
   if (!Array.isArray(options) || !options.length) {
     return "";
   }

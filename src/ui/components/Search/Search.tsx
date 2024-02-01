@@ -1,9 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, forwardRef } from "react";
 import styled from "styled-components";
 import { faSearch, faTimes, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input, IconButton, Label } from "@deskpro/deskpro-ui";
-import type { FC, ChangeEvent } from "react";
+import type { FC, Ref, ChangeEvent } from "react";
 import type { AnyIcon, InputProps } from "@deskpro/deskpro-ui";
 
 export type Props = {
@@ -23,7 +23,7 @@ const SearchContainer = styled.div`
   }
 `;
 
-const Search: FC<Props> = ({
+const Search: FC<Props> = forwardRef(({
   label,
   onChange,
   disabled = false,
@@ -31,7 +31,7 @@ const Search: FC<Props> = ({
   isFetching = false,
   marginBottom = 10,
   inputProps = {},
-}) => {
+}, ref: Ref<HTMLInputElement>) => {
   const [search, setSearch] = useState<string>("");
 
   const onChangeSearch = useCallback(({ target: { value: q }}: ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +53,7 @@ const Search: FC<Props> = ({
         style={{ marginBottom }}
       >
         <Input
+          ref={ref}
           id="search"
           name="search"
           value={search}
@@ -77,6 +78,6 @@ const Search: FC<Props> = ({
       </Label>
     </SearchContainer>
   );
-}
+});
 
 export { Search };

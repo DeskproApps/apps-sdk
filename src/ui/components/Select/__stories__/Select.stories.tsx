@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { action } from "@storybook/addon-actions";
 import { Button } from "@deskpro/deskpro-ui";
-import { Stack } from "@deskpro/deskpro-ui";
 import { Member } from "../../Member";
 import { Select } from "../Select";
 import type { DropdownValueType } from "@deskpro/deskpro-ui";
@@ -108,21 +107,19 @@ export const HandleChangedValue = () => {
   const [form, setForm] = useState({ writers: ["1"] });
 
   return (
-    <Stack gap={15}>
-      <div style={{ width: "300px" }}>
-        <Select
-          initValue={["1"]}
-          closeOnSelect={false}
-          options={memberOptions as never[]}
-          onChange={(newValue) => {
-            setForm({
-              ...form,
-              writers: newValue as string[],
-            });
-          }}
-        />
-      </div>
+    <>
+      <Select
+        initValue={["1"]}
+        closeOnSelect={false}
+        options={memberOptions as never[]}
+        onChange={(newValue) => {
+          setForm({
+            ...form,
+            writers: newValue as string[],
+          });
+        }}
+      />
       <pre>{JSON.stringify(form, null, 2)}</pre>
-    </Stack>
+    </>
   );
 };
