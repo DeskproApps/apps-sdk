@@ -3,4 +3,3 @@ import{j as n}from"./jsx-runtime-29545a09.js";import{S as s}from"./Section-16265
       App Section Content
     </Section>;
 }`,...(r=(o=e.parameters)==null?void 0:o.docs)==null?void 0:r.source}}};const S=["Default"];export{e as Default,S as __namedExportsOrder,m as default};
-//# sourceMappingURL=Section.stories-f6c196a2.js.map
