@@ -24,7 +24,7 @@
     "node": "^16.0.0"
   },
   "dependencies": {
-    "@deskpro/deskpro-ui": "^7.1.0",
+    "@deskpro/deskpro-ui": "^7.18.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
