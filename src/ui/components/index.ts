@@ -11,3 +11,4 @@ export * from "./DateInput";
 export * from "./Search";
 export * from "./Select";
 export * from "./Link";
+export * from "./Member";

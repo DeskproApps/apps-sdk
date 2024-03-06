@@ -10,7 +10,7 @@ export default {
 
 export const PropertyRow = () => {
   return (
-    <Stack vertical gap={15} style={{ maxWidth: "265px" }}>
+    <Stack vertical gap={15}>
       <PropertyRowCmp>
         <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
@@ -25,7 +25,7 @@ export const PropertyRow = () => {
       </PropertyRowCmp>
       <PropertyRowCmp>
         <Property label="key" text="value" marginBottom={0}/>
-        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" marginBottom={0}/>
         <Property label="key" text="most popular programming" marginBottom={0}/>
         <Property label="key" text="value" marginBottom={0}/>
       </PropertyRowCmp>
@@ -40,7 +40,7 @@ export const PropertyRow = () => {
         <Property label="key" text="JavaScript" marginBottom={0}/>
         <Property label="key" text="value" marginBottom={0}/>
         <Property label="key" text="JavaScript it's the world" marginBottom={0}/>
-        <Property label="key" text="value" marginBottom={0}/>
+        <Property label="key" text="block with some copy text" marginBottom={0} copyText="https://deskpro.com/apps"/>
       </PropertyRowCmp>
       <PropertyRowCmp>
         <Property label="key" text="value" marginBottom={0}/>

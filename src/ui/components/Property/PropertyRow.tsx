@@ -15,6 +15,7 @@ const Row = styled.div<RowProps>`
   display: grid;
   grid-template-columns: repeat(${({ count }) => count}, ${({ count }) => 100/count}%);
   width: 100%;
+  margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
 `;
 
 const ItemContainer = styled.div`

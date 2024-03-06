@@ -14,6 +14,7 @@ export const Property: StoryObj<typeof PropertyCmp> = {
   args: {
     label: "Deskpro ticket",
     text: "",
+    copyText: "some text to copy",
     marginBottom: 10,
   }
 };

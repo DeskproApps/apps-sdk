@@ -5,10 +5,15 @@ import { createClient } from "../../client/client";
 import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../../client/types";
 import { DeskproAppContext } from "./context";
 import { ThemeProvider } from "@deskpro/deskpro-ui";
+import { HeightWrapper } from "./SetHeightWrapper";
 
-export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, theme, debug }: DeskproAppProviderProps) => {
-  const [client, setClient] = useState<IDeskproClient|null>(null);
-  const [context, setContext] = useState<Context|null>(null);
+export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({
+  children,
+  theme,
+  debug,
+}: DeskproAppProviderProps) => {
+  const [client, setClient] = useState<IDeskproClient | null>(null);
+  const [context, setContext] = useState<Context | null>(null);
   const [registeredElements, setRegisteredElements] = useState<string[]>([]);
 
   useEffect(() => {
@@ -51,26 +56,28 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
 
     dpClient.onElementEvent((id, type, payload) => {
       document.dispatchEvent(
-        new CustomEvent<TargetElementEvent>(DeskproAppEventType.TARGET_ELEMENT_EVENT, { detail: {id, type, payload} as TargetElementEvent })
+        new CustomEvent<TargetElementEvent>(DeskproAppEventType.TARGET_ELEMENT_EVENT, {
+          detail: { id, type, payload } as TargetElementEvent,
+        })
       );
     });
 
     dpClient.onAdminSettingsChange((settings) => {
       setContext({ type: "admin_settings", settings }); // Pass more admin context here if we ever have one
       document.dispatchEvent(
-          new CustomEvent<Record<string, any>>(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, { detail: settings })
+        new CustomEvent<Record<string, any>>(DeskproAppEventType.ADMIN_SETTINGS_CHANGE, {
+          detail: settings,
+        })
       );
     });
 
     dpClient.run().then(() => setClient(dpClient));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (debug) {
     console.debug(
-        client
-            ? "Deskpro apps client is ready"
-            : "Deskpro apps client is initialising..."
+      client ? "Deskpro apps client is ready" : "Deskpro apps client is initialising..."
     );
   }
 
@@ -79,8 +86,10 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({ children, them
   return (
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
-      <DeskproAppContext.Provider value={{ client, context, registeredElements, setRegisteredElements, theme: currentTheme }}>
-        {children}
+      <DeskproAppContext.Provider
+        value={{ client, context, registeredElements, setRegisteredElements, theme: currentTheme }}
+      >
+        <HeightWrapper>{children}</HeightWrapper>
       </DeskproAppContext.Provider>
     </ThemeProvider>
   );

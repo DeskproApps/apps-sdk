@@ -1,6 +1,18 @@
 import { NO_FOUND } from "./constants";
 import type { DropdownItemType, DropdownValueType } from "@deskpro/deskpro-ui";
 
+const truncate = (str: string) => {
+  const maxLength = 35;
+  if (str.length <= maxLength) {
+    return str;
+  }
+
+  const trimmedStr = str.slice(0, maxLength);
+  const lastSpaceIndex = trimmedStr.lastIndexOf(" ");
+
+  return (lastSpaceIndex > 0 ? trimmedStr.slice(0, lastSpaceIndex) : trimmedStr) + "...";
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isString = (value: any): value is string => {
   return typeof value === "string";
@@ -16,7 +28,7 @@ const isPrimitive = (value: any): value is string|number => {
   return isString(value) || isNumber(value);
 }
 
-const getDisplayValue = <T,>(value: T|T[], options: Array<DropdownValueType<T>>) => {
+const getDisplayValue = <T,>(value: T|T[], options?: Array<DropdownValueType<T>>) => {
   if (!Array.isArray(options) || !options.length) {
     return "";
   }
@@ -35,7 +47,7 @@ const getDisplayValue = <T,>(value: T|T[], options: Array<DropdownValueType<T>>)
     }
 
     if (isPrimitive(filteredOptions[0])) {
-      return filteredOptions.join(", ");
+      return filteredOptions.map((label) => truncate(`${label}`)).join(", ");
     }
 
     return filteredOptions;

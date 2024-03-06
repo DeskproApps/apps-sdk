@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { action } from "@storybook/addon-actions";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Stack, Avatar, P5 } from "@deskpro/deskpro-ui";
+import { Button } from "@deskpro/deskpro-ui";
+import { Member } from "../../Member";
 import { Select } from "../Select";
-import type { FC } from "react";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
 
 export default {
   title: "Core/Select",
 };
-
-const Member: FC<{ name: string }> = ({ name }) => (
-  <Stack gap={6}>
-    <Avatar size={18} name={name} backupIcon={faUser} />
-    <P5>{name}</P5>
-  </Stack>
-);
 
 const options = [
   { value: "1", label: "one", key: "1", type: "value" },
@@ -22,7 +15,7 @@ const options = [
   { value: "3", label: "three", key: "3", type: "value" },
 ];
 
-const memberOptions = [
+const memberOptions: Array<DropdownValueType<string>> = [
   {
     key: "1",
     value: "1",
@@ -57,6 +50,14 @@ export const SingleSelect = () => (
   <Select initValue={""} options={options as never} onChange={action("onChange")} />
 );
 
+export const PassingValue = () => {
+  const [value, setValue] = useState("1");
+
+  return (
+    <Select value={value} options={options as never} onChange={(e) => setValue(e as string)} />
+  );
+};
+
 export const MultiplySelect = () => (
   <Select
     initValue={[]}
@@ -77,29 +78,48 @@ export const CustomLabels = () => (
   />
 );
 
+export const MultiplyLongItems = () => (
+  <Select
+    initValue={[]}
+    closeOnSelect={false}
+    options={[
+      { value: "1", label: "Lorem ipsum dolor sit amet.", key: "1", type: "value" },
+      { value: "2", label: "Aliquam aperiam debitis delectus dolorem, dolorum, earum in ipsa magnam minus nisi nulla quam quo repellat similique, tempora?", key: "2", type: "value" },
+      { value: "3", label: "A alias, consequatur consequuntur distinctio dolorum ducimus ea eius harum magnam nam non quam quos reiciendis repellat sequi sint sit tempora ullam vitae voluptas.", key: "3", type: "value" },
+      { value: "4", label: "Aliquid enim, eveniet laborum nihil possimus quia reiciendis tenetur voluptatibus.", key: "4", type: "value" },
+      { value: "5", label: "Consequatur delectus dignissimos, facere impedit inventore nemo nobis qui rerum tenetur vitae!", key: "5", type: "value" },
+    ]}
+  />
+);
+
 export const WithoutOptions = () => <Select initValue={""} options={[]} />;
 
-export const WithChildren = () => <Select children={<h1>Dropdown</h1>} />;
+export const WithChildren = () => (
+  <Select
+    initValue=""
+    options={memberOptions}
+    children={<Button type="button" text="Open" />}
+    onChange={action("onChange")}
+  />
+);
 
 export const HandleChangedValue = () => {
   const [form, setForm] = useState({ writers: ["1"] });
 
   return (
-    <Stack gap={15}>
-      <div style={{ width: "300px" }}>
-        <Select
-          initValue={["1"]}
-          closeOnSelect={false}
-          options={memberOptions as never[]}
-          onChange={(newValue) => {
-            setForm({
-              ...form,
-              writers: newValue as string[],
-            });
-          }}
-        />
-      </div>
+    <>
+      <Select
+        initValue={["1"]}
+        closeOnSelect={false}
+        options={memberOptions as never[]}
+        onChange={(newValue) => {
+          setForm({
+            ...form,
+            writers: newValue as string[],
+          });
+        }}
+      />
       <pre>{JSON.stringify(form, null, 2)}</pre>
-    </Stack>
+    </>
   );
 };
