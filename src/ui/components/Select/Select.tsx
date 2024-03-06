@@ -45,12 +45,17 @@ const Select = <T,>({
   const [selected, setSelected] = useState(initValue);
 
   const displayValue = useMemo(
-    () => getDisplayValue(value || selected, options),
+    () => getDisplayValue(value || selected, options as Array<DropdownValueType<T|undefined>>),
     [value, selected, options]
   );
 
   const currentOptions = useMemo(() => {
-    return getFilteredOptions(options, selected, input, noFoundText);
+    return getFilteredOptions(
+      options as Array<DropdownValueType<T|undefined>>,
+      selected,
+      input,
+      noFoundText,
+    );
   }, [options, selected, input, noFoundText]);
 
   const setValues = (value: T | T[], selectedOption: DropdownValueType<T>) => {
