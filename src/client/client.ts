@@ -67,7 +67,7 @@ class DeskproUI implements IDeskproUI {
 
   alertError(text: string, duration?: number): Promise<void> {
     return this.send({
-      type: "alert_success",
+      type: "alert_error",
       text,
       duration,
     });
