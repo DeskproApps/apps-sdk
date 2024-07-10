@@ -371,7 +371,7 @@ export interface IEntityAssociation {
  * Send arbitrary content to the "active" ticket reply box RTE
  */
 export type DeskproUIMessageAppendToActiveTicketReplyBox = {
-  type: "append_to_active_ticket_reply_box",
+  type: "append_to_active_ticket_reply_box";
   content: string;
 };
 
@@ -379,21 +379,52 @@ export type DeskproUIMessageAppendToActiveTicketReplyBox = {
  * Append link to the "active" ticket reply box RTE
  */
 export type DeskproUIMessageAppendLinkToActiveTicketReplyBox = {
-  type: "append_link_to_active_ticket_reply_box",
+  type: "append_link_to_active_ticket_reply_box";
   url: string;
   text: string;
   title?: string;
 };
 
+/**
+ * Trigger a success alert
+ */
+export type DeskproUIMessageAlertSuccess = {
+  type: "alert_success";
+  text: string;
+  duration?: number;
+};
+
+/**
+ * Trigger a error alert
+ */
+export type DeskproUIMessageAlertError = {
+  type: "alert_error";
+  text: string;
+  duration?: number;
+};
+
+/**
+ * Dismiss all alerts
+ */
+export type DeskproUIMessageAlertDismiss = {
+  type: "alert_dismiss";
+};
+
 export type DeskproUIMessage =
     DeskproUIMessageAppendToActiveTicketReplyBox
     | DeskproUIMessageAppendLinkToActiveTicketReplyBox
+    | DeskproUIMessageAlertSuccess
+    | DeskproUIMessageAlertError
+    | DeskproUIMessageAlertDismiss
 ;
 
 export interface IDeskproUI {
   send: (message: DeskproUIMessage) => Promise<void>;
   appendContentToActiveTicketReplyBox: (content: string) => Promise<void>;
   appendLinkToActiveTicketReplyBox(url: string, text: string, title?: string): Promise<void>;
+  alertSuccess: (text: string, duration?: number) => Promise<void>;
+  alertError: (text: string, duration?: number) => Promise<void>;
+  alertDismiss: () => Promise<void>;
 }
 
 export interface OAuth2CallbackUrlOptions {
