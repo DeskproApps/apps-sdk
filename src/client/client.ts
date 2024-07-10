@@ -56,6 +56,28 @@ class DeskproUI implements IDeskproUI {
       title,
     });
   }
+
+  alertSuccess(text: string, duration?: number): Promise<void> {
+    return this.send({
+      type: "alert_success",
+      text,
+      duration,
+    });
+  }
+
+  alertError(text: string, duration?: number): Promise<void> {
+    return this.send({
+      type: "alert_success",
+      text,
+      duration,
+    });
+  }
+
+  alertDismiss(): Promise<void> {
+    return this.send({
+      type: "alert_dismiss",
+    });
+  }
 }
 
 class EntityAssociation implements IEntityAssociation {

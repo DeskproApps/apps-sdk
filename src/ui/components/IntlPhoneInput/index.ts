@@ -1,0 +1,1 @@
+export { IntlPhoneInput } from "./IntlPhoneInput";
