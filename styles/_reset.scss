@@ -53,7 +53,7 @@ ul li {
 dt {
   font-weight: 500;
   text-transform: uppercase;
-  font-size: ($pageFontSize / 1.2);
+  font-size: calc($pageFontSize / 1.2);
   font-family: $dlTitleFontFamily;
   margin-bottom: 3px;
 }

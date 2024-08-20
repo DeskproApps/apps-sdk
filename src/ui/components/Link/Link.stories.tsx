@@ -27,7 +27,8 @@ export const ExampleWithTitle = () => (
   <Title
     title={
       <>
-        Sales Invoices (5) <LinkIcon icon={faPlus} href="https://deskpro.com/apps" />
+        Sales Invoices (5){" "}
+        <LinkIcon icon={faPlus} href="https://deskpro.com/apps" />
       </>
     }
   />

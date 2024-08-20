@@ -8,7 +8,7 @@ export default {
 };
 
 export const Spinners = () => (
-    <Stack justify="center">
-      <LoadingSpinner />
-    </Stack>
+  <Stack justify="center">
+    <LoadingSpinner />
+  </Stack>
 );

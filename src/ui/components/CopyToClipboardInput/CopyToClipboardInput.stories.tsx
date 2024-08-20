@@ -9,5 +9,5 @@ export default {
 export const Default: StoryObj<typeof CopyToClipboardInput> = {
   args: {
     value: "https://www.google.com",
-  }
+  },
 };

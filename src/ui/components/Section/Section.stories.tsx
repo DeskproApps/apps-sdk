@@ -6,9 +6,5 @@ export default {
 };
 
 export const Default = () => {
-  return (
-    <Section>
-      App Section Content
-    </Section>
-  );
+  return <Section>App Section Content</Section>;
 };
