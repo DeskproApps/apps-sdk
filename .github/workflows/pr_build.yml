@@ -69,7 +69,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          storybookBuildDir: build-storybook
+          storybookBuildDir: storybook
           exitOnceUploaded: true
 
       - name: Leave comment with URL
