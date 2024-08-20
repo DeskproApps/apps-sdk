@@ -4,7 +4,7 @@ import { GlobalStyles, lightTheme } from "../theme";
 import { createClient } from "../../client/client";
 import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../../client/types";
 import { DeskproAppContext } from "./context";
-import { Scrollbar, ThemeProvider } from "@deskpro/deskpro-ui";
+import { ThemeProvider } from "@deskpro/deskpro-ui";
 
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({
   children,
@@ -88,7 +88,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({
       <DeskproAppContext.Provider
         value={{ client, context, registeredElements, setRegisteredElements, theme: currentTheme }}
       >
-        <Scrollbar style={{height: '100%', width: '100%'}}>{children}</Scrollbar>
+        {children}
       </DeskproAppContext.Provider>
     </ThemeProvider>
   );
