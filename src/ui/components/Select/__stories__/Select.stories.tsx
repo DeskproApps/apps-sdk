@@ -47,14 +47,22 @@ const memberOptions: Array<DropdownValueType<string>> = [
 ];
 
 export const SingleSelect = () => (
-  <Select initValue={""} options={options as never} onChange={action("onChange")} />
+  <Select
+    initValue={""}
+    options={options as never}
+    onChange={action("onChange")}
+  />
 );
 
 export const PassingValue = () => {
   const [value, setValue] = useState("1");
 
   return (
-    <Select value={value} options={options as never} onChange={(e) => setValue(e as string)} />
+    <Select
+      value={value}
+      options={options as never}
+      onChange={(e) => setValue(e as string)}
+    />
   );
 };
 
@@ -67,7 +75,9 @@ export const MultiplySelect = () => (
   />
 );
 
-export const Disabled = () => <Select disabled initValue={"1"} options={options as never[]} />;
+export const Disabled = () => (
+  <Select disabled initValue={"1"} options={options as never[]} />
+);
 
 export const CustomLabels = () => (
   <Select
@@ -83,11 +93,40 @@ export const MultiplyLongItems = () => (
     initValue={[]}
     closeOnSelect={false}
     options={[
-      { value: "1", label: "Lorem ipsum dolor sit amet.", key: "1", type: "value" },
-      { value: "2", label: "Aliquam aperiam debitis delectus dolorem, dolorum, earum in ipsa magnam minus nisi nulla quam quo repellat similique, tempora?", key: "2", type: "value" },
-      { value: "3", label: "A alias, consequatur consequuntur distinctio dolorum ducimus ea eius harum magnam nam non quam quos reiciendis repellat sequi sint sit tempora ullam vitae voluptas.", key: "3", type: "value" },
-      { value: "4", label: "Aliquid enim, eveniet laborum nihil possimus quia reiciendis tenetur voluptatibus.", key: "4", type: "value" },
-      { value: "5", label: "Consequatur delectus dignissimos, facere impedit inventore nemo nobis qui rerum tenetur vitae!", key: "5", type: "value" },
+      {
+        value: "1",
+        label: "Lorem ipsum dolor sit amet.",
+        key: "1",
+        type: "value",
+      },
+      {
+        value: "2",
+        label:
+          "Aliquam aperiam debitis delectus dolorem, dolorum, earum in ipsa magnam minus nisi nulla quam quo repellat similique, tempora?",
+        key: "2",
+        type: "value",
+      },
+      {
+        value: "3",
+        label:
+          "A alias, consequatur consequuntur distinctio dolorum ducimus ea eius harum magnam nam non quam quos reiciendis repellat sequi sint sit tempora ullam vitae voluptas.",
+        key: "3",
+        type: "value",
+      },
+      {
+        value: "4",
+        label:
+          "Aliquid enim, eveniet laborum nihil possimus quia reiciendis tenetur voluptatibus.",
+        key: "4",
+        type: "value",
+      },
+      {
+        value: "5",
+        label:
+          "Consequatur delectus dignissimos, facere impedit inventore nemo nobis qui rerum tenetur vitae!",
+        key: "5",
+        type: "value",
+      },
     ]}
   />
 );

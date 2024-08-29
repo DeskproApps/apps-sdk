@@ -1,20 +1,20 @@
 import { useRef, useEffect } from "react";
 import { Search } from "./Search";
-import { action } from '@storybook/addon-actions';
+import { action } from "@storybook/addon-actions";
 import type { ComponentStory } from "@storybook/react";
 
 export default {
-    title: "Core/Search",
-    component: Search,
-    argTypes: {
-      label: { control: "text" },
-      disabled: { control: "boolean" },
-      required: { control: "boolean" },
-      isFetching: { control: "boolean" },
-      marginBottom: { control: "number" },
-      onChange: { action: "change" },
-      inputProps: { control: "object" },
-    },
+  title: "Core/Search",
+  component: Search,
+  argTypes: {
+    label: { control: "text" },
+    disabled: { control: "boolean" },
+    required: { control: "boolean" },
+    isFetching: { control: "boolean" },
+    marginBottom: { control: "number" },
+    onChange: { action: "change" },
+    inputProps: { control: "object" },
+  },
 };
 
 export const Default: ComponentStory<typeof Object> = (props) => (
@@ -38,10 +38,8 @@ export const AutoFocus: ComponentStory<typeof Object> = (props) => {
 
   useEffect(
     () => searchInputRef && searchInputRef.current?.focus(),
-    [searchInputRef]
+    [searchInputRef],
   );
 
-  return (
-    <Search ref={searchInputRef} {...props} />
-  );
+  return <Search ref={searchInputRef} {...props} />;
 };

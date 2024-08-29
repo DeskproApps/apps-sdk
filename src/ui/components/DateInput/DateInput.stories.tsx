@@ -1,5 +1,5 @@
 import { DateInput as DateInputCmp } from "./DateInput";
-import { action } from '@storybook/addon-actions';
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "Core/DateInput",
@@ -12,20 +12,10 @@ const defaultProps = {
   onChange: action("onChange"),
 };
 
-export const OnlyDate = () => (
-  <DateInputCmp {...defaultProps} />
-);
+export const OnlyDate = () => <DateInputCmp {...defaultProps} />;
 
 export const DateWithTime = () => (
-  <DateInputCmp
-    {...defaultProps}
-    enableTime={true}
-  />
+  <DateInputCmp {...defaultProps} enableTime={true} />
 );
 
-export const WithError = () => (
-  <DateInputCmp
-    {...defaultProps}
-    error={true}
-  />
-);
+export const WithError = () => <DateInputCmp {...defaultProps} error={true} />;
