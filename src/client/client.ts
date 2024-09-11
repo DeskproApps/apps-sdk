@@ -180,7 +180,7 @@ class OAuth2 implements IOAuth2 {
     authorizeUrl.searchParams.set("callback", start.deskproCallbackUrl);
 
     // curried poll function that returns the promise that resolves when polling is done... or rejects
-    // when polling fails, times-out or has oauth error after grant flow
+    // when polling times out
     const poll = () => new Promise<OAuth2StartPollResult>((resolve, reject) => {
       const poller = setInterval(() => {
         this.client.pollOAuth2Flow(start.state).then((pollResult) => {
@@ -238,7 +238,7 @@ class OAuth2 implements IOAuth2 {
     authorizeUrl.searchParams.set("callback", start.deskproCallbackUrl);
 
     // curried poll function that returns the promise that resolves when polling is done... or rejects
-    // when polling fails, times-out or has oauth error after grant flow
+    // when polling times out
     const poll = () => new Promise<OAuth2StartPollResult>((resolve, reject) => {
       const poller = setInterval(() => {
         this.client.pollStatelessOAuth2Flow(start.state).then((pollResult) => {
