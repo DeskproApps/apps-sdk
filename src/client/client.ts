@@ -121,7 +121,7 @@ class OAuth2 implements IOAuth2 {
       tokenAcquisitionPattern: RegExp,
       options?: OAuth2CallbackUrlOptions
   ): Promise<OAuth2CallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const timeout = options?.timeout ?? (600 * 1000); // 10 minute timeout
     const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
 
     const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout, options?.expires);
@@ -159,7 +159,7 @@ class OAuth2 implements IOAuth2 {
     codeAcquisitionPattern: RegExp,
     options?: OAuth2StartOptions
   ): Promise<OAuth2Start> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const timeout = options?.timeout ?? (600 * 1000); // 10 minute timeout
     const pollInterval = options?.pollInterval ?? 2000; // 2 second poll interval
 
     const start = await this.client.startOAuth2Flow(
