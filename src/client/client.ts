@@ -461,8 +461,8 @@ export class DeskproClient implements IDeskproClient {
     this.startOAuth2Flow = async () => ({} as StartOAuth2FlowResult);
     this.startStatelessOAuth2Flow = async () => ({} as StartStatelessOAuth2FlowResult);
 
-    this.pollOAuth2Flow = async (state: string) => ({} as PollOAuth2FlowResult);
-    this.pollStatelessOAuth2Flow = async (state: string) => ({} as PollStatelessOAuth2FlowResult);
+    this.pollOAuth2Flow = async () => ({} as PollOAuth2FlowResult);
+    this.pollStatelessOAuth2Flow = async () => ({} as PollStatelessOAuth2FlowResult);
 
     this.setAdminSetting = async () => {};
     this.setAdminSettingInvalid = async () => {};
