@@ -29,6 +29,14 @@ import {
   OAuth2StaticCallbackUrl,
   IDeskproUI,
   DeskproUIMessage,
+  OAuth2StartAuthorizeUrlFn,
+  OAuth2StartOptions,
+  OAuth2Start,
+  OAuth2StartPollResult,
+  StartStatelessOAuth2FlowResult,
+  StartOAuth2FlowResult,
+  PollOAuth2FlowResult,
+  PollStatelessOAuth2FlowResult,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
 
@@ -141,6 +149,121 @@ class OAuth2 implements IOAuth2 {
       poll,
       callbackUrl: urlResponse.url,
     };
+  }
+
+  /**
+   *  {@inheritdoc}
+   */
+  async start(
+    authorizeUrlFn: OAuth2StartAuthorizeUrlFn,
+    codeAcquisitionPattern: RegExp,
+    options?: OAuth2StartOptions
+  ): Promise<OAuth2Start> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const pollInterval = options?.pollInterval ?? 2000; // 2 second poll interval
+
+    const start = await this.client.startOAuth2Flow(
+      codeAcquisitionPattern,
+      timeout
+    );
+
+    // build our "proper" authorize URL using downstream implementation
+    const idpAuthorizeUrl = authorizeUrlFn({
+      state: start.state,
+      redirectUri: start.gatewayCallbackUrl,
+      codeChallenge: start.codeChallenge,
+    });
+
+    // formulate the authorize URL that the app user should use to that the grant flow
+    const authorizeUrl = new URL(start.gatewayAuthorizeUrl);
+    authorizeUrl.searchParams.set("return", idpAuthorizeUrl);
+    authorizeUrl.searchParams.set("callback", start.deskproCallbackUrl);
+
+    // curried poll function that returns the promise that resolves when polling is done... or rejects
+    // when polling fails, times-out or has oauth error after grant flow
+    const poll = () => new Promise<OAuth2StartPollResult>((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.pollOAuth2Flow(start.state).then((pollResult) => {
+          if (pollResult && pollResult.status !== "Pending") {
+            clearInterval(poller);
+            resolve({
+              status: pollResult.status,
+              error: pollResult.error,
+              authCodeProxyPlaceholder: pollResult.authCodeProxyPlaceholder,
+              codeVerifierProxyPlaceholder: pollResult.codeVerifierProxyPlaceholder,
+            } satisfies OAuth2StartPollResult)
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      authorizeUrl: authorizeUrl.toString(),
+    } satisfies OAuth2Start;
+  }
+
+  /**
+   *  {@inheritdoc}
+   */
+  async startStateless
+  (
+    authorizeUrlFn: OAuth2StartAuthorizeUrlFn,
+    codeAcquisitionPattern: RegExp,
+    options?: OAuth2StartOptions
+  ): Promise<OAuth2Start> {
+    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
+    const pollInterval = options?.pollInterval ?? 2000; // 2 second poll interval
+
+    const start = await this.client.startStatelessOAuth2Flow(
+      codeAcquisitionPattern,
+      timeout
+    );
+
+    // build our "proper" authorize URL using downstream implementation
+    const idpAuthorizeUrl = authorizeUrlFn({
+      state: start.state,
+      redirectUri: start.gatewayCallbackUrl,
+      codeChallenge: start.codeChallenge,
+    });
+
+    // formulate the authorize URL that the app user should use to that the grant flow
+    const authorizeUrl = new URL(start.gatewayAuthorizeUrl);
+    authorizeUrl.searchParams.set("return", idpAuthorizeUrl);
+    authorizeUrl.searchParams.set("callback", start.deskproCallbackUrl);
+
+    // curried poll function that returns the promise that resolves when polling is done... or rejects
+    // when polling fails, times-out or has oauth error after grant flow
+    const poll = () => new Promise<OAuth2StartPollResult>((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.client.pollStatelessOAuth2Flow(start.state).then((pollResult) => {
+          if (pollResult && pollResult.status !== "Pending") {
+            clearInterval(poller);
+            resolve({
+              status: pollResult.status,
+              error: pollResult.error,
+              authCodeProxyPlaceholder: pollResult.authCodeProxyPlaceholder,
+              codeVerifierProxyPlaceholder: pollResult.codeVerifierProxyPlaceholder,
+            } satisfies OAuth2StartPollResult)
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject("Acquisition timeout");
+      }, timeout);
+    });
+
+    return {
+      poll,
+      authorizeUrl: authorizeUrl.toString(),
+    } satisfies OAuth2Start;
   }
 
   async getGenericCallbackUrl(
@@ -280,6 +403,12 @@ export class DeskproClient implements IDeskproClient {
   public getStaticOAuth2CallbackUrlValue: () => Promise<string>;
   public getStaticOAuth2Token: (key: string) => Promise<string|null>;
 
+  public startOAuth2Flow: (codeAcquisitionPattern: RegExp, timeout:number) => Promise<StartOAuth2FlowResult>;
+  public startStatelessOAuth2Flow: (codeAcquisitionPattern: RegExp, timeout:number) => Promise<StartStatelessOAuth2FlowResult>;
+
+  public pollOAuth2Flow: (state: string) => Promise<PollOAuth2FlowResult>;
+  public pollStatelessOAuth2Flow: (state: string) => Promise<PollStatelessOAuth2FlowResult>;
+
   // Admin
   public setAdminSetting: (value: string) => void;
   public setAdminSettingInvalid: (message: string, settingName?: string) => void;
@@ -328,6 +457,12 @@ export class DeskproClient implements IDeskproClient {
     this.getStaticOAuth2CallbackUrl = async () => ({ url: "" });
     this.getStaticOAuth2CallbackUrlValue = async () => "";
     this.getStaticOAuth2Token = async () => null;
+
+    this.startOAuth2Flow = async () => ({} as StartOAuth2FlowResult);
+    this.startStatelessOAuth2Flow = async () => ({} as StartStatelessOAuth2FlowResult);
+
+    this.pollOAuth2Flow = async (state: string) => ({} as PollOAuth2FlowResult);
+    this.pollStatelessOAuth2Flow = async (state: string) => ({} as PollStatelessOAuth2FlowResult);
 
     this.setAdminSetting = async () => {};
     this.setAdminSettingInvalid = async () => {};
@@ -493,6 +628,22 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent._getStaticOAuth2Token) {
       this.getStaticOAuth2Token = (key: string) => parent._getStaticOAuth2Token(key);
+    }
+
+    if (parent._startOAuth2Flow) {
+      this.startOAuth2Flow = (codeAcquisitionPattern: RegExp, timeout: number) => parent._startOAuth2Flow(codeAcquisitionPattern.source, timeout);
+    }
+
+    if (parent._startStatelessOAuth2Flow) {
+      this.startStatelessOAuth2Flow = (codeAcquisitionPattern: RegExp, timeout: number) => parent._startStatelessOAuth2Flow(codeAcquisitionPattern.source, timeout);
+    }
+
+    if (parent._pollOAuth2Flow) {
+      this.pollOAuth2Flow = (state: string) => parent._pollOAuth2Flow(state);
+    }
+
+    if (parent._pollStatelessOAuth2Flow) {
+      this.pollStatelessOAuth2Flow = (state: string) => parent._pollStatelessOAuth2Flow(state);
     }
 
     // Admin

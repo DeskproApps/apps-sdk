@@ -217,6 +217,10 @@ export interface CoreCallSender {
   _getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
   _getStaticOAuth2CallbackUrlValue: () => Promise<string>;
   _getStaticOAuth2Token: (key: string) => Promise<string|null>;
+  _startOAuth2Flow: (codeAcquisitionPattern: string, timeout: number) => Promise<StartOAuth2FlowResult>;
+  _startStatelessOAuth2Flow: (codeAcquisitionPattern: string, timeout: number) => Promise<StartStatelessOAuth2FlowResult>;
+  _pollOAuth2Flow: (state: string) => Promise<PollOAuth2FlowResult>;
+  _pollStatelessOAuth2Flow: (state: string) => Promise<PollStatelessOAuth2FlowResult>;
   _setAdminSetting: (value: string) => void;
   _setAdminSettingInvalid: (message: string, settingName?: string) => void;
   _sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
@@ -306,6 +310,27 @@ export interface GetStaticOAuth2CallbackUrlResponse {
   url: string;
 }
 
+export type StartOAuth2FlowResult = {
+  state: string;
+  codeChallenge: string;
+  gatewayAuthorizeUrl: string;
+  gatewayCallbackUrl: string;
+  deskproCallbackUrl: string;
+};
+
+export type StartStatelessOAuth2FlowResult = StartOAuth2FlowResult; // Same for now but may diverge in future
+
+export type PollOAuth2FlowStatus = "Pending"|"Success"|"Fail";
+
+export type PollOAuth2FlowResult = {
+  status: PollOAuth2FlowStatus;
+  authCodeProxyPlaceholder: string;
+  codeVerifierProxyPlaceholder: string;
+  error?: string|null;
+};
+
+export type PollStatelessOAuth2FlowResult = PollOAuth2FlowResult; // Same for now but may diverge in future
+
 export interface IDeskproClient {
   run: () => Promise<void>;
   onReady: (cb: ChildMethod) => void;
@@ -343,6 +368,13 @@ export interface IDeskproClient {
   getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
   getStaticOAuth2CallbackUrlValue: () => Promise<string>;
   getStaticOAuth2Token: (key: string) => Promise<string|null>;
+
+  // OAuth 2.0 flow with PKCE support
+  startOAuth2Flow: (codeAcquisitionPattern: RegExp, timeout:number) => Promise<StartOAuth2FlowResult>;
+  startStatelessOAuth2Flow: (codeAcquisitionPattern: RegExp, timeout:number) => Promise<StartStatelessOAuth2FlowResult>;
+  pollOAuth2Flow: (state: string) => Promise<PollOAuth2FlowResult>;
+  pollStatelessOAuth2Flow: (state: string) => Promise<PollStatelessOAuth2FlowResult>;
+
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
   setAdminSetting: (value: string) => void;
@@ -505,6 +537,75 @@ export interface DeferredOAuth2CallbackUrl {
   };
 }
 
+/**
+ * Options when starting an OAuth 2.0 flow
+ */
+export type OAuth2StartOptions = OAuth2CallbackUrlOptions; // Are currently the same thing, but may diverge in future
+
+/**
+ * Properties used to "build" the initial authorize URL that the user follows to take them through
+ * the IDP's grant flow (login, usually) @see https://www.oauth.com/oauth2-servers/authorization/the-authorization-request/
+ */
+export type OAuth2StartAuthorizeUrlFnProps = {
+  state: string;
+  redirectUri: string;
+  codeChallenge: string;
+};
+
+/**
+ * Function used to "build" an authorize URl as per the IDP's instructions. We will give you some
+ * predefined values to add to it
+ */
+export type OAuth2StartAuthorizeUrlFn = (props: OAuth2StartAuthorizeUrlFnProps) => string;
+
+/**
+ * After successful auth code, state + processing our poll promise will resolve with the following
+ * parameters/proxy placeholders
+ */
+export type OAuth2StartPollResult = {
+  /**
+   * Polling status, will continue to poll is status = Pending
+   */
+  status: PollOAuth2FlowStatus;
+
+  /**
+   * Apps proxy placeholder that may be passed in future requests and will be replaced with the
+   * value of the acquired authorization code
+   */
+  authCodeProxyPlaceholder: string;
+
+  /**
+   * Apps proxy placeholder that may be passed in future requests that contains the complementary
+   * PKCE code verifier as defined in @see OAuth2StartAuthorizeUrlFnProps["codeChallenge"]
+   */
+  codeVerifierProxyPlaceholder: string;
+
+  /**
+   * If there was an error during auth code acquisition then return it here
+   */
+  error?: string|null;
+};
+
+/**
+ * Values returned to the app after "starting" and OAuth flow
+ */
+export type OAuth2Start = {
+  /**
+   * Deskpro will hand this "augmented" authorize URL back to you, and this is the URL you must use
+   * in place of the actual authorize URL that the IDP prescribes
+   */
+  authorizeUrl: string;
+
+  /**
+   * The poll promise will resolve when we have successfully acquired and processed the access code
+   * and state from the IDP's grant flow. Will reject on failure (unsuccessfully acquisition of code or
+   * state as well as any OAuth errors that may occur)
+   *
+   * Running this poll function will START polling, the promise resolving/rejecting ENDS the promise
+   */
+  poll: () => Promise<OAuth2StartPollResult>;
+};
+
 export interface IOAuth2 {
   /**
    * Get an OAuth2 callback URL
@@ -548,4 +649,31 @@ export interface IOAuth2 {
       keyAcquisitionPattern: RegExp,
       options?: OAuth2CallbackUrlOptions
   ): Promise<OAuth2StaticCallbackUrl>;
+
+  /**
+   * Start an OAuth 2.0 flow from an app
+   *
+   * @param authorizeUrlFn Build the "authorize" URl as prescribed by the IDP using some values that we give you
+   * @param codeAcquisitionPattern RegEx pattern to acquire the access code from the callback URL that the IDP redirects you to
+   * @param options
+   */
+  start(
+    authorizeUrlFn: OAuth2StartAuthorizeUrlFn,
+    codeAcquisitionPattern: RegExp,
+    options?: OAuth2StartOptions
+  ): Promise<OAuth2Start>;
+
+  /**
+   * Start an OAuth 2.0 flow from an app before the app is installed (the app cannot have any state,
+   * so we have to run this OAuth flow in "stateless" mode)
+   *
+   * @param authorizeUrlFn Build the "authorize" URl as prescribed by the IDP using some values that we give you
+   * @param codeAcquisitionPattern RegEx pattern to acquire the access code from the callback URL that the IDP redirects you to
+   * @param options
+   */
+  startStateless(
+    authorizeUrlFn: OAuth2StartAuthorizeUrlFn,
+    codeAcquisitionPattern: RegExp,
+    options?: OAuth2StartOptions
+  ): Promise<OAuth2Start>;
 }
