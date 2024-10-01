@@ -76,7 +76,7 @@ importers:
         version: 0.13.9
       sass:
         specifier: ^1.77.8
-        version: 1.77.8
+        version: 1.79.4
       shortcut-buttons-flatpickr:
         specifier: 0.4.0
         version: 0.4.0
@@ -140,7 +140,7 @@ importers:
         version: 8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)
       '@storybook/react-vite':
         specifier: ^8.2.9
-        version: 8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@2.61.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))
+        version: 8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@2.61.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))
       '@storybook/test':
         specifier: ^8.2.9
         version: 8.2.9(@types/jest@29.5.11)(jest@27.4.4)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))
@@ -1672,6 +1672,7 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1679,6 +1680,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.2':
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@istanbuljs/load-nyc-config@1.1.0':
     resolution: {integrity: sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ==}
@@ -2655,6 +2657,10 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
+  chokidar@4.0.1:
+    resolution: {integrity: sha512-n8enUVCED/KVRQlab1hr3MVpcVMvxtZjmEa956u+4YijlmQED223XMSYj2tLuKvr4jcCTzNNMpQDUer72MMmzA==}
+    engines: {node: '>= 14.16.0'}
+
   chownr@2.0.0:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
@@ -3341,6 +3347,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
@@ -3510,6 +3517,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -4727,6 +4735,10 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
 
+  readdirp@4.0.1:
+    resolution: {integrity: sha512-GkMg9uOTpIWWKbSsgwb5fA4EavTR+SG/PMPoAY8hkhHfEEY0/vqljY+XHqtDf2cr2IJtoNRDbrrEpZUiZCkYRw==}
+    engines: {node: '>= 14.16.0'}
+
   recast@0.23.4:
     resolution: {integrity: sha512-qtEDqIZGVcSZCHniWwZWbRy79Dc6Wp3kT/UmDA2RJKBPg7+7k51aQBZirHmUGn5uvHf2rg8DkjizrN26k61ATw==}
     engines: {node: '>= 4'}
@@ -4815,6 +4827,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@4.4.1:
@@ -4903,8 +4916,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  sass@1.77.8:
-    resolution: {integrity: sha512-4UHg6prsrycW20fqLGPShtEvo/WyHRVRHwOP4DzkUrObWoWI05QBSfzU71TVB7PFaL104TwNaHpjlWXAZbQiNQ==}
+  sass@1.79.4:
+    resolution: {integrity: sha512-K0QDSNPXgyqO4GZq2HO5Q70TLxTH6cIT59RdoCHMivrC8rqzaTw5ab9prjz9KUN1El4FLXrBXJhik61JR4HcGg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -7641,13 +7654,13 @@ snapshots:
       '@types/yargs': 17.0.32
       chalk: 4.1.2
 
-  '@joshwooding/vite-plugin-react-docgen-typescript@0.3.1(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))':
+  '@joshwooding/vite-plugin-react-docgen-typescript@0.3.1(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))':
     dependencies:
       glob: 7.2.3
       glob-promise: 4.2.2(glob@7.2.3)
       magic-string: 0.27.0
       react-docgen-typescript: 2.2.2(typescript@4.9.5)
-      vite: 4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2)
+      vite: 4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2)
     optionalDependencies:
       typescript: 4.9.5
 
@@ -7917,7 +7930,7 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@storybook/builder-vite@8.2.9(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))':
+  '@storybook/builder-vite@8.2.9(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))':
     dependencies:
       '@storybook/csf-plugin': 8.2.9(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))
       '@types/find-cache-dir': 3.2.1
@@ -7929,7 +7942,7 @@ snapshots:
       magic-string: 0.30.6
       storybook: 8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0))
       ts-dedent: 2.2.0
-      vite: 4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2)
+      vite: 4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2)
     optionalDependencies:
       typescript: 4.9.5
     transitivePeerDependencies:
@@ -8018,11 +8031,11 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       storybook: 8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0))
 
-  '@storybook/react-vite@8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@2.61.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))':
+  '@storybook/react-vite@8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(rollup@2.61.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))':
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.3.1(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.3.1(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))
       '@rollup/pluginutils': 5.1.0(rollup@2.61.0)
-      '@storybook/builder-vite': 8.2.9(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2))
+      '@storybook/builder-vite': 8.2.9(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)(vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2))
       '@storybook/react': 8.2.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(storybook@8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0)))(typescript@4.9.5)
       find-up: 5.0.0
       magic-string: 0.30.6
@@ -8032,7 +8045,7 @@ snapshots:
       resolve: 1.22.8
       storybook: 8.2.9(@babel/preset-env@7.16.4(@babel/core@7.16.0))
       tsconfig-paths: 4.2.0
-      vite: 4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2)
+      vite: 4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2)
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - rollup
@@ -8813,6 +8826,10 @@ snapshots:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  chokidar@4.0.1:
+    dependencies:
+      readdirp: 4.0.1
 
   chownr@2.0.0: {}
 
@@ -11196,6 +11213,8 @@ snapshots:
     dependencies:
       picomatch: 2.3.1
 
+  readdirp@4.0.1: {}
+
   recast@0.23.4:
     dependencies:
       assert: 2.1.0
@@ -11410,9 +11429,9 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sass@1.77.8:
+  sass@1.79.4:
     dependencies:
-      chokidar: 3.6.0
+      chokidar: 4.0.1
       immutable: 4.3.7
       source-map-js: 1.2.0
 
@@ -11939,7 +11958,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@4.5.3(@types/node@20.11.15)(sass@1.77.8)(terser@5.27.2):
+  vite@4.5.3(@types/node@20.11.15)(sass@1.79.4)(terser@5.27.2):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.38
@@ -11947,7 +11966,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.11.15
       fsevents: 2.3.3
-      sass: 1.77.8
+      sass: 1.79.4
       terser: 5.27.2
 
   w3c-hr-time@1.0.2:
