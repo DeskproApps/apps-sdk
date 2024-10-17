@@ -1,11 +1,10 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { DeskproAppEventType, DeskproAppProviderProps } from "./types";
 import { GlobalStyles, lightTheme } from "../theme";
 import { createClient } from "../../client/client";
 import { Context, IDeskproClient, TargetAction, TargetElementEvent } from "../../client/types";
 import { DeskproAppContext } from "./context";
 import { ThemeProvider } from "@deskpro/deskpro-ui";
-import { HeightWrapper } from "./SetHeightWrapper";
 
 export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({
   children,
@@ -89,7 +88,7 @@ export const DeskproAppProvider: FC<DeskproAppProviderProps> = ({
       <DeskproAppContext.Provider
         value={{ client, context, registeredElements, setRegisteredElements, theme: currentTheme }}
       >
-        <HeightWrapper>{children}</HeightWrapper>
+        {children}
       </DeskproAppContext.Provider>
     </ThemeProvider>
   );
