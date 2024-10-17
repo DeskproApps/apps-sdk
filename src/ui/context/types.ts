@@ -8,9 +8,9 @@ export interface DeskproAppProviderProps {
   debug?: boolean,
 }
 
-export type DeskproAppContextValue = {
+export type DeskproAppContextValue<Data = any, Settings = any> = {
   client: IDeskproClient|null,
-  context: Context|null,
+  context: Context<Data, Settings>|null,
   theme: DeskproTheme,
   registeredElements: string[];
   setRegisteredElements: (value: (((prevState: string[]) => string[]) | string[])) => void;
@@ -20,8 +20,8 @@ export interface DeskproAppClient {
   client: IDeskproClient|null;
 }
 
-export interface LatestDeskproAppContext {
-  context: Context|null;
+export interface LatestDeskproAppContext<Data, Settings> {
+  context: Context<Data, Settings>|null;
 }
 
 export interface DeskproAppTheme {
