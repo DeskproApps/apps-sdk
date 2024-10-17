@@ -38,8 +38,7 @@ export const ObserverDiv = () => {
 
   return (
     <RelativeContainer>
-      Scroll the top in and out of view. Observe count:{" "}
-      {state}
+      Scroll the top in and out of view. Observe count: {state}
       <ObservedDiv onIntersect={handleIntersect} />
     </RelativeContainer>
   );
@@ -48,7 +47,7 @@ export const ObserverDiv = () => {
 const messagesArbitary = fc
   .tuple(
     fc.constantFrom("Tom Nook", "Chirs P", "Chris G", "Chris N"),
-    fc.string({ minLength: 500, maxLength: 500 })
+    fc.string({ minLength: 500, maxLength: 500 }),
   )
   .chain(([name, message]) =>
     fc.record({
@@ -56,12 +55,12 @@ const messagesArbitary = fc
       name: fc.constant(name),
       email: fc.constant(`${name.toLowerCase().replace(" ", "_")}@deskpro.com`),
       message: fc.constant(message),
-    })
+    }),
   );
 
 export const Example = () => {
   const [state, setState] = useState(() =>
-    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 })
+    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 }),
   );
   const [infiniteState, setInfiniteState] = useState<
     "loading" | "hasNextPage" | "end" | "end-with-force"
@@ -119,7 +118,7 @@ export const Example = () => {
 
 export const ExampleReversed = () => {
   const [state, setState] = useState(() =>
-    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 })
+    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 }),
   );
   const [infiniteState, setInfiniteState] = useState<
     "loading" | "hasNextPage" | "end" | "end-with-force"
@@ -178,7 +177,7 @@ export const ExampleReversed = () => {
 
 export const ExampleReversedWithOffset = () => {
   const [state, setState] = useState(() =>
-    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 })
+    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 }),
   );
   const [infiniteState, setInfiniteState] = useState<
     "loading" | "hasNextPage" | "end" | "end-with-force"
@@ -352,7 +351,7 @@ const ExampleScrollWrapper = ({
 
 export const ExampleWithSideEffect = () => {
   const [state, setState] = useState(() =>
-    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 })
+    fc.sample(messagesArbitary, { numRuns: 4, seed: 2324 }),
   );
   const [status, setStatus] = useState<
     "loading" | "hasNextPage" | "end" | "end-with-force"

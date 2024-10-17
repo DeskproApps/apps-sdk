@@ -5,7 +5,7 @@ import { useState } from "react";
 import { faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default {
-  title: "Core/Link",
+  title: "Core/IntlPhoneInput",
 };
 
 export const Default = () => {

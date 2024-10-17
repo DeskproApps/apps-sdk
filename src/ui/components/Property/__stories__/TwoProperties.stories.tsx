@@ -2,14 +2,14 @@ import React from "react";
 import { TwoProperties as TwoPropertiesCmp } from "../TwoProperties";
 
 export default {
-    title: "Core/Property",
-    component: TwoPropertiesCmp,
-    argTypes: {
-      leftLabel: { control: "text" },
-      leftText: { control: "text" },
-      rightLabel: { control: "text" },
-      rightText: { control: "text" },
-    },
+  title: "Core/Property",
+  component: TwoPropertiesCmp,
+  argTypes: {
+    leftLabel: { control: "text" },
+    leftText: { control: "text" },
+    rightLabel: { control: "text" },
+    rightText: { control: "text" },
+  },
 };
 
 export const TwoProperties = () => (
