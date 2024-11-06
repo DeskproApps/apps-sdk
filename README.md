@@ -5,7 +5,7 @@ styles and utilities for use in simple apps and widgets.
 
 ## Installation
 
-Install the SDK via PNPM or NPM:
+Install the SDK via `pnpm` or `npm`:
 
 ```bash
 pnpm add @deskpro/app-sdk
