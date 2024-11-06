@@ -66,14 +66,14 @@ jobs:
           fi
 
           if [[ "${{ steps.labels.outputs.milestone }}" == "major-version" ]]; then
-            npm version major
+            pnpm version major
           elif [[ "${{ steps.labels.outputs.milestone }}" == "minor-version" ]]; then
-            npm version minor
+            pnpm version minor
           else
-            npm version patch
+            pnpm version patch
           fi
 
-          npm run docs:storybook
+          pnpm run docs:storybook
 
           git add docs/*
 
@@ -81,12 +81,12 @@ jobs:
 
           git push origin master
 
-      - name: Authenticate NPM
+      - name: Authenticate Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
+        run: pnpm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
 
-      - name: Publish to NPM
+      - name: Publish to Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: npm publish
+        run: pnpm publish
