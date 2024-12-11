@@ -185,6 +185,7 @@ export type ChildMethods = {
 
 export interface TicketSidebarDeskproCallSender {
   setTitle: (title: string) => void;
+  focus: () => void;
   setBadgeCount: (count: number) => void;
 }
 
@@ -323,6 +324,7 @@ export interface IDeskproClient {
   onElementEvent: (cb: ElementEventChildMethod) => void;
   setBadgeCount: (count: number) => void;
   setTitle: (title: string) => void;
+  focus: () => void;
   entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string|null>;
   entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
   entityAssociationDelete: (entityId: string, name: string, key: string) => Promise<void>;

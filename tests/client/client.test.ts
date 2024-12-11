@@ -39,6 +39,7 @@ test("run() mount core methods", async () => {
   const setHeightMock = jest.fn();
   const setBadgeCountMock = jest.fn();
   const getTitleMock = jest.fn();
+  const focusMock = jest.fn();
 
   const parent = jest.fn().mockReturnValue({
     promise: new Promise((resolve) => {
@@ -47,6 +48,7 @@ test("run() mount core methods", async () => {
         _setHeight: setHeightMock,
         setBadgeCount: setBadgeCountMock,
         setTitle: getTitleMock,
+        focus: focusMock,
       });
     }),
   });
@@ -57,4 +59,5 @@ test("run() mount core methods", async () => {
   expect(client.resize).toBeTruthy();
   expect(client.setBadgeCount).toBeTruthy();
   expect(client.setTitle).toBeTruthy();
+  expect(client.focus).toBeTruthy();
 });

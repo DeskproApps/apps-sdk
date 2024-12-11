@@ -245,6 +245,7 @@ export class DeskproClient implements IDeskproClient {
   // Sidebar Methods
   public setBadgeCount: (count: number) => void;
   public setTitle: (title: string) => void;
+  public focus: () => void;
 
   // EntityAssociation
   public entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
@@ -300,6 +301,7 @@ export class DeskproClient implements IDeskproClient {
     this.deregisterElement = () => {};
     this.setBadgeCount = () => {};
     this.setTitle = () => {};
+    this.focus = () => {};
 
     this.entityAssociationSet = async () => {};
     this.entityAssociationDelete = async () => {};
@@ -387,6 +389,10 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent.setTitle) {
       this.setTitle = parent.setTitle;
+    }
+
+    if (parent.focus) {
+      this.focus = parent.focus;
     }
 
     // Entity Association
