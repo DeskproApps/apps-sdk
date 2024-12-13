@@ -186,7 +186,7 @@ export type ChildMethods = {
 export interface TicketSidebarDeskproCallSender {
   setTitle: (title: string) => void;
   focus: () => void;
-  openContact: (contact: Partial<{id: number, email: string, phoneNumber: string}>) => void;
+  openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
   setBadgeCount: (count: number) => void;
 }
 
@@ -326,7 +326,7 @@ export interface IDeskproClient {
   setBadgeCount: (count: number) => void;
   setTitle: (title: string) => void;
   focus: () => void;
-  openContact: (contact: Partial<{id: number, email: string, phoneNumber: string}>) => void;
+  openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
   entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string|null>;
   entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
   entityAssociationDelete: (entityId: string, name: string, key: string) => Promise<void>;
