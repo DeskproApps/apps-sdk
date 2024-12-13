@@ -246,6 +246,7 @@ export class DeskproClient implements IDeskproClient {
   public setBadgeCount: (count: number) => void;
   public setTitle: (title: string) => void;
   public focus: () => void;
+  public openContact: (contact: Partial<{id: number, email: string, phoneNumber: string}>) => void;
 
   // EntityAssociation
   public entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
@@ -302,6 +303,7 @@ export class DeskproClient implements IDeskproClient {
     this.setBadgeCount = () => {};
     this.setTitle = () => {};
     this.focus = () => {};
+    this.openContact = () => {};
 
     this.entityAssociationSet = async () => {};
     this.entityAssociationDelete = async () => {};
@@ -393,6 +395,10 @@ export class DeskproClient implements IDeskproClient {
 
     if (parent.focus) {
       this.focus = parent.focus;
+    }
+
+    if (parent.openContact) {
+      this.openContact = parent._openContact;
     }
 
     // Entity Association
