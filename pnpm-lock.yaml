@@ -22,7 +22,7 @@ importers:
         version: 6.5.1
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.4.0
-        version: 6.5.1
+        version: 6.7.2
       '@fortawesome/react-fontawesome':
         specifier: ^0.1.19
         version: 0.1.19(@fortawesome/fontawesome-svg-core@6.5.1)(react@18.2.0)
@@ -1642,6 +1642,10 @@ packages:
     resolution: {integrity: sha512-GkWzv+L6d2bI5f/Vk6ikJ9xtl7dfXtoRu3YGE6nq0p/FFqA1ebMOAWg3XgRyb0I6LYyYkiAo+3/KrwuBp8xG7A==}
     engines: {node: '>=6'}
 
+  '@fortawesome/fontawesome-common-types@6.7.2':
+    resolution: {integrity: sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==}
+    engines: {node: '>=6'}
+
   '@fortawesome/fontawesome-svg-core@6.5.1':
     resolution: {integrity: sha512-MfRCYlQPXoLlpem+egxjfkEuP9UQswTrlCOsknus/NcMoblTH2g0jPrapbcIb04KGA7E2GZxbAccGZfWoYgsrQ==}
     engines: {node: '>=6'}
@@ -1654,8 +1658,8 @@ packages:
     resolution: {integrity: sha512-m6ShXn+wvqEU69wSP84coxLbNl7sGVZb+Ca+XZq6k30SzuP3X4TfPqtycgUh9ASwlNh5OfQCd8pDIWxl+O+LlQ==}
     engines: {node: '>=6'}
 
-  '@fortawesome/free-solid-svg-icons@6.5.1':
-    resolution: {integrity: sha512-S1PPfU3mIJa59biTtXJz1oI0+KAXW6bkAb31XKhxdxtuXDiUIFsih4JR1v5BbxY7hVHsD1RKq+jRkVRaf773NQ==}
+  '@fortawesome/free-solid-svg-icons@6.7.2':
+    resolution: {integrity: sha512-GsBrnOzU8uj0LECDfD5zomZJIjrPhIlWU82AHwa2s40FKH+kcxQaBvBo3Z4TxyZHIyX8XTDxsyA33/Vx9eFuQA==}
     engines: {node: '>=6'}
 
   '@fortawesome/react-fontawesome@0.1.19':
@@ -7260,7 +7264,7 @@ snapshots:
   '@deskpro/deskpro-ui@8.0.0(@types/web@0.0.111)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(styled-components@5.3.11(@babel/core@7.16.0)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0))':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 6.5.1
-      '@fortawesome/free-solid-svg-icons': 6.5.1
+      '@fortawesome/free-solid-svg-icons': 6.7.2
       '@fortawesome/react-fontawesome': 0.1.19(@fortawesome/fontawesome-svg-core@6.5.1)(react@18.2.0)
       '@heroicons/react': 1.0.6(react@18.2.0)
       '@popperjs/core': 2.11.8
@@ -7444,6 +7448,8 @@ snapshots:
 
   '@fortawesome/fontawesome-common-types@6.5.1': {}
 
+  '@fortawesome/fontawesome-common-types@6.7.2': {}
+
   '@fortawesome/fontawesome-svg-core@6.5.1':
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.5.1
@@ -7456,9 +7462,9 @@ snapshots:
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.5.1
 
-  '@fortawesome/free-solid-svg-icons@6.5.1':
+  '@fortawesome/free-solid-svg-icons@6.7.2':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 6.5.1
+      '@fortawesome/fontawesome-common-types': 6.7.2
 
   '@fortawesome/react-fontawesome@0.1.19(@fortawesome/fontawesome-svg-core@6.5.1)(react@18.2.0)':
     dependencies:
