@@ -185,7 +185,6 @@ export type ChildMethods = {
 
 export interface TicketSidebarDeskproCallSender {
   setTitle: (title: string) => void;
-  focus: () => void;
   openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
   setBadgeCount: (count: number) => void;
 }
@@ -193,6 +192,8 @@ export interface TicketSidebarDeskproCallSender {
 export interface CoreCallSender {
   _setHeight: (height: number) => void;
   _setWidth: (width: number | string) => void;
+  focus: () => void;
+  unfocus: () => void;
   _registerElement: (id: string, element: AppElement) => Promise<void>;
   _deregisterElement: (id: string) => Promise<void>;
   _getProxyAuth: () => Promise<ProxyAuthPayload>;
