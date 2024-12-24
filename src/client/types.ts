@@ -1,3 +1,6 @@
+import { string } from "fast-check";
+import { number } from "ts-pattern/dist/patterns";
+
 export interface User {
   firstName: string;
   lastName: string;
@@ -335,8 +338,12 @@ export interface IDeskproClient {
   setAdminSettingInvalid: (message: string, settingName?: string) => void;
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
-  startOauth2Local(authorizeUrlFn: (data: {state: string, redirectUri: string, codeChallenge: string}) => string, regex: RegExp): IOAuth2;
-  startOauth2Global(clientId: string): IOAuth2;
+  startOauth2Local(
+    authorizeUrlFn: (data: {state: string, redirectUri: string, codeChallenge: string}) => string,
+    codeRegex: RegExp,
+    convertResponseToToken: (response: any) => Promise<string>
+  ): Promise<IOAuth2>;
+  startOauth2Global(clientId: string): Promise<IOAuth2>;
   deskpro(): IDeskproUI;
 }
 
@@ -348,6 +355,8 @@ export interface IOAuth2 {
 export interface OAuth2Result {
   data: Record<string, any>;
 }
+
+export class OAuth2Error extends Error {}
 
 export interface TargetActionOptions<Payload = any> {
   title?: string;
