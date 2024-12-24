@@ -19,14 +19,6 @@ import {
   GetStateResponse,
   TargetActionType,
   TargetActionOptions,
-  IOAuth2,
-  OAuth2CallbackUrlOptions,
-  OAuth2CallbackUrl,
-  GetOAuth2CallbackUrlResponse,
-  OAuth2CallbackUrlPoll,
-  GetStaticOAuth2CallbackUrlResponse,
-  OAuth2StaticCallbackUrlPoll,
-  OAuth2StaticCallbackUrl,
   IDeskproUI,
   DeskproUIMessage,
 } from "./types";
@@ -105,123 +97,6 @@ class EntityAssociation implements IEntityAssociation {
   }
 }
 
-class OAuth2 implements IOAuth2 {
-  constructor(private client: IDeskproClient) {}
-
-  async getCallbackUrl(
-      name: string,
-      tokenAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2CallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout, options?.expires);
-
-    const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.hasUserState(urlResponse.statePath).then((has) => {
-          if (has) {
-            clearInterval(poller);
-            resolve({
-              statePath: urlResponse.statePath,
-              statePathPlaceholder: urlResponse.statePathPlaceholder,
-            });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
-  }
-
-  async getGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
-        key,
-        tokenAcquisitionPattern.source,
-        keyAcquisitionPattern.source,
-        timeout,
-        options?.expires
-    );
-
-    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.getStaticOAuth2Token(key).then((token) => {
-          if (token) {
-            clearInterval(poller);
-            resolve({ token });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
-  }
-
-  async getAdminGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
-        key,
-        tokenAcquisitionPattern.source,
-        keyAcquisitionPattern.source,
-        timeout,
-        options?.expires
-    );
-
-    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.getStaticOAuth2Token(key).then((token) => {
-          if (token) {
-            clearInterval(poller);
-            resolve({ token });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
-  }
-}
-
 export class DeskproClient implements IDeskproClient {
 
   private parentMethods: ChildMethods = {
@@ -277,10 +152,7 @@ export class DeskproClient implements IDeskproClient {
   public deregisterTargetAction: (name: string) => Promise<void>;
 
   // OAuth2
-  public getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
-  public getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
-  public getStaticOAuth2CallbackUrlValue: () => Promise<string>;
-  public getStaticOAuth2Token: (key: string) => Promise<string|null>;
+
 
   // Admin
   public setAdminSetting: (value: string) => void;
@@ -328,10 +200,7 @@ export class DeskproClient implements IDeskproClient {
     this.registerTargetAction = async () => {};
     this.deregisterTargetAction = async () => {};
 
-    this.getOAuth2CallbackUrl = async () => ({ url: "", statePath: "", statePathPlaceholder: "" });
-    this.getStaticOAuth2CallbackUrl = async () => ({ url: "" });
-    this.getStaticOAuth2CallbackUrlValue = async () => "";
-    this.getStaticOAuth2Token = async () => null;
+    // @todo: oauth2
 
     this.setAdminSetting = async () => {};
     this.setAdminSettingInvalid = async () => {};
@@ -491,21 +360,6 @@ export class DeskproClient implements IDeskproClient {
     }
 
     // OAuth2
-    if (parent._getOAuth2CallbackUrl) {
-      this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout, expires);
-    }
-
-    if (parent._getStaticOAuth2CallbackUrl) {
-      this.getStaticOAuth2CallbackUrl = (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getStaticOAuth2CallbackUrl(key, tokenAcquisitionPattern, keyAcquisitionPattern, timeout, expires);
-    }
-
-    if (parent._getStaticOAuth2CallbackUrlValue) {
-      this.getStaticOAuth2CallbackUrlValue = () => parent._getStaticOAuth2CallbackUrlValue();
-    }
-
-    if (parent._getStaticOAuth2Token) {
-      this.getStaticOAuth2Token = (key: string) => parent._getStaticOAuth2Token(key);
-    }
 
     // Admin
     if (parent._setAdminSetting) {
@@ -575,10 +429,6 @@ export class DeskproClient implements IDeskproClient {
 
   public getEntityAssociation(name: string, entityId: string): IEntityAssociation {
     return new EntityAssociation(this, name, entityId);
-  }
-
-  public oauth2(): IOAuth2 {
-    return new OAuth2(this);
   }
 
   public deskpro(): IDeskproUI {

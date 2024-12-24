@@ -341,7 +341,7 @@ export interface IDeskproClient {
   startOauth2Local(
     authorizeUrlFn: (data: {state: string, redirectUri: string, codeChallenge: string}) => string,
     codeRegex: RegExp,
-    convertResponseToToken: (response: any) => Promise<string>
+    convertResponseToToken: (code: string) => Promise<OAuth2Result>
   ): Promise<IOAuth2>;
   startOauth2Global(clientId: string): Promise<IOAuth2>;
   deskpro(): IDeskproUI;
@@ -353,7 +353,11 @@ export interface IOAuth2 {
 }
 
 export interface OAuth2Result {
-  data: Record<string, any>;
+  data: {
+    access_token: string;
+    refresh_token?: string;
+    expires?: string|number;
+  };
 }
 
 export class OAuth2Error extends Error {}
