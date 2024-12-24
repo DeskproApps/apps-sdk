@@ -1,6 +1,3 @@
-import { string } from "fast-check";
-import { number } from "ts-pattern/dist/patterns";
-
 export interface User {
   firstName: string;
   lastName: string;
@@ -342,7 +339,7 @@ export interface IDeskproClient {
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   startOauth2Local(
-    authorizeUrlFn: (data: { state: string, redirectUri: string, codeChallenge: string }) => string,
+    authorizeUrlFn: (data: { state: string, callbackUrl: string, codeChallenge: string }) => string,
     codeAcquisitionPattern: RegExp,
     convertResponseToToken: (code: string) => Promise<OAuth2Result>,
     options?: { timeout?: number, pollInterval?: number },
@@ -372,12 +369,12 @@ export class OAuth2Error extends Error { }
 export type StartOAuth2LocalFlowResult = {
   state: string;
   codeChallenge: string;
-  redirectUrl: string;
+  callbackUrl: string;
 };
 
 export type StartOAuth2GlobalFlowResult = {
   state: string,
-  authorizeUrl: string;
+  authorizationUrl: string;
 };
 
 export type PollOAuth2FlowStatus = "Pending" | "Success" | "Fail";
@@ -388,6 +385,7 @@ export type PollOAuth2FlowResult = {
 };
 
 export type PollOAuth2LocalFlowResult = PollOAuth2FlowResult & {
+  authCode?: string; // always exists when PollOAuth2FlowStatus is "Success"
   codeVerifierProxyPlaceholder: string;
 }
 

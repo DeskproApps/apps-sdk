@@ -453,9 +453,9 @@ export class DeskproClient implements IDeskproClient {
   }
 
   public async startOauth2Local(
-    authorizeUrlFn: (data: { state: string, redirectUri: string, codeChallenge: string }) => string,
+    authorizeUrlFn: (data: { state: string, callbackUrl: string, codeChallenge: string }) => string,
     codeAcquisitionPattern: RegExp,
-    convertResponseToToken: (code: string) => Promise<OAuth2Result>,
+    convertResponseToToken: (code: string, codeVerifierProxyPlaceholder: string) => Promise<OAuth2Result>,
     options?: { timeout?: number, pollInterval?: number },
   ): Promise<IOAuth2> {
     const timeout = options?.timeout ?? (600 * 1000); // 10 minute timeout
@@ -469,7 +469,7 @@ export class DeskproClient implements IDeskproClient {
     // Build our proper authorize URL using downstream implementation.
     const authorizeUrl = authorizeUrlFn({
       state: start.state,
-      redirectUri: start.redirectUrl,
+      callbackUrl: start.callbackUrl,
       codeChallenge: start.codeChallenge,
     });
 
@@ -484,7 +484,7 @@ export class DeskproClient implements IDeskproClient {
               reject(new OAuth2Error(pollResult.error));
               return;
             }
-            convertResponseToToken(pollResult.codeVerifierProxyPlaceholder)
+            convertResponseToToken(pollResult.authCode as string, pollResult.codeVerifierProxyPlaceholder)
               .then(resolve)
           }
         });
@@ -499,7 +499,7 @@ export class DeskproClient implements IDeskproClient {
     return {
       poll,
       authorizationUrl: authorizeUrl,
-    } satisfies IOAuth2;
+    };
   }
 
   public async startOauth2Global(clientId: string, options?: { timeout?: number, pollInterval?: number }): Promise<IOAuth2> {
@@ -537,8 +537,8 @@ export class DeskproClient implements IDeskproClient {
 
     return {
       poll,
-      authorizationUrl: start.authorizeUrl,
-    } satisfies IOAuth2;
+      authorizationUrl: start.authorizationUrl,
+    };
   }
 
   public deskpro(): IDeskproUI {
