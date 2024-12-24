@@ -335,7 +335,7 @@ export interface IDeskproClient {
   setAdminSettingInvalid: (message: string, settingName?: string) => void;
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
-  startOauth2Local(callback: (data: {state: string, redirectUri: string, codeChallenge: string}) => string, regex: RegExp): IOAuth2;
+  startOauth2Local(authorizeUrlFn: (data: {state: string, redirectUri: string, codeChallenge: string}) => string, regex: RegExp): IOAuth2;
   startOauth2Global(clientId: string): IOAuth2;
   deskpro(): IDeskproUI;
 }
