@@ -159,7 +159,7 @@ export class DeskproClient implements IDeskproClient {
   public registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   public deregisterTargetAction: (name: string) => Promise<void>;
 
-  // @todo: Should these be public, they're internal.
+  // OAuth2
   public startOAuth2LocalFlow: (codeAcquisitionPattern: RegExp, timeout: number) => Promise<StartOAuth2LocalFlowResult>;
   public startOAuth2GlobalFlow: (clientId: string, timeout: number) => Promise<StartOAuth2GlobalFlowResult>;
   public pollOAuth2Flow: <T = PollOAuth2FlowResult>(state: string) => Promise<T>;
