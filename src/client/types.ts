@@ -215,10 +215,6 @@ export interface CoreCallSender {
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
-  _getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
-  _getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
-  _getStaticOAuth2CallbackUrlValue: () => Promise<string>;
-  _getStaticOAuth2Token: (key: string) => Promise<string|null>;
   _setAdminSetting: (value: string) => void;
   _setAdminSettingInvalid: (message: string, settingName?: string) => void;
   _sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
@@ -298,16 +294,6 @@ export interface GetStateResponse<T> {
   data: T|null;
 }
 
-export interface GetOAuth2CallbackUrlResponse {
-  url: string;
-  statePath: string;
-  statePathPlaceholder: string;
-}
-
-export interface GetStaticOAuth2CallbackUrlResponse {
-  url: string;
-}
-
 export interface IDeskproClient {
   run: () => Promise<void>;
   onReady: (cb: ChildMethod) => void;
@@ -343,18 +329,24 @@ export interface IDeskproClient {
   setSetting: <T>(name: string, value: T) => Promise<void>;
   setSettings: (settings: Record<string, any>) => Promise<void>;
   setBlocking: (blocking: boolean) => Promise<void>;
-  getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetOAuth2CallbackUrlResponse>;
-  getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
-  getStaticOAuth2CallbackUrlValue: () => Promise<string>;
-  getStaticOAuth2Token: (key: string) => Promise<string|null>;
   registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   deregisterTargetAction: (name: string) => Promise<void>;
   setAdminSetting: (value: string) => void;
   setAdminSettingInvalid: (message: string, settingName?: string) => void;
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
-  oauth2(): IOAuth2;
+  startOauth2Local(callback: (data: {state: string, redirectUri: string, codeChallenge: string}) => string, regex: RegExp): IOAuth2;
+  startOauth2Global(clientId: string): IOAuth2;
   deskpro(): IDeskproUI;
+}
+
+export interface IOAuth2 {
+  poll: () => Promise<OAuth2Result>;
+  authorizationUrl: string;
+}
+
+export interface OAuth2Result {
+  data: Record<string, any>;
 }
 
 export interface TargetActionOptions<Payload = any> {
@@ -428,128 +420,4 @@ export interface IDeskproUI {
   alertSuccess: (text: string, duration?: number) => Promise<void>;
   alertError: (text: string, duration?: number) => Promise<void>;
   alertDismiss: () => Promise<void>;
-}
-
-export interface OAuth2CallbackUrlOptions {
-  /**
-   * Token acquisition polling interval in milliseconds
-   */
-  pollInterval?: number;
-
-  /**
-   * Token acquisition timeout in milliseconds
-   */
-  timeout?: number;
-
-  /**
-   * Don't block the app whilst polling for an access code/token
-   */
-  noBlockWhenPolling?: boolean;
-
-  /**
-   * UTC date/time when this token expires (sets the TTL of the stored token)
-   */
-  expires?: Date;
-}
-
-export type OAuth2CallbackUrlPoll = () => Promise<{ statePath: string; statePathPlaceholder: string; }>;
-
-export type OAuth2StaticCallbackUrlPoll = () => Promise<{ token: string; }>;
-
-export interface OAuth2CallbackUrl {
-  /**
-   * URL used to pass to the vendor's auth page as the "redirect URL"
-   */
-  callbackUrl: string;
-
-  /**
-   * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
-   * the token has been successfully captured by Deskpro
-   */
-  poll: OAuth2CallbackUrlPoll;
-}
-
-export interface OAuth2StaticCallbackUrl {
-  /**
-   * URL used to pass to the vendor's auth page as the "redirect URL"
-   */
-  callbackUrl: string;
-
-  /**
-   * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
-   * the token has been successfully captured by Deskpro
-   */
-  poll: OAuth2StaticCallbackUrlPoll;
-}
-
-export type HasOAuth2Token = () => Promise<boolean|undefined>;
-
-export interface DeferredOAuth2CallbackUrl {
-  /**
-   * When isReady is TRUE then the details of the callback URL will be available in the "callback" object
-   */
-  isReady: boolean;
-
-  callback?: {
-    /**
-     * URL used to pass to the vendor's auth page as the "redirect URL"
-     */
-    callbackUrl: string;
-
-    /**
-     * Used to poll for the token. This promise will resolve when the user has successfully authorized the auth request and
-     * the token has been successfully captures by Deskpro
-     */
-    poll: OAuth2CallbackUrlPoll;
-
-    /**
-     * Utility to detect an already existing token
-     */
-    hasToken: HasOAuth2Token;
-  };
-}
-
-export interface IOAuth2 {
-  /**
-   * Get an OAuth2 callback URL
-   *
-   * @param name Name of the token, e.g. "jira" (this will later be used to create the state var for the token)
-   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
-   * @param options
-   */
-  getCallbackUrl(
-      name: string,
-      tokenAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2CallbackUrl>;
-
-  /**
-   * Get an OAuth2 static callback URL for agent operations
-   *
-   * @param key Generated "random" key used to link the auth request to the returned access token
-   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
-   * @param keyAcquisitionPattern RegEx pattern to acquire the key from the callback URL
-   * @param options
-   */
-  getGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl>;
-
-  /**
-   * Get an OAuth2 static callback URL for admin operations
-   *
-   * @param key Generated "random" key used to link the auth request to the returned access token
-   * @param tokenAcquisitionPattern RegEx pattern to acquire the access token from the callback URL
-   * @param keyAcquisitionPattern RegEx pattern to acquire the key from the callback URL
-   * @param options
-   */
-  getAdminGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl>;
 }
