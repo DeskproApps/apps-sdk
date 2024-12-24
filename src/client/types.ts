@@ -23,7 +23,7 @@ export type ContextType = "ticket"
   | "community_topic"
   | "global"
   | "admin_settings"
-;
+  ;
 
 export interface Context<Data = any, Settings = any> {
   type: ContextType;
@@ -43,7 +43,7 @@ export type TargetActionType =
   | "on_reply_box_note"
   | "reply_box_email_item_selection"
   | "on_reply_box_email"
-;
+  ;
 
 export type TargetActionPayload =
   {
@@ -79,7 +79,7 @@ export type TargetActionPayload =
       attachments: File[];
     };
   }
-;
+  ;
 
 export type TicketAdditionTargetAction = {
   type: "ticket_addition";
@@ -151,7 +151,7 @@ export type TargetActionData = TicketAdditionTargetAction
   | OnTicketReplyNoteTargetAction
   | TicketReplyEmailItemSelectionTargetAction
   | OnTicketReplyEmailTargetAction
-;
+  ;
 
 export interface TargetAction<P = any> {
   name: string;
@@ -189,7 +189,7 @@ export type ChildMethods = {
 export interface TicketSidebarDeskproCallSender {
   setTitle: (title: string) => void;
   focus: () => void;
-  openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
+  openContact: (contact: Partial<{ id: number, emailAddress: string, phoneNumber: string }>) => void;
   setBadgeCount: (count: number) => void;
 }
 
@@ -218,6 +218,9 @@ export interface CoreCallSender {
   _blockingSet: (blocking: boolean) => Promise<any>;
   _registerTargetAction: (name: string, type: TargetActionType, options?: TargetActionOptions) => Promise<void>;
   _deregisterTargetAction: (name: string) => Promise<void>;
+  _startOAuth2LocalFlow: (codeAcquisitionPattern: string, timeout: number) => Promise<StartOAuth2LocalFlowResult>;
+  _startOAuth2GlobalFlow: (clientId: string, timeout: number) => Promise<StartOAuth2GlobalFlowResult>;
+  _pollOAuth2Flow: <PollOAuth2FlowResult>(state: string) => Promise<PollOAuth2FlowResult>;
   _setAdminSetting: (value: string) => void;
   _setAdminSettingInvalid: (message: string, settingName?: string) => void;
   _sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
@@ -268,7 +271,7 @@ export type AppElement<Payload = any> =
     url: string;
     hasIcon: boolean;
   }
-;
+  ;
 
 export interface StateOptions {
   /**
@@ -294,7 +297,7 @@ export interface SetStateResponse {
 
 export interface GetStateResponse<T> {
   name: string;
-  data: T|null;
+  data: T | null;
 }
 
 export interface IDeskproClient {
@@ -315,8 +318,8 @@ export interface IDeskproClient {
   setBadgeCount: (count: number) => void;
   setTitle: (title: string) => void;
   focus: () => void;
-  openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
-  entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string|null>;
+  openContact: (contact: Partial<{ id: number, emailAddress: string, phoneNumber: string }>) => void;
+  entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string | null>;
   entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
   entityAssociationDelete: (entityId: string, name: string, key: string) => Promise<void>;
   entityAssociationList: (entityId: string, name: string) => Promise<string[]>;
@@ -339,11 +342,15 @@ export interface IDeskproClient {
   sendDeskproUIMessage: (message: DeskproUIMessage) => Promise<void>;
   getEntityAssociation(name: string, entityId: string): IEntityAssociation;
   startOauth2Local(
-    authorizeUrlFn: (data: {state: string, redirectUri: string, codeChallenge: string}) => string,
-    codeRegex: RegExp,
-    convertResponseToToken: (code: string) => Promise<OAuth2Result>
+    authorizeUrlFn: (data: { state: string, redirectUri: string, codeChallenge: string }) => string,
+    codeAcquisitionPattern: RegExp,
+    convertResponseToToken: (code: string) => Promise<OAuth2Result>,
+    options?: { timeout?: number, pollInterval?: number },
   ): Promise<IOAuth2>;
-  startOauth2Global(clientId: string): Promise<IOAuth2>;
+  startOauth2Global(
+    clientId: string,
+    options?: { timeout?: number, pollInterval?: number },
+  ): Promise<IOAuth2>;
   deskpro(): IDeskproUI;
 }
 
@@ -356,11 +363,39 @@ export interface OAuth2Result {
   data: {
     access_token: string;
     refresh_token?: string;
-    expires?: string|number;
+    expires?: string | number;
   };
 }
 
-export class OAuth2Error extends Error {}
+export class OAuth2Error extends Error { }
+
+export type StartOAuth2LocalFlowResult = {
+  state: string;
+  codeChallenge: string;
+  redirectUrl: string;
+};
+
+export type StartOAuth2GlobalFlowResult = {
+  state: string,
+  authorizeUrl: string;
+};
+
+export type PollOAuth2FlowStatus = "Pending" | "Success" | "Fail";
+
+export type PollOAuth2FlowResult = {
+  status: PollOAuth2FlowStatus;
+  error?: string | null;
+};
+
+export type PollOAuth2LocalFlowResult = PollOAuth2FlowResult & {
+  codeVerifierProxyPlaceholder: string;
+}
+
+export type PollOAuth2GlobalFlowResult = PollOAuth2FlowResult & {
+  access_token: string,
+  refresh_token: string,
+  expires: number | string,
+}
 
 export interface TargetActionOptions<Payload = any> {
   title?: string;
@@ -371,7 +406,7 @@ export interface TargetActionOptions<Payload = any> {
 export interface IEntityAssociation {
   set: <T>(key: string, value?: T) => Promise<void>;
   delete: (key: string) => Promise<void>;
-  get: <T>(key: string) => Promise<T|null>;
+  get: <T>(key: string) => Promise<T | null>;
   list: () => Promise<string[]>;
 }
 
@@ -419,12 +454,12 @@ export type DeskproUIMessageAlertDismiss = {
 };
 
 export type DeskproUIMessage =
-    DeskproUIMessageAppendToActiveTicketReplyBox
-    | DeskproUIMessageAppendLinkToActiveTicketReplyBox
-    | DeskproUIMessageAlertSuccess
-    | DeskproUIMessageAlertError
-    | DeskproUIMessageAlertDismiss
-;
+  DeskproUIMessageAppendToActiveTicketReplyBox
+  | DeskproUIMessageAppendLinkToActiveTicketReplyBox
+  | DeskproUIMessageAlertSuccess
+  | DeskproUIMessageAlertError
+  | DeskproUIMessageAlertDismiss
+  ;
 
 export interface IDeskproUI {
   send: (message: DeskproUIMessage) => Promise<void>;
