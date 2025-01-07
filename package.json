@@ -14,7 +14,7 @@
     "README.md"
   ],
   "peerDependencies": {
-    "@deskpro/deskpro-ui": "^8",
+    "@deskpro/deskpro-ui": "^8.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "react": "^18",
