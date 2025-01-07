@@ -177,7 +177,7 @@ const SelectComponent = ({
           style={{ width: 40 }}
           ref={targetRef}
           {...targetProps}
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
             // Stops it from immediately closing the dropdown
             e.preventDefault();
             targetProps.onClick && targetProps.onClick(e);
