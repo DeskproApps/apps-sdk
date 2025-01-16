@@ -19,23 +19,23 @@ import {
   GetStateResponse,
   TargetActionType,
   TargetActionOptions,
-  IOAuth2,
-  OAuth2CallbackUrlOptions,
-  OAuth2CallbackUrl,
-  GetOAuth2CallbackUrlResponse,
-  OAuth2CallbackUrlPoll,
-  GetStaticOAuth2CallbackUrlResponse,
-  OAuth2StaticCallbackUrlPoll,
-  OAuth2StaticCallbackUrl,
   IDeskproUI,
   DeskproUIMessage,
+  OAuth2Result,
+  IOAuth2,
+  OAuth2Error,
+  StartOAuth2LocalFlowResult,
+  StartOAuth2GlobalFlowResult,
+  PollOAuth2FlowResult,
+  PollOAuth2LocalFlowResult,
+  PollOAuth2GlobalFlowResult,
 } from "./types";
 import { CallSender } from "penpal/lib/types";
 
 class DeskproUI implements IDeskproUI {
   constructor(
-      private client: IDeskproClient,
-  ) {}
+    private client: IDeskproClient,
+  ) { }
 
   send(message: DeskproUIMessage): Promise<void> {
     return this.client.sendDeskproUIMessage(message);
@@ -85,9 +85,9 @@ class EntityAssociation implements IEntityAssociation {
     private client: IDeskproClient,
     private name: string,
     private entityId: string
-  ) {}
+  ) { }
 
-  async get<T>(key: string): Promise<T|null> {
+  async get<T>(key: string): Promise<T | null> {
     const value = await this.client.entityAssociationGet(this.entityId, this.name, key);
     return value ? JSON.parse(value) : null;
   }
@@ -102,123 +102,6 @@ class EntityAssociation implements IEntityAssociation {
 
   delete(key: string): Promise<void> {
     return this.client.entityAssociationDelete(this.entityId, this.name, key);
-  }
-}
-
-class OAuth2 implements IOAuth2 {
-  constructor(private client: IDeskproClient) {}
-
-  async getCallbackUrl(
-      name: string,
-      tokenAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2CallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getOAuth2CallbackUrl(name, tokenAcquisitionPattern.source, timeout, options?.expires);
-
-    const poll: OAuth2CallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.hasUserState(urlResponse.statePath).then((has) => {
-          if (has) {
-            clearInterval(poller);
-            resolve({
-              statePath: urlResponse.statePath,
-              statePathPlaceholder: urlResponse.statePathPlaceholder,
-            });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
-  }
-
-  async getGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
-        key,
-        tokenAcquisitionPattern.source,
-        keyAcquisitionPattern.source,
-        timeout,
-        options?.expires
-    );
-
-    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.getStaticOAuth2Token(key).then((token) => {
-          if (token) {
-            clearInterval(poller);
-            resolve({ token });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
-  }
-
-  async getAdminGenericCallbackUrl(
-      key: string,
-      tokenAcquisitionPattern: RegExp,
-      keyAcquisitionPattern: RegExp,
-      options?: OAuth2CallbackUrlOptions
-  ): Promise<OAuth2StaticCallbackUrl> {
-    const timeout = options?.timeout ?? (300 * 1000); // 5 minute timeout
-    const pollInterval = options?.pollInterval ?? 1000; // 1 second poll interval
-
-    const urlResponse = await this.client.getStaticOAuth2CallbackUrl(
-        key,
-        tokenAcquisitionPattern.source,
-        keyAcquisitionPattern.source,
-        timeout,
-        options?.expires
-    );
-
-    const poll: OAuth2StaticCallbackUrlPoll = () => new Promise((resolve, reject) => {
-      const poller = setInterval(() => {
-        this.client.getStaticOAuth2Token(key).then((token) => {
-          if (token) {
-            clearInterval(poller);
-            resolve({ token });
-          }
-        });
-      }, pollInterval);
-
-      setTimeout(() => {
-        clearInterval(poller);
-        reject("Token acquisition timeout");
-      }, timeout);
-    });
-
-    return {
-      poll,
-      callbackUrl: urlResponse.url,
-    };
   }
 }
 
@@ -247,12 +130,12 @@ export class DeskproClient implements IDeskproClient {
   public setTitle: (title: string) => void;
   public focus: () => void;
   public unfocus: () => void;
-  public openContact: (contact: Partial<{id: number, emailAddress: string, phoneNumber: string}>) => void;
+  public openContact: (contact: Partial<{ id: number, emailAddress: string, phoneNumber: string }>) => void;
 
   // EntityAssociation
   public entityAssociationSet: (entityId: string, name: string, key: string, value?: string) => Promise<void>;
   public entityAssociationDelete: (entityId: string, name: string, key: string) => Promise<void>;
-  public entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string|null>;
+  public entityAssociationGet: (entityId: string, name: string, key: string) => Promise<string | null>;
   public entityAssociationList: (entityId: string, name: string) => Promise<string[]>;
   public entityAssociationCountEntities: (name: string, key: string) => Promise<number>;
 
@@ -278,10 +161,9 @@ export class DeskproClient implements IDeskproClient {
   public deregisterTargetAction: (name: string) => Promise<void>;
 
   // OAuth2
-  public getOAuth2CallbackUrl: (name: string, tokenAcquisitionPattern: string, timeout: number) => Promise<GetOAuth2CallbackUrlResponse>;
-  public getStaticOAuth2CallbackUrl: (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => Promise<GetStaticOAuth2CallbackUrlResponse>;
-  public getStaticOAuth2CallbackUrlValue: () => Promise<string>;
-  public getStaticOAuth2Token: (key: string) => Promise<string|null>;
+  public startOAuth2LocalFlow: (codeAcquisitionPattern: RegExp, timeout: number) => Promise<StartOAuth2LocalFlowResult>;
+  public startOAuth2GlobalFlow: (clientId: string, timeout: number) => Promise<StartOAuth2GlobalFlowResult>;
+  public pollOAuth2Flow: <T = PollOAuth2FlowResult>(state: string) => Promise<T>;
 
   // Admin
   public setAdminSetting: (value: string) => void;
@@ -294,21 +176,21 @@ export class DeskproClient implements IDeskproClient {
     private readonly parent: <T extends object = CallSender>(options?: object) => Connection<T>,
     private readonly options: DeskproClientOptions
   ) {
-    this.getProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
-    this.getAdminGenericProxyAuth = () => new Promise<ProxyAuthPayload>(() => {});
-    this.resize = () => {};
-    this.setWidth = () => {};
-    this.setHeight = () => {};
-    this.registerElement = () => {};
-    this.deregisterElement = () => {};
-    this.setBadgeCount = () => {};
-    this.setTitle = () => {};
-    this.focus = () => {};
-    this.unfocus = () => {};
-    this.openContact = () => {};
+    this.getProxyAuth = () => new Promise<ProxyAuthPayload>(() => { });
+    this.getAdminGenericProxyAuth = () => new Promise<ProxyAuthPayload>(() => { });
+    this.resize = () => { };
+    this.setWidth = () => { };
+    this.setHeight = () => { };
+    this.registerElement = () => { };
+    this.deregisterElement = () => { };
+    this.setBadgeCount = () => { };
+    this.setTitle = () => { };
+    this.focus = () => { };
+    this.unfocus = () => { };
+    this.openContact = () => { };
 
-    this.entityAssociationSet = async () => {};
-    this.entityAssociationDelete = async () => {};
+    this.entityAssociationSet = async () => { };
+    this.entityAssociationDelete = async () => { };
     this.entityAssociationGet = async () => null;
     this.entityAssociationList = async () => [""];
     this.entityAssociationCountEntities = async () => 0;
@@ -322,23 +204,22 @@ export class DeskproClient implements IDeskproClient {
     this.hasState = async () => false;
     this.hasUserState = async () => false;
 
-    this.setSetting = async () => {};
-    this.setSettings = async () => {};
+    this.setSetting = async () => { };
+    this.setSettings = async () => { };
 
-    this.setBlocking = async () => {};
+    this.setBlocking = async () => { };
 
-    this.registerTargetAction = async () => {};
-    this.deregisterTargetAction = async () => {};
+    this.registerTargetAction = async () => { };
+    this.deregisterTargetAction = async () => { };
 
-    this.getOAuth2CallbackUrl = async () => ({ url: "", statePath: "", statePathPlaceholder: "" });
-    this.getStaticOAuth2CallbackUrl = async () => ({ url: "" });
-    this.getStaticOAuth2CallbackUrlValue = async () => "";
-    this.getStaticOAuth2Token = async () => null;
+    this.startOAuth2LocalFlow = async () => ({} as StartOAuth2LocalFlowResult);
+    this.startOAuth2GlobalFlow = async () => ({} as StartOAuth2GlobalFlowResult);
+    this.pollOAuth2Flow = async <PollOAuth2FlowResult>() => ({} as PollOAuth2FlowResult);
 
-    this.setAdminSetting = async () => {};
-    this.setAdminSettingInvalid = async () => {};
+    this.setAdminSetting = async () => { };
+    this.setAdminSettingInvalid = async () => { };
 
-    this.sendDeskproUIMessage = async () => {};
+    this.sendDeskproUIMessage = async () => { };
 
     if (this.options.runAfterPageLoad) {
       window.addEventListener("load", () => this.run());
@@ -497,20 +378,14 @@ export class DeskproClient implements IDeskproClient {
     }
 
     // OAuth2
-    if (parent._getOAuth2CallbackUrl) {
-      this.getOAuth2CallbackUrl = (name: string, tokenAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getOAuth2CallbackUrl(name, tokenAcquisitionPattern, timeout, expires);
+    if (parent._startOAuth2LocalFlow) {
+      this.startOAuth2LocalFlow = (codeAcquisitionPattern: RegExp, timeout: number) => parent._startOAuth2LocalFlow(codeAcquisitionPattern.source, timeout);
     }
-
-    if (parent._getStaticOAuth2CallbackUrl) {
-      this.getStaticOAuth2CallbackUrl = (key: string, tokenAcquisitionPattern: string, keyAcquisitionPattern: string, timeout: number, expires?: Date) => parent._getStaticOAuth2CallbackUrl(key, tokenAcquisitionPattern, keyAcquisitionPattern, timeout, expires);
+    if (parent._startOAuth2GlobalFlow) {
+      this.startOAuth2GlobalFlow = (clientId: string, timeout: number) => parent._startOAuth2GlobalFlow(clientId, timeout);
     }
-
-    if (parent._getStaticOAuth2CallbackUrlValue) {
-      this.getStaticOAuth2CallbackUrlValue = () => parent._getStaticOAuth2CallbackUrlValue();
-    }
-
-    if (parent._getStaticOAuth2Token) {
-      this.getStaticOAuth2Token = (key: string) => parent._getStaticOAuth2Token(key);
+    if (parent._pollOAuth2Flow) {
+      this.pollOAuth2Flow = <PollOAuth2FlowResult>(state: string) => parent._pollOAuth2Flow<PollOAuth2FlowResult>(state);
     }
 
     // Admin
@@ -583,8 +458,93 @@ export class DeskproClient implements IDeskproClient {
     return new EntityAssociation(this, name, entityId);
   }
 
-  public oauth2(): IOAuth2 {
-    return new OAuth2(this);
+  public async startOauth2Local(
+    authorizeUrlFn: (data: { state: string, callbackUrl: string, codeChallenge: string }) => string,
+    codeAcquisitionPattern: RegExp,
+    convertResponseToToken: (code: string, codeVerifierProxyPlaceholder: string) => Promise<OAuth2Result>,
+    options?: { timeout?: number, pollInterval?: number },
+  ): Promise<IOAuth2> {
+    const timeout = options?.timeout ?? (600 * 1000); // 10 minute timeout
+    const pollInterval = options?.pollInterval ?? 2000; // 2 second poll interval
+
+    const start = await this.startOAuth2LocalFlow(
+      codeAcquisitionPattern,
+      timeout,
+    );
+
+    // Build our proper authorize URL using downstream implementation.
+    const authorizeUrl = authorizeUrlFn({
+      state: start.state,
+      callbackUrl: start.callbackUrl,
+      codeChallenge: start.codeChallenge,
+    });
+
+    // Curried poll function that returns the promise that resolves when polling is done... or rejects
+    // when polling times out
+    const poll = () => new Promise<OAuth2Result>((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.pollOAuth2Flow<PollOAuth2LocalFlowResult>(start.state).then((pollResult) => {
+          if (pollResult && pollResult.status !== "Pending") {
+            clearInterval(poller);
+            if (pollResult.error) {
+              reject(new OAuth2Error(pollResult.error));
+              return;
+            }
+            convertResponseToToken(pollResult.authCode as string, pollResult.codeVerifierProxyPlaceholder)
+              .then(resolve)
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject(new OAuth2Error("Acquisition timeout"));
+      }, timeout);
+    });
+
+    return {
+      poll,
+      authorizationUrl: authorizeUrl,
+    };
+  }
+
+  public async startOauth2Global(clientId: string, options?: { timeout?: number, pollInterval?: number }): Promise<IOAuth2> {
+    const timeout = options?.timeout ?? (600 * 1000); // 10 minute timeout
+    const pollInterval = options?.pollInterval ?? 2000; // 2 second poll interval
+
+    const start = await this.startOAuth2GlobalFlow(
+      clientId,
+      timeout,
+    );
+
+    // Curried poll function that returns the promise that resolves when polling is done... or rejects
+    // when polling times out
+    const poll = () => new Promise<OAuth2Result>((resolve, reject) => {
+      const poller = setInterval(() => {
+        this.pollOAuth2Flow<PollOAuth2GlobalFlowResult>(start.state).then((pollResult) => {
+          if (pollResult && pollResult.status !== "Pending") {
+            clearInterval(poller);
+            if (pollResult.error) {
+              reject(new OAuth2Error(pollResult.error));
+              return;
+            }
+            resolve({
+              data: pollResult,
+            });
+          }
+        });
+      }, pollInterval);
+
+      setTimeout(() => {
+        clearInterval(poller);
+        reject(new OAuth2Error("Acquisition timeout"));
+      }, timeout);
+    });
+
+    return {
+      poll,
+      authorizationUrl: start.authorizationUrl,
+    };
   }
 
   public deskpro(): IDeskproUI {

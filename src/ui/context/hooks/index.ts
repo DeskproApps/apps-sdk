@@ -4,7 +4,6 @@ export { useDeskproAppFetch } from "./useDeskproAppFetch";
 export { useDeskproAppTheme } from "./useDeskproAppTheme";
 export { useDeskproElements } from "./useDeskproElements";
 export { useDeskproLatestAppContext } from "./useDeskproLatestAppContext";
-export { useDeskproOAuth2Auth } from "./useDeskproOAuth2Auth";
 export { useInitialisedDeskproAppClient } from "./useInitialisedDeskproAppClient";
 export { useMutationWithClient } from "./useMutationWithClient";
 export { useQueryWithClient } from "./useQueryWithClient";
