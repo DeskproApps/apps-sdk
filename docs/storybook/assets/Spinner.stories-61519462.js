@@ -1,0 +1,3 @@
+import{j as r}from"./jsx-runtime-2aae9559.js";import{S as i,U as a}from"./SPA-1143c1d3.js";import"./index-ff614419.js";import"./index-fc111d74.js";const o=()=>r.jsx(i,{justify:"center",align:"center",style:{height:"200px"},children:r.jsx(a,{size:"large"})}),d={title:"Core/Spinner",component:o},e=()=>r.jsx(i,{justify:"center",children:r.jsx(o,{})});var n,s,t;e.parameters={...e.parameters,docs:{...(n=e.parameters)==null?void 0:n.docs,source:{originalSource:`() => <Stack justify="center">
+    <LoadingSpinner />
+  </Stack>`,...(t=(s=e.parameters)==null?void 0:s.docs)==null?void 0:t.source}}};const j=["Spinners"];export{e as Spinners,j as __namedExportsOrder,d as default};
