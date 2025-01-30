@@ -103,7 +103,8 @@
     "storybook": "^8.5.2",
     "terser": "5.27.2",
     "tippy.js": "^6.3.7",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vite": "4.5.6"
   },
   "scripts": {
     "start": "pnpm start:storybook",
