@@ -51,8 +51,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       penpal:
-        specifier: 6.2.1
-        version: 6.2.1
+        specifier: 6.2.2
+        version: 6.2.2
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -3444,8 +3444,8 @@ packages:
     resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
     engines: {node: '>= 14.16'}
 
-  penpal@6.2.1:
-    resolution: {integrity: sha512-gA2tL25HO2tOkj+/2DkgxM3YdVeWauqo85pzZ6bZgVOsdQWof5Y694Dsl+lAN/E8HWaCA2Te9het8ohf1O2bqA==}
+  penpal@6.2.2:
+    resolution: {integrity: sha512-RQD7hTx14/LY7QoS3tQYO3/fzVtwvZI+JeS5udgsu7FPaEDjlvfK9HBcme9/ipzSPKnrxSgacI9PI7154W62YQ==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -8269,7 +8269,7 @@ snapshots:
 
   pathval@2.0.0: {}
 
-  penpal@6.2.1: {}
+  penpal@6.2.2: {}
 
   picocolors@1.1.1: {}
 
