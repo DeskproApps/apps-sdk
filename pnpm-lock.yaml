@@ -63,8 +63,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-flatpickr:
-        specifier: 3.10.7
-        version: 3.10.7(react@18.3.1)
+        specifier: 3.10.13
+        version: 3.10.13(react@18.3.1)
       react-intl:
         specifier: ^5.25.1
         version: 5.25.1(react@18.3.1)(typescript@5.7.3)
@@ -160,8 +160,8 @@ importers:
         specifier: ^18.3.5
         version: 18.3.5(@types/react@18.3.18)
       '@types/react-flatpickr':
-        specifier: 3.8.4
-        version: 3.8.4
+        specifier: 3.8.11
+        version: 3.8.11
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.62.0
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3)
@@ -1854,8 +1854,8 @@ packages:
     peerDependencies:
       '@types/react': ^18.0.0
 
-  '@types/react-flatpickr@3.8.4':
-    resolution: {integrity: sha512-Vojzr1yTTtXowsVTmw4OlWUvclWnE2t4eVQvWtrXuJNxk8cpzbNm4Wyl8d5Ej/dWokIKefM73ygQZaHTMsqWkQ==}
+  '@types/react-flatpickr@3.8.11':
+    resolution: {integrity: sha512-wXGyGRpUjiGknioxWzWJdNvF2XxKw5lAI7H64Iv7w4iL+1iT7QvAzrigz5FkW4lTg9IJOww6t7g21FzsrmRV6A==}
 
   '@types/react@18.3.18':
     resolution: {integrity: sha512-t4yC+vtgnkYjNSKlFx1jkAhH8LgTo2N/7Qvi83kdEaUtMDiwpbLAktKDaAMlRcJ5eSxZkH74eEGt1ky31d7kfQ==}
@@ -3782,10 +3782,10 @@ packages:
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
-  react-flatpickr@3.10.7:
-    resolution: {integrity: sha512-dJ7cZAayefqWJnX4Xe8Piy13oK2h4aeGCH9tz+D2iSNh+kbezUAWVMVCKdTqjsNBqTMS4v0DkfMy2CP2atNCTQ==}
+  react-flatpickr@3.10.13:
+    resolution: {integrity: sha512-4m+K1K8jhvRFI8J/AHmQfA5hLALzhebEtEK8mLevXjX24MV3u502crzBn+EGFIBOfNUtrL5PId9FsGwgtuz/og==}
     peerDependencies:
-      react: ^17.0.1
+      react: '>=16, <=18'
 
   react-highlight-words@0.17.0:
     resolution: {integrity: sha512-uX1Qh5IGjnLuJT0Zok234QDwRC8h4hcVMnB99Cb7aquB1NlPPDiWKm0XpSZOTdSactvnClCk8LOmVlP+75dgHA==}
@@ -6348,7 +6348,7 @@ snapshots:
     dependencies:
       '@types/react': 18.3.18
 
-  '@types/react-flatpickr@3.8.4':
+  '@types/react-flatpickr@3.8.11':
     dependencies:
       '@types/react': 18.3.18
       flatpickr: 4.6.13
@@ -8591,7 +8591,7 @@ snapshots:
 
   react-fast-compare@3.2.2: {}
 
-  react-flatpickr@3.10.7(react@18.3.1):
+  react-flatpickr@3.10.13(react@18.3.1):
     dependencies:
       flatpickr: 4.6.13
       prop-types: 15.8.1
