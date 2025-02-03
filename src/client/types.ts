@@ -356,6 +356,7 @@ export interface IDeskproClient {
 export interface IOAuth2 {
   poll: () => Promise<OAuth2Result>;
   authorizationUrl: string;
+  stopPolling: void;
 }
 
 export interface OAuth2Result {
