@@ -505,6 +505,7 @@ export class DeskproClient implements IDeskproClient {
     return {
       poll,
       authorizationUrl: authorizeUrl,
+      stopPolling: clearInterval(pollInterval),
     };
   }
 
@@ -544,6 +545,7 @@ export class DeskproClient implements IDeskproClient {
     return {
       poll,
       authorizationUrl: start.authorizationUrl,
+      stopPolling: clearInterval(pollInterval),
     };
   }
 
